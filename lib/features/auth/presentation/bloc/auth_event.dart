@@ -1,0 +1,62 @@
+part of 'auth_bloc.dart';
+
+sealed class AuthEvent extends Equatable {
+  const AuthEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class AuthCheckStatusEvent extends AuthEvent {
+  const AuthCheckStatusEvent();
+}
+
+final class OtpSendEvent extends AuthEvent {
+  final String phoneNumber;
+
+  const OtpSendEvent({required this.phoneNumber});
+
+  @override
+  List<Object?> get props => [phoneNumber];
+}
+
+final class OtpVerifyEvent extends AuthEvent {
+  final String otp;
+
+  const OtpVerifyEvent({required this.otp});
+
+  @override
+  List<Object?> get props => [otp];
+}
+
+final class OtpResendEvent extends AuthEvent {
+  final String phoneNumber;
+
+  const OtpResendEvent({required this.phoneNumber});
+
+  @override
+  List<Object?> get props => [phoneNumber];
+}
+
+final class CreateAccountEvent extends AuthEvent {
+  final String uid;
+  final String phoneNumber;
+  final String displayName;
+  final String email;
+  final String? photoUrl;
+
+  const CreateAccountEvent({
+    required this.uid,
+    required this.phoneNumber,
+    required this.displayName,
+    required this.email,
+    this.photoUrl,
+  });
+
+  @override
+  List<Object?> get props => [uid, phoneNumber, displayName, email, photoUrl];
+}
+
+final class SignOutEvent extends AuthEvent {
+  const SignOutEvent();
+}

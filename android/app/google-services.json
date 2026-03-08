@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189711768964",
+    "project_id": "file-flow-e29db",
+    "storage_bucket": "file-flow-e29db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189711768964:android:bcf4e2784fd1f6110cd1d1",
+        "android_client_info": {
+          "package_name": "com.fileflow.project.fileflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFyxC9Jd_G3P74PHLNBT_eWZCyo_2WMpM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
