@@ -1,6 +1,7 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
 import 'package:fileflow/core/common/shapes/dotted_border_painter.dart';
 import 'package:fileflow/core/common/widgets/folder_card.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:flutter/material.dart';
 
 class UploadScreen extends FileFlowStatelessWidget {
@@ -24,9 +25,9 @@ class UploadScreen extends FileFlowStatelessWidget {
           text: const TextSpan(
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
             children: [
-              TextSpan(text: 'File'),
+              TextSpan(text: StringConstants.kFile),
               TextSpan(
-                text: 'Flow',
+                text: StringConstants.kFlow,
                 style: TextStyle(color: Color(0xFF0062FF)),
               ),
             ],
@@ -54,7 +55,7 @@ class UploadScreen extends FileFlowStatelessWidget {
                     Icon(Icons.upload_sharp, color: Colors.white),
                     SizedBox(height: 5),
                     Text(
-                      'Select your files',
+                      StringConstants.kSelectYourFiles,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
                     ),
                   ],
@@ -81,7 +82,7 @@ class UploadScreen extends FileFlowStatelessWidget {
                       FolderCard(size: 50, tabWidth: 1),
                       SizedBox(width: 20),
                       Text(
-                        'Root',
+                        StringConstants.kRoot,
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                       Spacer(),
@@ -99,7 +100,10 @@ class UploadScreen extends FileFlowStatelessWidget {
                       Container(
                         color: const Color(0xFF070D1F),
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: const Text('Location', style: TextStyle(color: Colors.white, fontSize: 12)),
+                        child: const Text(
+                          StringConstants.kLocation,
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
                       ),
                       Expanded(flex: 25, child: Container(height: 1, color: Colors.grey)),
                     ],
@@ -119,7 +123,7 @@ class UploadScreen extends FileFlowStatelessWidget {
                 backgroundColor: const Color(0xFF0062FF),
               ),
               child: const Text(
-                'Upload File',
+                StringConstants.kUploadFile,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
               ),
             ),

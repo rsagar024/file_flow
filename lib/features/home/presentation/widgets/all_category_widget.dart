@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/home/presentation/screens/folder_details_screen.dart';
 import 'package:fileflow/features/home/presentation/widgets/file_list_item_widget.dart';
 import 'package:fileflow/features/home/presentation/widgets/folder_item_widget.dart';
@@ -49,7 +50,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    'Pinned Folder',
+                    StringConstants.kPinnedFolder,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   TextButton(
@@ -60,7 +61,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                     ),
                     onPressed: () {},
                     child: const Text(
-                      'View All',
+                      StringConstants.kViewAll,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF0062FF)),
                     ),
                   ),
@@ -112,7 +113,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
               child: Row(
                 children: [
                   const Text(
-                    'Recent Files',
+                    StringConstants.kRecentFiles,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   const Spacer(),

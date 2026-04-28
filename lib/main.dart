@@ -1,4 +1,5 @@
-import  'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/routes/app_route.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/firebase_options.dart';
@@ -14,7 +15,6 @@ void main() async {
 }
 
 class FileFlowApp extends StatelessWidget {
-
   const FileFlowApp({super.key});
 
   @override
@@ -23,7 +23,7 @@ class FileFlowApp extends StatelessWidget {
       providers: [BlocProvider<AuthBloc>(create: (_) => getIt<AuthBloc>())],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'File Flow',
+        title: StringConstants.kAppName,
         theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
         routerConfig: AppRoute.routes,
       ),

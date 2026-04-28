@@ -1,6 +1,7 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/core/validator/validator.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
@@ -31,7 +32,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
         automaticallyImplyLeading: true,
         backgroundColor: Colors.transparent,
         title: const Text(
-          'Create Account',
+          StringConstants.kCreateAccount,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
         ),
         centerTitle: true,
@@ -62,11 +63,11 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Profile Photo',
+                            StringConstants.kProfilePhoto,
                             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                           ),
                           Text(
-                            'PNG, JPG up to 10MB',
+                            StringConstants.kPngJpgUpTo10MB,
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                           ),
                         ],
@@ -74,48 +75,48 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                     ),
                     const SizedBox(height: 32),
                     const Text(
-                      'Full Name',
+                      StringConstants.kFullName,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.nameController,
-                      hintText: 'Sagar Sahu',
+                      hintText: StringConstants.kHintName,
                       keyboardType: TextInputType.text,
                       prefixIcon: const Icon(Icons.badge, color: Colors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateFullName,
                     ),
                     const Text(
-                      'Username',
+                      StringConstants.kUsername,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.usernameController,
-                      hintText: 'sagar_sahu',
+                      hintText: StringConstants.kHintUsername,
                       keyboardType: TextInputType.text,
                       prefixIcon: const Icon(Icons.perm_identity, color: Colors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateUsername,
                     ),
                     const Text(
-                      'Email Address',
+                      StringConstants.kEmailAddress,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.emailController,
-                      hintText: 'sagar@gmail.com',
+                      hintText: StringConstants.kHintEmailAddress,
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon: const Icon(Icons.email_rounded, color: Colors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateEmail,
                     ),
                     const Text(
-                      'Phone Number',
+                      StringConstants.kPhoneNumber,
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.phoneController,
-                      hintText: '+919999999999',
+                      hintText: StringConstants.kHintPhoneNumber,
                       keyboardType: TextInputType.phone,
                       prefixIcon: const Icon(Icons.phone, color: Colors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
@@ -138,7 +139,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
             }
           },
           label: const Text(
-            'Create Account',
+            StringConstants.kCreateAccount,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           icon: const Icon(Icons.arrow_forward, color: Colors.white),
@@ -196,7 +197,7 @@ class ProfileImagePicker extends FormField<String> {
                        bottom: 10,
                        right: MediaQuery.sizeOf(context).width / 2 - 70,
                        child: GestureDetector(
-                         onTap: (){
+                         onTap: () {
                            // 👇 replace with your image picker logic
                            const String pickedImage = 'dummy_path';
 

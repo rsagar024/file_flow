@@ -1,6 +1,7 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
@@ -52,19 +53,19 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                 SvgPicture.asset('assets/icons/ic_logo.svg', height: 80),
                 const SizedBox(height: 10),
                 const Text(
-                  'OTP Verification',
+                  StringConstants.kOtpVerification,
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 8),
                   child: Text(
-                    'Enter the 6-digit code sent to your number',
+                    StringConstants.kEnterThe6DigitCode,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                   ),
                 ),
                 Padding(padding: const EdgeInsets.symmetric(vertical: 32), child: pinTextField),
                 const Text(
-                  'Didn\'t receive the code?',
+                  StringConstants.kDidNtReceiveTheCode,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF64748B)),
                 ),
                 BlocSelector<AuthBloc, AuthState, ({int seconds, bool canResend})>(
@@ -81,7 +82,9 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                               }
                             : null,
                         child: Text(
-                          data.canResend ? 'Resend Code' : 'Resend in 00:${data.seconds.toString().padLeft(2, '0')}',
+                          data.canResend
+                              ? StringConstants.kResendCode
+                              : '${StringConstants.kResendIn} 00:${data.seconds.toString().padLeft(2, '0')}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -101,7 +104,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                     }
                   },
                   label: const Text(
-                    'Verify',
+                    StringConstants.kVerify,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   icon: const Icon(Icons.security, color: Colors.white),

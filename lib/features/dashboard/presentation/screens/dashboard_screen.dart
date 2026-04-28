@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/home/presentation/screens/home_screen.dart';
 import 'package:fileflow/features/upload/presentation/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     activeColor: _activeColor,
                     inactiveColor: _inactiveColor,
                     onTap: _onTapNav,
-                    label: 'Home',
+                    label: StringConstants.kHome,
                   ),
                   _NavItem(
                     icon: Icons.people_alt,
@@ -151,7 +152,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     activeColor: _activeColor,
                     inactiveColor: _inactiveColor,
                     onTap: _onTapNav,
-                    label: 'Sharing',
+                    label: StringConstants.kSharing,
                   ),
                   _NavItem(
                     icon: Icons.person_outline_rounded,
@@ -169,7 +170,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     activeColor: _activeColor,
                     inactiveColor: _inactiveColor,
                     onTap: _onTapNav,
-                    label: 'Coming',
+                    label: StringConstants.kComing,
                   ),
                   _NavItem(
                     icon: Icons.person_outline_rounded,
@@ -178,7 +179,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     activeColor: _activeColor,
                     inactiveColor: _inactiveColor,
                     onTap: _onTapNav,
-                    label: 'Profile',
+                    label: StringConstants.kProfile,
                   ),
                 ],
               );

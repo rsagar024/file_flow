@@ -3,6 +3,7 @@ import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/phone_field/phone_field.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/otp_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,17 +16,22 @@ class LoginScreen extends FileFlowBackgroundStatefulWidget {
 
   const LoginScreen({super.key});
 
-  static const actions = ['Help Center', 'Terms', 'Privacy'];
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
+  final actions = [StringConstants.kHelpCenter, StringConstants.kTerms, StringConstants.kPrivacy];
   final TextEditingController _phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Country? country;
   String? phone;
+
+  @override
+  void onDispose() {
+    super.onDispose();
+    _phoneController.dispose();
+  }
 
   @override
   Widget buildContent(BuildContext context) {
@@ -57,9 +63,9 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                         text: const TextSpan(
                           style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
                           children: [
-                            TextSpan(text: 'File'),
+                            TextSpan(text: StringConstants.kFile),
                             TextSpan(
-                              text: 'Flow',
+                              text: StringConstants.kFlow,
                               style: TextStyle(color: Color(0xFF0062FF)),
                             ),
                           ],
@@ -68,7 +74,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                       const Padding(
                         padding: EdgeInsets.only(top: 8, bottom: 48),
                         child: Text(
-                          'Securely sync your workflow anywhere',
+                          StringConstants.kSecureSyncYourWorkflowAnywhere,
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                         ),
                       ),
@@ -76,28 +82,28 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                   ),
                 ),
                 const Text(
-                  'Welcome Back',
+                  StringConstants.kWelcomeBack,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 8, bottom: 32),
                   child: Text(
-                    'Enter your mobile number to sign in to your account.',
+                    StringConstants.kEnterYourMobileNumberToSignIn,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                   ),
                 ),
-                const Text(
-                  'MOBILE NUMBER',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                Text(
+                  StringConstants.kMobileNumber.toUpperCase(),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                 ),
                 Form(
                   key: _formKey,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 24),
                     child: PhoneField(
-                      labelText: 'phone',
+                      labelText: StringConstants.kPhone,
                       controller: _phoneController,
-                      selectedDialCode: '91',
+                      selectedDialCode: StringConstants.kIndianDialCode,
                       isRequired: true,
                       onValidationChanged: (isValid, country, phoneNumber) {
                         setState(() {
@@ -121,7 +127,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     }
                   },
                   label: const Text(
-                    'Send Otp',
+                    StringConstants.kSendOtp,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   icon: const Icon(CupertinoIcons.arrow_right, color: Colors.white),
@@ -140,9 +146,9 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: List.generate(
-                    LoginScreen.actions.length,
+                    actions.length,
                     (index) => Text(
-                      LoginScreen.actions[index],
+                      actions[index],
                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
                     ),
                   ),

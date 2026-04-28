@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/home/presentation/widgets/all_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +14,14 @@ class HomeScreen extends FileFlowStatefulWidget {
 }
 
 class _HomeScreenState extends FileFlowState<HomeScreen> {
-  static const List<String> categories = ['All', 'Folders', 'Images', 'Videos', 'Audio', 'Documents'];
+  static const List<String> categories = [
+    StringConstants.kAll,
+    StringConstants.kFolders,
+    StringConstants.kImages,
+    StringConstants.kVideos,
+    StringConstants.kAudios,
+    StringConstants.kDocuments,
+  ];
 
   @override
   void onInit() {
@@ -45,9 +53,9 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
                   text: const TextSpan(
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
                     children: [
-                      TextSpan(text: 'File'),
+                      TextSpan(text: StringConstants.kFile),
                       TextSpan(
-                        text: 'Flow',
+                        text: StringConstants.kFlow,
                         style: TextStyle(color: Color(0xFF0062FF)),
                       ),
                     ],
@@ -58,7 +66,7 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
               ],
             ),
             _customTextField(
-              hintText: 'Search in FileFlow',
+              hintText: StringConstants.kSearchInFileFlow,
               keyboardType: TextInputType.text,
               prefixIcon: const Icon(Icons.search, color: Colors.grey, size: 20),
               margin: const EdgeInsets.symmetric(vertical: 16),
