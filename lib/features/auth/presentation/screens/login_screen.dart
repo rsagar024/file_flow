@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends FileFlowBackgroundStatefulWidget {
   static const routeName = '/login';
@@ -40,7 +41,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.state == AuthAppState.otpSent) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const OtpVerificationScreen()));
+            context.push(OtpVerificationScreen.routeName);
           }
         },
         child: SafeArea(

@@ -8,6 +8,7 @@ import 'package:fileflow/features/auth/presentation/screens/create_account_scree
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class OtpVerificationScreen extends FileFlowBackgroundStatefulWidget {
   static const routeName = '/otp-verification';
@@ -38,7 +39,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.state == AuthAppState.newUserDetected) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccountScreen()));
+            context.go(CreateAccountScreen.routeName);
           }
         },
         child: SafeArea(
