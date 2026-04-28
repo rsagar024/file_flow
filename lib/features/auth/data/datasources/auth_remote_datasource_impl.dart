@@ -28,7 +28,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (!completer.isCompleted) {
-          completer.completeError(Failure(e.code));
+          completer.completeError(e.message ?? e.code);
         }
       },
       codeSent: (String verificationId, int? resendToken) {

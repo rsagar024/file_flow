@@ -56,5 +56,7 @@ class AppColors {
   // Glass Effect Colors
   static const glassLight = Color(0x0DFFFFFF); // White with 5% opacity
   static const glassMedium = Color(0x1AFFFFFF); // White with 10% opacity
-  static const glassDark = Color(0x26FFFFFF); // White with 15% opacity
+  static const glassDark = Color(0x26FFFFFF);
+
+  static const Color white = Color(0xFFFFFFFF); // White with 15% opacity
 }

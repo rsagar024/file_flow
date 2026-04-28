@@ -6,9 +6,10 @@ import 'package:flutter/services.dart';
 
 class PinTextFieldWidget extends StatefulWidget {
   final int length;
+  final bool obscure;
   final TextEditingController controller = TextEditingController();
 
-  PinTextFieldWidget({super.key, this.length = 4});
+  PinTextFieldWidget({super.key, this.length = 4, this.obscure = true});
 
   @override
   State<PinTextFieldWidget> createState() => _PinTextFieldWidgetState();
@@ -42,7 +43,7 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
   }
 
   void _onTextChanged() {
-    String text = widget.controller.text;
+    final String text = widget.controller.text;
 
     // Limit the input to the widget's length
     if (text.length > widget.length) {
@@ -56,18 +57,20 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
         _pinValues[i] = text[i];
         _obsValues[i] = text[i]; // Show current digit initially
 
-        // Cancel any existing timer for this index
-        _timers[i]?.cancel();
+        if(widget.obscure) {
+          // Cancel any existing timer for this index
+          _timers[i]?.cancel();
 
-        // Set a timer to replace the digit with a star after 0.2 seconds
-        _timers[i] = Timer(const Duration(milliseconds: 200), () {
-          if (widget.controller.text == text) {
-            // Ensure text hasn't changed
-            setState(() {
-              _obsValues[i] = '*';
-            });
-          }
-        });
+          // Set a timer to replace the digit with a star after 0.2 seconds
+          _timers[i] = Timer(const Duration(milliseconds: 200), () {
+            if (widget.controller.text == text) {
+              // Ensure text hasn't changed
+              setState(() {
+                _obsValues[i] = '*';
+              });
+            }
+          });
+        }
       } else if (i >= text.length) {
         // Clear values for indexes not yet filled
         _pinValues[i] = '';
@@ -76,7 +79,9 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
       } else {
         // Ensure all previous digits remain stars
         if (_pinValues[i].isNotEmpty) {
-          _obsValues[i] = '*';
+          if(widget.obscure) {
+            _obsValues[i] = '*';
+          }
         }
       }
     }
@@ -91,7 +96,7 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        _buildPinBoxes(), // Visual PIN boxes
+        _buildPinBoxes(widget.obscure), // Visual PIN boxes
         Container(
           width: _calculateTotalWidth(),
           height: 60,
@@ -117,22 +122,22 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
     );
   }
 
-  Widget _buildPinBoxes() {
+  Widget _buildPinBoxes(bool obscure) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.length * 2 - 1, (index) {
         if (index.isOdd) return const SizedBox(width: 12);
         final boxIndex = index ~/ 2;
-        return _buildSinglePinBox(boxIndex);
+        return _buildSinglePinBox(boxIndex, obscure);
       }),
     );
   }
 
-  Widget _buildSinglePinBox(int index) {
+  Widget _buildSinglePinBox(int index, bool obscure) {
     return Container(
       width: 42,
       height: 52,
-      padding: const EdgeInsets.only(top: 8),
+      padding: EdgeInsets.only(top: obscure ? 8 : 0),
       decoration: BoxDecoration(
         color: Colors.white.withAlpha((0.3 * 255).toInt()),
         borderRadius: BorderRadius.circular(8),
