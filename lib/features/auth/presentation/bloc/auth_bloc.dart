@@ -130,7 +130,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onResendOtp(OtpResendEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(state: AuthAppState.loading, resendSeconds: 45));
 
     final result = await _resendOtpUsecase(ResendOtpParams(event.phoneNumber));
 

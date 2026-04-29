@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/phone_field/phone_field.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
@@ -39,6 +40,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (prev, curr) => prev.state != curr.state,
         listener: (context, state) {
           if (state.state == AuthAppState.otpSent) {
             context.push(OtpVerificationScreen.routeName);
@@ -119,7 +121,11 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     ),
                   ),
                 ),
-                ElevatedButton.icon(
+                FileFlowButton(
+                  text: StringConstants.kSendOtp,
+                  textColor: Colors.white,
+                  icon: const Icon(CupertinoIcons.arrow_right, color: Colors.white),
+                  iconAlignment: IconAlignment.end,
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
                       if (country?.dialCode != null && phone != null) {
@@ -127,18 +133,6 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                       }
                     }
                   },
-                  label: const Text(
-                    StringConstants.kSendOtp,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
-                  ),
-                  icon: const Icon(CupertinoIcons.arrow_right, color: Colors.white),
-                  iconAlignment: IconAlignment.end,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: const Color(0xFF0062FF),
-                  ),
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 24),

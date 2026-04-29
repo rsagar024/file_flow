@@ -47,4 +47,19 @@ class StringConstants {
   static const String kRoot = 'Root';
   static const String kLocation = 'Location';
   static const String kUploadFile = 'Upload File';
+  static const String kIsRequiredField = 'is required field';
+  static const String kOnlyDigitsAreAllowed = 'Only digits are allowed';
+  static const String kNumberMustStartWith = 'Number must start with';
+  static const String kInvalidContactNumber = 'Invalid contact number';
+  static const String kSelectCountry = 'select country';
+  static const String kFullNameIsRequired = 'Full name is required';
+  static const String kNameMustBeAtLeast3Character = 'Name must be at least 3 characters';
+  static const String kOnlyLettersAndSpacesAllowed = 'Only letters and spaces allowed';
+  static const String kUsernameIsRequired = 'Username is required';
+  static const String kUsernameMustNotContainSpaces = 'Username must not contain spaces';
+  static const String kMinimum3CharactersRequired = 'Minimum 3 characters required';
+  static const String kOnlyLowercaseLettersNumbers = 'Only lowercase letters, numbers, and underscore allowed';
+  static const String kCannotStartOrEndWithUnderscore = 'Cannot start or end with underscore';
+  static const String kEmailIsRequired = 'Email is required';
+  static const String kEnterAValidEmailAddress = 'Enter a valid email address';
 }

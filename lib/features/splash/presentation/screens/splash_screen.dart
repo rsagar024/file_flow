@@ -29,6 +29,7 @@ class _SplashScreenState extends FileFlowBackgroundState<SplashScreen> {
   @override
   Widget buildContent(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (prev, curr) => prev.state != curr.state,
       listener: (context, state) {
         if (state.state == AuthAppState.newUserDetected) {
           context.go(CreateAccountScreen.routeName);

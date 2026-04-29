@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
@@ -37,6 +38,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
         ),
       ),
       body: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (prev, curr) => prev.state != curr.state,
         listener: (context, state) {
           if (state.state == AuthAppState.newUserDetected) {
             context.go(CreateAccountScreen.routeName);
@@ -96,7 +98,11 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                     );
                   },
                 ),
-                ElevatedButton.icon(
+                FileFlowButton(
+                  text: StringConstants.kVerify,
+                  textColor: Colors.white,
+                  icon: const Icon(Icons.security, color: Colors.white),
+                  iconAlignment: IconAlignment.end,
                   onPressed: () {
                     if (pinTextField.controller.text.trim().length == 6) {
                       context.read<AuthBloc>().add(OtpVerifyEvent(otp: pinTextField.controller.text.trim()));
@@ -104,18 +110,6 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                       printError('Invalid Otp');
                     }
                   },
-                  label: const Text(
-                    StringConstants.kVerify,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
-                  ),
-                  icon: const Icon(Icons.security, color: Colors.white),
-                  iconAlignment: IconAlignment.end,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    backgroundColor: const Color(0xFF0062FF),
-                  ),
                 ),
                 const Spacer(),
               ],

@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/selectable_item_bottom_sheet.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +81,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
   }
 
   void _updateSelectedCountry() {
-    final dialCode = widget.selectedDialCode?.replaceAll('+', '') ?? '91';
+    final dialCode = widget.selectedDialCode?.replaceAll('+', '') ?? StringConstants.kIndianDialCode;
     setState(() {
       _selectedCountry = _countries.firstWhere(
         (element) => element.value?.dialCode == dialCode,
@@ -151,7 +152,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
 
     if (value == null || value.isEmpty) {
       if (widget.isRequired) {
-        _errorText = '${widget.labelText} is required field';
+        _errorText = '${widget.labelText} ${StringConstants.kIsRequiredField}';
         _triggerValidationCallback(false, null, null);
         return _errorText;
       } else {
@@ -162,7 +163,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
     }
 
     if (!digitsOnly.hasMatch(value)) {
-      _errorText = 'Only digits are allowed';
+      _errorText = StringConstants.kOnlyDigitsAreAllowed;
       _triggerValidationCallback(false, null, null);
       return _errorText;
     }
@@ -171,14 +172,14 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
     if (startingDigits.isNotEmpty) {
       final isValidStart = startingDigits.any((prefix) => value.startsWith(prefix));
       if (!isValidStart) {
-        _errorText = 'Number must start with ${startingDigits.join(', ')}';
+        _errorText = '${StringConstants.kNumberMustStartWith} ${startingDigits.join(', ')}';
         _triggerValidationCallback(false, country, null);
         return _errorText;
       }
     }
 
     if (value.length != maxLength || (int.tryParse(value) ?? 0) <= 0) {
-      _errorText = 'Invalid contact number';
+      _errorText = StringConstants.kInvalidContactNumber;
       _triggerValidationCallback(false, country, null);
       return _errorText;
     }
@@ -307,7 +308,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SelectableItemBottomSheet(
-                              title: 'select country',
+                              title: StringConstants.kSelectCountry,
                               selectableItems: _countries,
                               selectedItem: _selectedCountry,
                               canSearchItems: true,
@@ -345,7 +346,9 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                     readOnly: false,
                     onTap: () {
                       _focusNode.requestFocus();
-                      _effectiveController.selection = TextSelection.collapsed(offset: _effectiveController.text.length);
+                      _effectiveController.selection = TextSelection.collapsed(
+                        offset: _effectiveController.text.length,
+                      );
                     },
                     enabled: widget.isEnabled,
                     cursorColor: AppColors.white,
@@ -368,13 +371,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
         if (_errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 6, left: 12),
-            child: Text(
-              _errorText!,
-              style: const TextStyle(
-                color: Colors.red,
-                fontSize: 12,
-              ),
-            ),
+            child: Text(_errorText!, style: const TextStyle(color: Colors.red, fontSize: 12)),
           ),
       ],
     );

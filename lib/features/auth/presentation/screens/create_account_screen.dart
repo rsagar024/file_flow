@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
@@ -131,7 +132,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: MediaQuery.paddingOf(context).bottom + 10),
-        child: ElevatedButton.icon(
+        child: /*ElevatedButton.icon(
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
             } else {
@@ -150,6 +151,17 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             backgroundColor: const Color(0xFF0062FF),
           ),
+        ),*/ FileFlowButton(
+          text: StringConstants.kCreateAccount,
+          textColor: Colors.white,
+          icon: const Icon(Icons.arrow_forward, color: Colors.white),
+          iconAlignment: IconAlignment.end,
+          onPressed: () {
+            if (_formKey.currentState?.validate() ?? false) {
+            } else {
+              printError('Not validate');
+            }
+          },
         ),
       ),
     );
