@@ -3,6 +3,7 @@ import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/core/validator/validator.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
@@ -26,15 +27,15 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         animateColor: false,
         automaticallyImplyLeading: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         title: const Text(
           StringConstants.kCreateAccount,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
         ),
         centerTitle: true,
       ),
@@ -65,11 +66,11 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                         children: [
                           Text(
                             StringConstants.kProfilePhoto,
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.white),
                           ),
                           Text(
                             StringConstants.kPngJpgUpTo10MB,
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: AppColors.textSecondary),
                           ),
                         ],
                       ),
@@ -77,49 +78,49 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                     const SizedBox(height: 32),
                     const Text(
                       StringConstants.kFullName,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.nameController,
                       hintText: StringConstants.kHintName,
                       keyboardType: TextInputType.text,
-                      prefixIcon: const Icon(Icons.badge, color: Colors.grey, size: 20),
+                      prefixIcon: const Icon(Icons.badge, color: AppColors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateFullName,
                     ),
                     const Text(
                       StringConstants.kUsername,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.usernameController,
                       hintText: StringConstants.kHintUsername,
                       keyboardType: TextInputType.text,
-                      prefixIcon: const Icon(Icons.perm_identity, color: Colors.grey, size: 20),
+                      prefixIcon: const Icon(Icons.perm_identity, color: AppColors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateUsername,
                     ),
                     const Text(
                       StringConstants.kEmailAddress,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.emailController,
                       hintText: StringConstants.kHintEmailAddress,
                       keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const Icon(Icons.email_rounded, color: Colors.grey, size: 20),
+                      prefixIcon: const Icon(Icons.email_rounded, color: AppColors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       validator: Validator.validateEmail,
                     ),
                     const Text(
                       StringConstants.kPhoneNumber,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFFCBD5E1)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                     FileFlowTextFieldWidget(
                       controller: authBloc.phoneController,
                       hintText: StringConstants.kHintPhoneNumber,
                       keyboardType: TextInputType.phone,
-                      prefixIcon: const Icon(Icons.phone, color: Colors.grey, size: 20),
+                      prefixIcon: const Icon(Icons.phone, color: AppColors.grey, size: 20),
                       margin: const EdgeInsets.only(top: 8, bottom: 20),
                       enabled: false,
                     ),
@@ -132,29 +133,10 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: MediaQuery.paddingOf(context).bottom + 10),
-        child: /*ElevatedButton.icon(
-          onPressed: () {
-            if (_formKey.currentState?.validate() ?? false) {
-            } else {
-              printError('Not validate');
-            }
-          },
-          label: const Text(
-            StringConstants.kCreateAccount,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
-          ),
-          icon: const Icon(Icons.arrow_forward, color: Colors.white),
-          iconAlignment: IconAlignment.end,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            backgroundColor: const Color(0xFF0062FF),
-          ),
-        ),*/ FileFlowButton(
+        child: FileFlowButton(
           text: StringConstants.kCreateAccount,
-          textColor: Colors.white,
-          icon: const Icon(Icons.arrow_forward, color: Colors.white),
+          textColor: AppColors.white,
+          icon: const Icon(Icons.arrow_forward, color: AppColors.white),
           iconAlignment: IconAlignment.end,
           onPressed: () {
             if (_formKey.currentState?.validate() ?? false) {
@@ -198,11 +180,11 @@ class ProfileImagePicker extends FormField<String> {
                        width: 100,
                        decoration: BoxDecoration(
                          shape: BoxShape.circle,
-                         border: Border.all(color: hasError ? Colors.red : Colors.grey, width: 2),
+                         border: Border.all(color: hasError ? AppColors.red : AppColors.grey, width: 2),
                        ),
                        alignment: Alignment.center,
                        child: field.value == null
-                           ? const Icon(Icons.person, size: 30, color: Colors.grey)
+                           ? const Icon(Icons.person, size: 30, color: AppColors.grey)
                            : ClipOval(child: Image.network(field.value!, fit: BoxFit.cover, width: 100, height: 100)),
                      ),
                      Positioned(
@@ -218,8 +200,8 @@ class ProfileImagePicker extends FormField<String> {
                          },
                          child: const CircleAvatar(
                            radius: 15,
-                           backgroundColor: Colors.blue,
-                           child: Icon(Icons.edit, size: 18, color: Colors.white),
+                           backgroundColor: AppColors.primary,
+                           child: Icon(Icons.edit, size: 18, color: AppColors.white),
                          ),
                        ),
                      ),
@@ -229,7 +211,7 @@ class ProfileImagePicker extends FormField<String> {
                if (hasError)
                  Padding(
                    padding: const EdgeInsets.only(top: 4),
-                   child: Text(field.errorText!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+                   child: Text(field.errorText!, style: const TextStyle(color: AppColors.red, fontSize: 12)),
                  ),
              ],
            );

@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widge
 import 'package:fileflow/core/common/shapes/dotted_border_painter.dart';
 import 'package:fileflow/core/common/widgets/folder_card.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class UploadScreen extends FileFlowStatelessWidget {
@@ -12,23 +13,23 @@ class UploadScreen extends FileFlowStatelessWidget {
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
+        surfaceTintColor: AppColors.transparent,
         animateColor: false,
         toolbarHeight: 40,
         centerTitle: true,
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.circle), color: Colors.white),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_rounded), color: Colors.white)],
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.circle), color: AppColors.white),
+        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_rounded), color: AppColors.white)],
         title: RichText(
           text: const TextSpan(
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
             children: [
               TextSpan(text: StringConstants.kFile),
               TextSpan(
                 text: StringConstants.kFlow,
-                style: TextStyle(color: Color(0xFF0062FF)),
+                style: TextStyle(color: AppColors.primary),
               ),
             ],
           ),
@@ -41,22 +42,22 @@ class UploadScreen extends FileFlowStatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 4),
             child: CustomPaint(
-              painter: const DottedBorderPainter(color: Colors.grey, strokeWidth: 0.8, dashPattern: [6, 6]),
+              painter: const DottedBorderPainter(color: AppColors.grey, strokeWidth: 0.8, dashPattern: [6, 6]),
               size: Size.infinite,
               isComplex: true,
               willChange: false,
               child: Container(
-                color: Colors.transparent,
+                color: AppColors.transparent,
                 height: 195,
                 width: double.infinity,
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.upload_sharp, color: Colors.white),
+                    Icon(Icons.upload_sharp, color: AppColors.white),
                     SizedBox(height: 5),
                     Text(
                       StringConstants.kSelectYourFiles,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                   ],
                 ),
@@ -73,9 +74,9 @@ class UploadScreen extends FileFlowStatelessWidget {
                   padding: const EdgeInsets.all(10).copyWith(left: 24, top: 18),
                   margin: const EdgeInsets.all(16).copyWith(bottom: 0),
                   decoration: BoxDecoration(
-                    color: Colors.transparent,
+                    color: AppColors.transparent,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: AppColors.grey),
                   ),
                   child: const Row(
                     children: [
@@ -83,10 +84,10 @@ class UploadScreen extends FileFlowStatelessWidget {
                       SizedBox(width: 20),
                       Text(
                         StringConstants.kRoot,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
                       ),
                       Spacer(),
-                      Icon(Icons.arrow_drop_down, size: 35, color: Colors.white),
+                      Icon(Icons.arrow_drop_down, size: 35, color: AppColors.white),
                     ],
                   ),
                 ),
@@ -96,16 +97,16 @@ class UploadScreen extends FileFlowStatelessWidget {
                   right: 32,
                   child: Row(
                     children: [
-                      Expanded(flex: 1, child: Container(height: 1, color: Colors.grey)),
+                      Expanded(flex: 1, child: Container(height: 1, color: AppColors.grey)),
                       Container(
-                        color: const Color(0xFF070D1F),
+                        color: AppColors.neutral900,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: const Text(
                           StringConstants.kLocation,
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: TextStyle(color: AppColors.white, fontSize: 12),
                         ),
                       ),
-                      Expanded(flex: 25, child: Container(height: 1, color: Colors.grey)),
+                      Expanded(flex: 25, child: Container(height: 1, color: AppColors.grey)),
                     ],
                   ),
                 ),
@@ -120,11 +121,11 @@ class UploadScreen extends FileFlowStatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                backgroundColor: const Color(0xFF0062FF),
+                backgroundColor: AppColors.primary,
               ),
               child: const Text(
                 StringConstants.kUploadFile,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.white),
               ),
             ),
           ),
@@ -138,7 +139,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //         padding: EdgeInsets.symmetric(vertical: 10),
           //         margin: EdgeInsets.only(right: 10),
           //         decoration: BoxDecoration(
-          //           color: Colors.white12,
+          //           color: AppColors.white12,
           //           borderRadius: BorderRadius.circular(12),
           //         ),
           //         child: Column(
@@ -149,7 +150,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //               style: TextStyle(
           //                 fontSize: 20,
           //                 fontWeight: FontWeight.w500,
-          //                 color: Colors.white,
+          //                 color: AppColors.white,
           //               ),
           //             ),
           //             SizedBox(height: 10),
@@ -176,7 +177,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //         padding: EdgeInsets.symmetric(vertical: 10),
           //         margin: EdgeInsets.only(right: 10),
           //         decoration: BoxDecoration(
-          //           color: Colors.white38,
+          //           color: AppColors.white38,
           //           borderRadius: BorderRadius.circular(12),
           //         ),
           //         child: Column(
@@ -187,7 +188,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //               style: TextStyle(
           //                 fontSize: 20,
           //                 fontWeight: FontWeight.w500,
-          //                 color: Colors.white,
+          //                 color: AppColors.white,
           //               ),
           //             ),
           //             SizedBox(height: 10),
@@ -214,7 +215,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //         padding: EdgeInsets.symmetric(vertical: 10),
           //         margin: EdgeInsets.only(right: 10),
           //         decoration: BoxDecoration(
-          //           color: Colors.white12,
+          //           color: AppColors.white12,
           //           borderRadius: BorderRadius.circular(12),
           //         ),
           //         child: Column(
@@ -225,7 +226,7 @@ class UploadScreen extends FileFlowStatelessWidget {
           //               style: TextStyle(
           //                 fontSize: 20,
           //                 fontWeight: FontWeight.w500,
-          //                 color: Colors.white,
+          //                 color: AppColors.white,
           //               ),
           //             ),
           //             SizedBox(height: 10),
@@ -261,7 +262,7 @@ class UploadScreen extends FileFlowStatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   margin: EdgeInsets.only(right: 10, bottom: 10),
                   decoration: BoxDecoration(
-                    color: index % 2 == 0 ? Colors.white12 : Colors.white38,
+                    color: index % 2 == 0 ? AppColors.white12 : AppColors.white38,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -272,7 +273,7 @@ class UploadScreen extends FileFlowStatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                       SizedBox(height: 10),

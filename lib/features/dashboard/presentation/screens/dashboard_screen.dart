@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/screens/home_screen.dart';
 import 'package:fileflow/features/upload/presentation/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +19,6 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
   final ValueNotifier _currentIndex = ValueNotifier(0);
   late AnimationController _controller;
   bool isLoading = false;
-
-  static const _activeColor = Color(0xFF0062FF);
-  static const _inactiveColor = Color(0xFF9A9AB0);
 
   @override
   void onInit() {
@@ -53,7 +51,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       body: PageView(
         controller: _pageController,
         // onPageChanged: _onTapNav,
@@ -61,14 +59,14 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
         children: const [
           HomeScreen(),
           Center(
-            child: Text('Sharing', style: TextStyle(color: Colors.white)),
+            child: Text('Sharing', style: TextStyle(color: AppColors.white)),
           ),
           UploadScreen(),
           Center(
-            child: Text('Coming Soon', style: TextStyle(color: Colors.white)),
+            child: Text('Coming Soon', style: TextStyle(color: AppColors.white)),
           ),
           Center(
-            child: Text('Profile', style: TextStyle(color: Colors.white)),
+            child: Text('Profile', style: TextStyle(color: AppColors.white)),
           ),
         ],
       ),
@@ -96,13 +94,13 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                           shape: BoxShape.circle,
                           gradient: SweepGradient(
                             colors: [
-                              Colors.red,
-                              Colors.orange,
-                              Colors.yellow,
-                              Colors.green,
-                              Colors.blue,
-                              Colors.indigo,
-                              Colors.purple,
+                              AppColors.red,
+                              AppColors.orange,
+                              AppColors.yellow,
+                              AppColors.green,
+                              AppColors.blue,
+                              AppColors.indigo,
+                              AppColors.purple,
                             ],
                           ),
                         ),
@@ -112,9 +110,9 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                 ),
               Container(
                 margin: const EdgeInsets.all(3),
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF0062FF)),
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
               ),
-              const Icon(Icons.upload_sharp, color: Colors.white),
+              const Icon(Icons.upload_sharp, color: AppColors.white),
             ],
           ),
         ),
@@ -125,7 +123,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
         shape: const CircularNotchedRectangle(),
         notchMargin: 6,
         elevation: 10,
-        color: Colors.white12,
+        color: AppColors.white12,
         height: 58,
         child: Container(
           height: 20,
@@ -140,8 +138,8 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     icon: Icons.home,
                     index: 0,
                     selectedIndex: value,
-                    activeColor: _activeColor,
-                    inactiveColor: _inactiveColor,
+                    activeColor: AppColors.primary,
+                    inactiveColor: AppColors.neutral500,
                     onTap: _onTapNav,
                     label: StringConstants.kHome,
                   ),
@@ -149,8 +147,8 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     icon: Icons.people_alt,
                     index: 1,
                     selectedIndex: value,
-                    activeColor: _activeColor,
-                    inactiveColor: _inactiveColor,
+                    activeColor: AppColors.primary,
+                    inactiveColor: AppColors.neutral500,
                     onTap: _onTapNav,
                     label: StringConstants.kSharing,
                   ),
@@ -158,8 +156,8 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     icon: Icons.person_outline_rounded,
                     index: 2,
                     selectedIndex: value,
-                    activeColor: Colors.transparent,
-                    inactiveColor: Colors.transparent,
+                    activeColor: AppColors.transparent,
+                    inactiveColor: AppColors.transparent,
                     onTap: (value) {},
                     label: '',
                   ),
@@ -167,8 +165,8 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     icon: Icons.settings,
                     index: 3,
                     selectedIndex: value,
-                    activeColor: _activeColor,
-                    inactiveColor: _inactiveColor,
+                    activeColor: AppColors.primary,
+                    inactiveColor: AppColors.neutral500,
                     onTap: _onTapNav,
                     label: StringConstants.kComing,
                   ),
@@ -176,8 +174,8 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
                     icon: Icons.person_outline_rounded,
                     index: 4,
                     selectedIndex: value,
-                    activeColor: _activeColor,
-                    inactiveColor: _inactiveColor,
+                    activeColor: AppColors.primary,
+                    inactiveColor: AppColors.neutral500,
                     onTap: _onTapNav,
                     label: StringConstants.kProfile,
                   ),

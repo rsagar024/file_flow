@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
 import 'package:fileflow/core/common/widgets/folder_card.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FolderItemWidget extends FileFlowStatelessWidget {
@@ -22,7 +23,7 @@ class FolderItemWidget extends FileFlowStatelessWidget {
             textAlign: TextAlign.start,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: AppColors.white),
           ),
         ),
       ],

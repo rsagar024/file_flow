@@ -1,3 +1,4 @@
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FileFlowTextFieldWidget extends FormField<String> {
@@ -13,7 +14,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
     bool obscureText = false,
     TextStyle? textStyle,
     TextStyle? hintStyle,
-    Color cursorColor = Colors.white,
+    Color cursorColor = AppColors.white,
     bool readOnly = false,
     bool enabled = true,
     int maxLines = 1,
@@ -40,7 +41,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
                    readOnly: readOnly,
                    enabled: enabled,
                    focusNode: focusNode,
-                   style: textStyle ?? const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white),
+                   style: textStyle ?? const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.white),
                    cursorColor: cursorColor,
                    onTap: onTap,
                    onChanged: (value) {
@@ -50,7 +51,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
                    decoration: InputDecoration(
                      hintText: hintText,
                      hintStyle:
-                         hintStyle ?? TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
+                         hintStyle ?? TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: AppColors.grey700),
                      counterText: '',
                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                      prefixIcon: prefixIcon,
@@ -59,11 +60,11 @@ class FileFlowTextFieldWidget extends FormField<String> {
                      // ❌ disable default error
                      focusedBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),
-                       borderSide: BorderSide(color: hasError ? Colors.red : Colors.white, width: 2),
+                       borderSide: BorderSide(color: hasError ? AppColors.red : AppColors.white, width: 2),
                      ),
                      enabledBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),
-                       borderSide: BorderSide(color: hasError ? Colors.red : Colors.grey),
+                       borderSide: BorderSide(color: hasError ? AppColors.red : AppColors.grey),
                      ),
                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                    ),
@@ -72,7 +73,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
                  // 👇 Custom error below
                  if (field.hasError) ...[
                    const SizedBox(height: 6),
-                   Text(field.errorText ?? '', style: const TextStyle(color: Colors.red, fontSize: 12)),
+                   Text(field.errorText ?? '', style: const TextStyle(color: AppColors.red, fontSize: 12)),
                  ],
                ],
              ),

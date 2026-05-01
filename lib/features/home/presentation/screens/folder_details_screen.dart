@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/widgets/folder_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -23,22 +24,22 @@ class FolderDetailsScreen extends FileFlowStatelessWidget {
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.transparent,
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
         toolbarHeight: 40,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         animateColor: false,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Work Folder',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
         ),
         centerTitle: true,
       ),

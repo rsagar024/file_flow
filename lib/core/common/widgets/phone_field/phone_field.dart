@@ -104,7 +104,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
     _animationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
     _backgroundColorAnimation =
         ColorTween(
-          begin: Colors.transparent,
+          begin: AppColors.transparent,
           end: AppColors.neutral50.withAlpha((0.1 * 255).toInt()),
         ).animate(_animationController)..addListener(() {
           setState(() {});
@@ -276,7 +276,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                             children: [
                               TextSpan(
                                 text: typedText,
-                                style: baseTextStyle.copyWith(color: Colors.white),
+                                style: baseTextStyle.copyWith(color: AppColors.white),
                               ),
                               TextSpan(
                                 text: hintZeros,
@@ -316,11 +316,11 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(prefixText, style: baseTextStyle.copyWith(color: Colors.white)),
+                                  Text(prefixText, style: baseTextStyle.copyWith(color: AppColors.white)),
                                   Container(
                                     width: 1.5,
                                     height: 40,
-                                    color: Colors.grey.withAlpha((0.3 * 255).toInt()),
+                                    color: AppColors.grey.withAlpha((0.3 * 255).toInt()),
                                     margin: const EdgeInsets.only(left: 10, right: 5),
                                   ),
                                 ],
@@ -338,7 +338,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                       ),
                     ),
                     style: baseTextStyle.copyWith(
-                      color: isComplete ? Colors.white : Colors.transparent,
+                      color: isComplete ? AppColors.white : AppColors.transparent,
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 1,
@@ -371,7 +371,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
         if (_errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 6, left: 12),
-            child: Text(_errorText!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+            child: Text(_errorText!, style: const TextStyle(color: AppColors.red, fontSize: 12)),
           ),
       ],
     );

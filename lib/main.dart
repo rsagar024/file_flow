@@ -1,6 +1,7 @@
 import 'package:fileflow/core/di/injection_container.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/routes/app_route.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +25,7 @@ class FileFlowApp extends StatelessWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: StringConstants.kAppName,
-        theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+        theme: ThemeData(colorScheme: .fromSeed(seedColor: AppColors.primary)),
         routerConfig: AppRoute.routes,
       ),
     );

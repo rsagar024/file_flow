@@ -5,6 +5,7 @@ import 'package:fileflow/core/common/widgets/phone_field/phone_field.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/otp_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +39,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.transparent,
       body: BlocListener<AuthBloc, AuthState>(
         listenWhen: (prev, curr) => prev.state != curr.state,
         listener: (context, state) {
@@ -64,12 +65,12 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                       const SizedBox(height: 10),
                       RichText(
                         text: const TextSpan(
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
                           children: [
                             TextSpan(text: StringConstants.kFile),
                             TextSpan(
                               text: StringConstants.kFlow,
-                              style: TextStyle(color: Color(0xFF0062FF)),
+                              style: TextStyle(color: AppColors.primary),
                             ),
                           ],
                         ),
@@ -78,7 +79,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                         padding: EdgeInsets.only(top: 8, bottom: 48),
                         child: Text(
                           StringConstants.kSecureSyncYourWorkflowAnywhere,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
                         ),
                       ),
                     ],
@@ -86,18 +87,18 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                 ),
                 const Text(
                   StringConstants.kWelcomeBack,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Color(0xFFF1F5F9)),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 8, bottom: 32),
                   child: Text(
                     StringConstants.kEnterYourMobileNumberToSignIn,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
                   ),
                 ),
                 Text(
                   StringConstants.kMobileNumber.toUpperCase(),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
                 ),
                 Form(
                   key: _formKey,
@@ -123,8 +124,8 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                 ),
                 FileFlowButton(
                   text: StringConstants.kSendOtp,
-                  textColor: Colors.white,
-                  icon: const Icon(CupertinoIcons.arrow_right, color: Colors.white),
+                  textColor: AppColors.white,
+                  icon: const Icon(CupertinoIcons.arrow_right, color: AppColors.white),
                   iconAlignment: IconAlignment.end,
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? false) {
@@ -136,7 +137,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Divider(color: Color(0xFF1E293B)),
+                  child: Divider(color: AppColors.surface),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -144,7 +145,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     actions.length,
                     (index) => Text(
                       actions[index],
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Color(0xFF94A3B8)),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.textSecondary),
                     ),
                   ),
                 ),

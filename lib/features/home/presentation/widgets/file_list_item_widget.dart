@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FileListItemWidget extends FileFlowStatelessWidget {
@@ -20,7 +21,7 @@ class FileListItemWidget extends FileFlowStatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: Colors.white10, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: AppColors.white12, borderRadius: BorderRadius.circular(12)),
       child: Row(
         children: [
           // Thumbnail
@@ -39,20 +40,20 @@ class FileListItemWidget extends FileFlowStatelessWidget {
                   fileName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                  style: const TextStyle(color: AppColors.white, fontSize: 14, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    Text(fileSize, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    Text(fileSize, style: const TextStyle(color: AppColors.white54, fontSize: 12)),
                     const SizedBox(width: 8),
                     Container(
                       width: 4,
                       height: 4,
-                      decoration: const BoxDecoration(color: Colors.white54, shape: BoxShape.circle),
+                      decoration: const BoxDecoration(color: AppColors.white54, shape: BoxShape.circle),
                     ),
                     const SizedBox(width: 8),
-                    Text(fileDate, style: const TextStyle(color: Colors.white54, fontSize: 12)),
+                    Text(fileDate, style: const TextStyle(color: AppColors.white54, fontSize: 12)),
                   ],
                 ),
               ],
@@ -62,7 +63,7 @@ class FileListItemWidget extends FileFlowStatelessWidget {
           // More options
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.more_vert_rounded, color: Colors.white54),
+            icon: const Icon(Icons.more_vert_rounded, color: AppColors.white54),
           ),
         ],
       ),

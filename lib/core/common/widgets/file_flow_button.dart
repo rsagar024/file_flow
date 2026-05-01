@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class FileFlowButton extends FileFlowStatelessWidget {
@@ -21,8 +22,8 @@ class FileFlowButton extends FileFlowStatelessWidget {
     this.icon,
     this.isLoading = false,
     this.isFullWidth = true,
-    this.backgroundColor = const Color(0xFF0062FF),
-    this.textColor = Colors.white,
+    this.backgroundColor = AppColors.primary,
+    this.textColor = AppColors.white,
     this.borderRadius = 12,
     this.padding = const EdgeInsets.symmetric(vertical: 14),
     this.height = 50,
@@ -54,7 +55,7 @@ class FileFlowButton extends FileFlowStatelessWidget {
       return const SizedBox(
         height: 20,
         width: 20,
-        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+        child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.white),
       );
     }
 

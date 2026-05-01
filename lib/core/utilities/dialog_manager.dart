@@ -1,3 +1,4 @@
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -22,14 +23,14 @@ class DialogManager {
         right: 0,
         bottom: 0,
         child: Material(
-          color: Colors.black.withValues(alpha: 0.5),
+          color: AppColors.black.withValues(alpha: 0.5),
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const CircularProgressIndicator(color: Colors.blueAccent),
+                const CircularProgressIndicator(color: AppColors.blueAccent),
                 const SizedBox(height: 16),
-                Text(message, style: CustomTextStyles.custom11Medium.copyWith(color: Colors.blueAccent)),
+                Text(message, style: CustomTextStyles.custom11Medium.copyWith(color: AppColors.blueAccent)),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/screens/folder_details_screen.dart';
 import 'package:fileflow/features/home/presentation/widgets/file_list_item_widget.dart';
 import 'package:fileflow/features/home/presentation/widgets/folder_item_widget.dart';
@@ -51,7 +52,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                 children: [
                   const Text(
                     StringConstants.kPinnedFolder,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
@@ -62,7 +63,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                     onPressed: () {},
                     child: const Text(
                       StringConstants.kViewAll,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF0062FF)),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary),
                     ),
                   ),
                 ],
@@ -114,18 +115,18 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                 children: [
                   const Text(
                     StringConstants.kRecentFiles,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
                   ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () => setState(() => _isGridView = true),
-                    child: Icon(Icons.grid_view, color: _isGridView ? const Color(0xFF0062FF) : Colors.white),
+                    child: Icon(Icons.grid_view, color: _isGridView ? AppColors.primary : AppColors.white),
                   ),
                   const SizedBox(width: 10),
                   // List icon
                   GestureDetector(
                     onTap: () => setState(() => _isGridView = false),
-                    child: Icon(Icons.list_outlined, color: !_isGridView ? const Color(0xFF0062FF) : Colors.white),
+                    child: Icon(Icons.list_outlined, color: !_isGridView ? AppColors.primary : AppColors.white),
                   ),
                 ],
               ),
@@ -156,8 +157,8 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
                                 onTap: () {},
                                 child: CircleAvatar(
                                   radius: 15,
-                                  backgroundColor: Colors.black.withValues(alpha: 0.3),
-                                  child: const Icon(Icons.favorite, color: Colors.red, size: 18),
+                                  backgroundColor: AppColors.black.withValues(alpha: 0.3),
+                                  child: const Icon(Icons.favorite, color: AppColors.red, size: 18),
                                 ),
                               ),
                             ),

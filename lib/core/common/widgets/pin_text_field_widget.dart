@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -57,7 +58,7 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
         _pinValues[i] = text[i];
         _obsValues[i] = text[i]; // Show current digit initially
 
-        if(widget.obscure) {
+        if (widget.obscure) {
           // Cancel any existing timer for this index
           _timers[i]?.cancel();
 
@@ -79,7 +80,7 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
       } else {
         // Ensure all previous digits remain stars
         if (_pinValues[i].isNotEmpty) {
-          if(widget.obscure) {
+          if (widget.obscure) {
             _obsValues[i] = '*';
           }
         }
@@ -108,14 +109,14 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
             keyboardType: TextInputType.number,
             enableInteractiveSelection: false,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            style: const TextStyle(fontSize: 1, color: Colors.transparent),
+            style: const TextStyle(fontSize: 1, color: AppColors.transparent),
             decoration: const InputDecoration(
               counterText: '',
               border: InputBorder.none,
               isCollapsed: true,
               contentPadding: EdgeInsets.symmetric(vertical: 20),
             ),
-            cursorColor: Colors.transparent,
+            cursorColor: AppColors.transparent,
           ),
         ),
       ],
@@ -139,14 +140,14 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
       height: 52,
       padding: EdgeInsets.only(top: obscure ? 8 : 0),
       decoration: BoxDecoration(
-        color: Colors.white.withAlpha((0.3 * 255).toInt()),
+        color: AppColors.white.withAlpha((0.3 * 255).toInt()),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: index == _currentFocusedIndex ? Colors.white : Colors.transparent, width: 2),
+        border: Border.all(color: index == _currentFocusedIndex ? AppColors.white : AppColors.transparent, width: 2),
       ),
       alignment: Alignment.center,
       child: Text(
         _obsValues[index],
-        style: CustomTextStyles.baseStyle.copyWith(fontSize: 25, fontWeight: FontWeight.w900, color: Colors.white),
+        style: CustomTextStyles.baseStyle.copyWith(fontSize: 25, fontWeight: FontWeight.w900, color: AppColors.white),
       ),
     );
   }

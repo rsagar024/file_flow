@@ -1,3 +1,4 @@
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SharpDividerPainter extends CustomPainter {
@@ -14,7 +15,7 @@ class SharpDividerPainter extends CustomPainter {
       ..shader =
           linearGradient ??
           const LinearGradient(
-            colors: [Colors.transparent, Colors.grey, Colors.transparent],
+            colors: [AppColors.transparent, AppColors.grey, AppColors.transparent],
           ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     final path = Path()
