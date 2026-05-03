@@ -38,6 +38,17 @@ final class OtpResendEvent extends AuthEvent {
   List<Object?> get props => [phoneNumber];
 }
 
+final class UpdateProfileImageEvent extends AuthEvent {
+  final String imagePath;
+
+  const UpdateProfileImageEvent({required this.imagePath});
+
+  @override
+  List<Object?> get props => [imagePath];
+}
+
+final class UpdateDeviceInfoEvent extends AuthEvent {}
+
 final class CreateAccountEvent extends AuthEvent {
   final String phoneNumber;
   final String displayName;
@@ -51,13 +62,4 @@ final class CreateAccountEvent extends AuthEvent {
 
 final class SignOutEvent extends AuthEvent {
   const SignOutEvent();
-}
-
-final class UpdateProfileImageEvent extends AuthEvent {
-  final String imagePath;
-
-  const UpdateProfileImageEvent({required this.imagePath});
-
-  @override
-  List<Object?> get props => [imagePath];
 }

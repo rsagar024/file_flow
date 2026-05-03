@@ -84,7 +84,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity>> createAccount(UserEntity userEntity) async {
     try {
       final deviceInfo = await _deviceInfoService.getDeviceInfo();
-      final userModel = userEntity.copyWith(devices: [deviceInfo]).toModel();
+      final userModel = userEntity
+          .copyWith(
+            devices: [
+              {deviceInfo.deviceId ?? 'unknown': deviceInfo},
+            ],
+          )
+          .toModel();
       final result = await _authRemoteDatasource.createUserInFirestore(userModel);
 
       return Right(result.toEntity());

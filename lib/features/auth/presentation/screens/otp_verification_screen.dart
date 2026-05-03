@@ -4,6 +4,7 @@ import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/core/utilities/custom_snackbar.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
@@ -43,6 +44,13 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
         listener: (context, state) {
           if (state.state == AuthAppState.newUserDetected) {
             context.go(CreateAccountScreen.routeName);
+          } else if (state.state == AuthAppState.failure) {
+            printError(state.errorMessage ?? 'Unknown error');
+            CustomSnackbar.show(
+              context: context,
+              message: state.errorMessage ?? 'Unknown error',
+              type: SnackbarType.error,
+            );
           }
         },
         child: SafeArea(

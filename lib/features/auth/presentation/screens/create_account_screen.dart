@@ -5,12 +5,15 @@ import 'package:fileflow/core/di/injection_container.dart';
 import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/core/utilities/custom_snackbar.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/core/validator/validator.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/widgets/profile_image_picker_widget.dart';
+import 'package:fileflow/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateAccountScreen extends FileFlowBackgroundStatefulWidget {
   static const routeName = '/create-account';
@@ -40,107 +43,122 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
         ),
         centerTitle: true,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BlocBuilder<AuthBloc, AuthState>(
-                        buildWhen: (prev, curr) => prev.imageUrl != curr.imageUrl,
-                        builder: (context, state) {
-                          return ProfileImagePickerWidget(
-                            context: context,
-                            imagePath: state.imageUrl,
-                            onChanged: (value) {
-                              if (value != null) {
-                                authBloc.add(UpdateProfileImageEvent(imagePath: value));
-                              }
-                            },
-                            isEditing: true,
-                          );
-                        },
-                      ),
-                      const Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          spacing: 3,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              StringConstants.kProfilePhoto,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.white),
-                            ),
-                            Text(
-                              StringConstants.kPngJpgUpTo10MB,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
+      body: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (prev, curr) => prev.state != curr.state,
+        listener: (context, state) {
+          if (state.state == AuthAppState.authenticated) {
+            context.go(DashboardScreen.routeName);
+          } else if (state.state == AuthAppState.failure) {
+            printError(state.errorMessage ?? 'Unknown error');
+            CustomSnackbar.show(
+              context: context,
+              message: state.errorMessage ?? 'Unknown error',
+              type: SnackbarType.error,
+            );
+          }
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, curr) => prev.imageUrl != curr.imageUrl,
+                          builder: (context, state) {
+                            return ProfileImagePickerWidget(
+                              context: context,
+                              imagePath: state.imageUrl,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  authBloc.add(UpdateProfileImageEvent(imagePath: value));
+                                }
+                              },
+                              isEditing: true,
+                            );
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 32),
-                      const Text(
-                        StringConstants.kFullName,
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
-                      ),
-                      FileFlowTextFieldWidget(
-                        controller: authBloc.nameController,
-                        hintText: StringConstants.kHintName,
-                        keyboardType: TextInputType.text,
-                        prefixIcon: const Icon(Icons.badge, color: AppColors.grey, size: 20),
-                        margin: const EdgeInsets.only(top: 8, bottom: 20),
-                        validator: Validator.validateFullName,
-                      ),
-                      const Text(
-                        StringConstants.kUsername,
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
-                      ),
-                      FileFlowTextFieldWidget(
-                        controller: authBloc.usernameController,
-                        hintText: StringConstants.kHintUsername,
-                        keyboardType: TextInputType.text,
-                        prefixIcon: const Icon(Icons.perm_identity, color: AppColors.grey, size: 20),
-                        margin: const EdgeInsets.only(top: 8, bottom: 20),
-                        validator: Validator.validateUsername,
-                      ),
-                      const Text(
-                        StringConstants.kEmailAddress,
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
-                      ),
-                      FileFlowTextFieldWidget(
-                        controller: authBloc.emailController,
-                        hintText: StringConstants.kHintEmailAddress,
-                        keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.email_rounded, color: AppColors.grey, size: 20),
-                        margin: const EdgeInsets.only(top: 8, bottom: 20),
-                        validator: Validator.validateEmail,
-                      ),
-                      const Text(
-                        StringConstants.kPhoneNumber,
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
-                      ),
-                      FileFlowTextFieldWidget(
-                        controller: authBloc.phoneController,
-                        hintText: StringConstants.kHintPhoneNumber,
-                        keyboardType: TextInputType.phone,
-                        prefixIcon: const Icon(Icons.phone, color: AppColors.grey, size: 20),
-                        margin: const EdgeInsets.only(top: 8, bottom: 20),
-                        enabled: false,
-                      ),
-                    ],
+                        const Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            spacing: 3,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                StringConstants.kProfilePhoto,
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.white),
+                              ),
+                              Text(
+                                StringConstants.kPngJpgUpTo10MB,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        const Text(
+                          StringConstants.kFullName,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                        ),
+                        FileFlowTextFieldWidget(
+                          controller: authBloc.nameController,
+                          hintText: StringConstants.kHintName,
+                          keyboardType: TextInputType.text,
+                          prefixIcon: const Icon(Icons.badge, color: AppColors.grey, size: 20),
+                          margin: const EdgeInsets.only(top: 8, bottom: 20),
+                          validator: Validator.validateFullName,
+                        ),
+                        const Text(
+                          StringConstants.kUsername,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                        ),
+                        FileFlowTextFieldWidget(
+                          controller: authBloc.usernameController,
+                          hintText: StringConstants.kHintUsername,
+                          keyboardType: TextInputType.text,
+                          prefixIcon: const Icon(Icons.perm_identity, color: AppColors.grey, size: 20),
+                          margin: const EdgeInsets.only(top: 8, bottom: 20),
+                          validator: Validator.validateUsername,
+                        ),
+                        const Text(
+                          StringConstants.kEmailAddress,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                        ),
+                        FileFlowTextFieldWidget(
+                          controller: authBloc.emailController,
+                          hintText: StringConstants.kHintEmailAddress,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: const Icon(Icons.email_rounded, color: AppColors.grey, size: 20),
+                          margin: const EdgeInsets.only(top: 8, bottom: 20),
+                          validator: Validator.validateEmail,
+                        ),
+                        const Text(
+                          StringConstants.kPhoneNumber,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                        ),
+                        FileFlowTextFieldWidget(
+                          controller: authBloc.phoneController,
+                          hintText: StringConstants.kHintPhoneNumber,
+                          keyboardType: TextInputType.phone,
+                          prefixIcon: const Icon(Icons.phone, color: AppColors.grey, size: 20),
+                          margin: const EdgeInsets.only(top: 8, bottom: 20),
+                          enabled: false,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

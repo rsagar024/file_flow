@@ -13,7 +13,7 @@ class UserEntity extends Equatable {
   final int? totalFilesCount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final List<DeviceEntity>? devices;
+  final List<Map<String, DeviceEntity>>? devices;
   final bool isNewUser;
 
   const UserEntity({
@@ -77,7 +77,7 @@ class UserEntity extends Equatable {
     int? totalFilesCount,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<DeviceEntity>? devices,
+    List<Map<String, DeviceEntity>>? devices,
     bool? isNewUser,
   }) {
     return UserEntity(
@@ -108,7 +108,8 @@ class UserEntity extends Equatable {
       totalFilesCount: totalFilesCount,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      devices: devices?.map((e) => e.toModel()).toList(),
+      devices: devices?.map((deviceMap) => deviceMap.map((key, value) => MapEntry(key, value.toModel()))).toList(),
+      // devices: devices?.map((e) => e.toModel()).toList(),
       isNewUser: isNewUser,
     );
   }

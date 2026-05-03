@@ -45,9 +45,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<OtpTimerTickEvent>(_onStartTimer);
     on<OtpVerifyEvent>(_onVerifyOtp);
     on<OtpResendEvent>(_onResendOtp);
+    on<UpdateDeviceInfoEvent>(_onUpdateDeviceInfo);
+    on<UpdateProfileImageEvent>(_onUpdateProfileImage);
     on<CreateAccountEvent>(_onCreateAccount);
     on<SignOutEvent>(_onSignOut);
-    on<UpdateProfileImageEvent>(_onUpdateProfileImage);
   }
 
   FutureOr<void> _onCheckStatus(AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
@@ -142,6 +143,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
+  FutureOr<void> _onUpdateDeviceInfo(UpdateDeviceInfoEvent event, Emitter<AuthState> emit) {
+
+  }
+
+
+  FutureOr<void> _onUpdateProfileImage(UpdateProfileImageEvent event, Emitter<AuthState> emit) {
+    emit(state.copyWith(imageUrl: event.imagePath));
+  }
+
   FutureOr<void> _onCreateAccount(CreateAccountEvent event, Emitter<AuthState> emit) async {
     emit(state.copyWith(state: AuthAppState.loading));
 
@@ -172,10 +182,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  FutureOr<void> _onUpdateProfileImage(UpdateProfileImageEvent event, Emitter<AuthState> emit) {
-    emit(state.copyWith(imageUrl: event.imagePath));
-  }
-
   @override
   Future<void> close() {
     nameController.dispose();
@@ -185,4 +191,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _timer?.cancel();
     return super.close();
   }
+
 }

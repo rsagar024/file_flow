@@ -6,6 +6,8 @@ import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/core/utilities/custom_snackbar.dart';
+import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/otp_verification_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,6 +47,13 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
         listener: (context, state) {
           if (state.state == AuthAppState.otpSent) {
             context.push(OtpVerificationScreen.routeName);
+          } else if (state.state == AuthAppState.failure) {
+            printError(state.errorMessage ?? 'Unknown error');
+            CustomSnackbar.show(
+              context: context,
+              message: state.errorMessage ?? 'Unknown error',
+              type: SnackbarType.error,
+            );
           }
         },
         child: SafeArea(
