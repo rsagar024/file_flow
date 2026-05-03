@@ -116,6 +116,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ) {
       _timer?.cancel();
       if (authResult.isNewUser) {
+        phoneController.text = authResult.phoneNumber;
         emit(
           state.copyWith(
             state: AuthAppState.newUserDetected,

@@ -122,17 +122,23 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     ),
                   ),
                 ),
-                FileFlowButton(
-                  text: StringConstants.kSendOtp,
-                  textColor: AppColors.white,
-                  icon: const Icon(CupertinoIcons.arrow_right, color: AppColors.white),
-                  iconAlignment: IconAlignment.end,
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      if (country?.dialCode != null && phone != null) {
-                        context.read<AuthBloc>().add(OtpSendEvent(phoneNumber: '+${country!.dialCode}$phone'));
-                      }
-                    }
+                BlocSelector<AuthBloc, AuthState, bool>(
+                  selector: (state) => state.state == AuthAppState.loading,
+                  builder: (context, isLoading) {
+                    return FileFlowButton(
+                      text: StringConstants.kSendOtp,
+                      textColor: AppColors.white,
+                      icon: const Icon(CupertinoIcons.arrow_right, color: AppColors.white),
+                      iconAlignment: IconAlignment.end,
+                      isLoading: isLoading,
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          if (country?.dialCode != null && phone != null) {
+                            context.read<AuthBloc>().add(OtpSendEvent(phoneNumber: '+${country!.dialCode}$phone'));
+                          }
+                        }
+                      },
+                    );
                   },
                 ),
                 const Padding(

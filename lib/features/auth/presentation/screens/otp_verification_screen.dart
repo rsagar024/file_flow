@@ -99,17 +99,23 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                     );
                   },
                 ),
-                FileFlowButton(
-                  text: StringConstants.kVerify,
-                  textColor: AppColors.white,
-                  icon: const Icon(Icons.security, color: AppColors.white),
-                  iconAlignment: IconAlignment.end,
-                  onPressed: () {
-                    if (pinTextField.controller.text.trim().length == 6) {
-                      context.read<AuthBloc>().add(OtpVerifyEvent(otp: pinTextField.controller.text.trim()));
-                    } else {
-                      printError('Invalid Otp');
-                    }
+                BlocSelector<AuthBloc, AuthState, bool>(
+                  selector: (state) => state.state == AuthAppState.loading,
+                  builder: (context, isLoading) {
+                    return FileFlowButton(
+                      text: StringConstants.kVerify,
+                      textColor: AppColors.white,
+                      icon: const Icon(Icons.security, color: AppColors.white),
+                      iconAlignment: IconAlignment.end,
+                      isLoading: isLoading,
+                      onPressed: () {
+                        if (pinTextField.controller.text.trim().length == 6) {
+                          context.read<AuthBloc>().add(OtpVerifyEvent(otp: pinTextField.controller.text.trim()));
+                        } else {
+                          printError('Invalid Otp');
+                        }
+                      },
+                    );
                   },
                 ),
                 const Spacer(),

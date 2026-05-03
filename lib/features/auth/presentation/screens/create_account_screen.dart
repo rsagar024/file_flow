@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_background_stat
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/enums/app_state/app_state.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
@@ -146,23 +147,29 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: MediaQuery.paddingOf(context).bottom),
-        child: FileFlowButton(
-          text: StringConstants.kCreateAccount,
-          textColor: AppColors.white,
-          icon: const Icon(Icons.arrow_forward, color: AppColors.white),
-          iconAlignment: IconAlignment.end,
-          onPressed: () {
-            if (_formKey.currentState?.validate() ?? false) {
-              authBloc.add(
-                CreateAccountEvent(
-                  phoneNumber: authBloc.phoneController.text,
-                  displayName: authBloc.nameController.text,
-                  email: authBloc.emailController.text,
-                ),
-              );
-            } else {
-              printError('Not validate');
-            }
+        child: BlocSelector<AuthBloc, AuthState, bool>(
+          selector: (state) => state.state == AuthAppState.loading,
+          builder: (context, isLoading) {
+            return FileFlowButton(
+              text: StringConstants.kCreateAccount,
+              textColor: AppColors.white,
+              icon: const Icon(Icons.arrow_forward, color: AppColors.white),
+              iconAlignment: IconAlignment.end,
+              isLoading: isLoading,
+              onPressed: () {
+                if (_formKey.currentState?.validate() ?? false) {
+                  authBloc.add(
+                    CreateAccountEvent(
+                      phoneNumber: authBloc.phoneController.text,
+                      displayName: authBloc.nameController.text,
+                      email: authBloc.emailController.text,
+                    ),
+                  );
+                } else {
+                  printError('Not validate');
+                }
+              },
+            );
           },
         ),
       ),
