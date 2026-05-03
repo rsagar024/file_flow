@@ -62,4 +62,8 @@ class StringConstants {
   static const String kCannotStartOrEndWithUnderscore = 'Cannot start or end with underscore';
   static const String kEmailIsRequired = 'Email is required';
   static const String kEnterAValidEmailAddress = 'Enter a valid email address';
+  static const String kProfileImageIsRequired = 'Profile image is required';
+  static const String kChooseImageSource = 'Choose Image Source';
+  static const String kGallery = 'Gallery';
+  static const String kCamera = 'Camera';
 }

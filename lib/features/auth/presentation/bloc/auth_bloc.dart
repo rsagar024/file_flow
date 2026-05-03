@@ -47,6 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<OtpResendEvent>(_onResendOtp);
     on<CreateAccountEvent>(_onCreateAccount);
     on<SignOutEvent>(_onSignOut);
+    on<UpdateProfileImageEvent>(_onUpdateProfileImage);
   }
 
   FutureOr<void> _onCheckStatus(AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
@@ -92,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _timer?.cancel();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      add(OtpTimerTickEvent()); // ✅ dispatch event instead of emit
+      add(OtpTimerTickEvent());
     });
   }
 
@@ -145,11 +146,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final result = await _createAccountUsecase(
       CreateAccountParams(
-        uid: event.uid,
+        uid: state.uid ?? '',
         phoneNumber: event.phoneNumber,
         displayName: event.displayName,
         email: event.email,
-        photoUrl: event.photoUrl ?? '',
+        photoUrl: state.imageUrl ?? '',
       ),
     );
 
@@ -170,8 +171,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
+  FutureOr<void> _onUpdateProfileImage(UpdateProfileImageEvent event, Emitter<AuthState> emit) {
+    emit(state.copyWith(imageUrl: event.imagePath));
+  }
+
   @override
   Future<void> close() {
+    nameController.dispose();
+    usernameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
     _timer?.cancel();
     return super.close();
   }

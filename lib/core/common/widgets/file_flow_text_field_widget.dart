@@ -41,7 +41,13 @@ class FileFlowTextFieldWidget extends FormField<String> {
                    readOnly: readOnly,
                    enabled: enabled,
                    focusNode: focusNode,
-                   style: textStyle ?? const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.white),
+                   style:
+                       textStyle ??
+                       TextStyle(
+                         fontSize: 15,
+                         fontWeight: FontWeight.w500,
+                         color: enabled ? AppColors.white : AppColors.grey,
+                       ),
                    cursorColor: cursorColor,
                    onTap: onTap,
                    onChanged: (value) {
@@ -57,7 +63,6 @@ class FileFlowTextFieldWidget extends FormField<String> {
                      prefixIcon: prefixIcon,
                      suffixIcon: suffixIcon,
                      errorText: null,
-                     // ❌ disable default error
                      focusedBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),
                        borderSide: BorderSide(color: hasError ? AppColors.red : AppColors.white, width: 2),
@@ -65,6 +70,10 @@ class FileFlowTextFieldWidget extends FormField<String> {
                      enabledBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),
                        borderSide: BorderSide(color: hasError ? AppColors.red : AppColors.grey),
+                     ),
+                     disabledBorder: OutlineInputBorder(
+                       borderRadius: BorderRadius.circular(12),
+                       borderSide: const BorderSide(color: AppColors.grey),
                      ),
                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                    ),

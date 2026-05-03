@@ -10,6 +10,7 @@ class AuthState extends Equatable {
   final bool isNewUser;
   final int resendSeconds;
   final bool canResend;
+  final String? imageUrl;
 
   const AuthState({
     this.state = AuthAppState.initial,
@@ -21,6 +22,7 @@ class AuthState extends Equatable {
     this.isNewUser = false,
     this.resendSeconds = 45,
     this.canResend = false,
+    this.imageUrl,
   });
 
   AuthState copyWith({
@@ -33,6 +35,7 @@ class AuthState extends Equatable {
     bool? isNewUser,
     int? resendSeconds,
     bool? canResend,
+    String? imageUrl,
   }) {
     return AuthState(
       state: state ?? this.state,
@@ -44,6 +47,7 @@ class AuthState extends Equatable {
       isNewUser: isNewUser ?? this.isNewUser,
       resendSeconds: resendSeconds ?? this.resendSeconds,
       canResend: canResend ?? this.canResend,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
@@ -58,5 +62,6 @@ class AuthState extends Equatable {
     isNewUser,
     resendSeconds,
     canResend,
+    imageUrl,
   ];
 }

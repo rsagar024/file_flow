@@ -46,6 +46,7 @@ dependencies:
   go_router: ^17.2.2
   path_provider: ^2.1.5
   file_picker: ^10.3.10
+  image_picker: ^1.1.2
   flutter_svg: ^2.2.3
   equatable: ^2.0.8
   fpdart: ^1.2.0

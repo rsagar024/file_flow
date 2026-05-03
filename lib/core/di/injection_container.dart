@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fileflow/core/services/device_info_service.dart';
+import 'package:fileflow/core/services/image_picker_service.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource_impl.dart';
 import 'package:fileflow/features/auth/data/repositories/auth_repository_impl.dart';
@@ -32,7 +33,9 @@ void _registerFirebase() {
 }
 
 void _registerCoreService() {
-  getIt.registerLazySingleton<DeviceInfoService>(() => DeviceInfoService());
+  getIt
+    ..registerLazySingleton<DeviceInfoService>(() => DeviceInfoService())
+    ..registerLazySingleton<ImagePickerService>(() => ImagePickerService());
 }
 
 void _registerDataSources() {
