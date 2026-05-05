@@ -30,8 +30,13 @@ class UserModel extends UserEntity {
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt'] as String) : null,
       devices: (json['devices'] as List<dynamic>?)
-          ?.map((e) => DeviceModel.fromJson(e as Map<String, dynamic>))
+          ?.map(
+            (deviceMap) => (deviceMap as Map<String, dynamic>).map(
+              (key, value) => MapEntry(key, DeviceModel.fromJson(value as Map<String, dynamic>)),
+            ),
+          )
           .toList(),
+      isNewUser: json['isNewUser'] as bool? ?? false,
     );
   }
 
@@ -48,6 +53,7 @@ class UserModel extends UserEntity {
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
       'devices': devices?.map((e) => (e as DeviceModel).toJson()).toList(),
+      'isNewUser': isNewUser,
     };
   }
 
@@ -63,7 +69,9 @@ class UserModel extends UserEntity {
       totalFilesCount: totalFilesCount,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      devices: devices?.map((e) => (e as DeviceModel).toEntity()).toList(),
+      devices: devices
+          ?.map((deviceMap) => deviceMap.map((key, value) => MapEntry(key, (value as DeviceModel).toEntity())))
+          .toList(),
       isNewUser: isNewUser,
     );
   }

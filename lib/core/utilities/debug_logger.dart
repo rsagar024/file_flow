@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:fileflow/core/resources/themes/ansi_color_code.dart';
+import 'package:fileflow/core/themes/ansi_color_code.dart';
 import 'package:flutter/foundation.dart';
 
 void printInfo(String text) {

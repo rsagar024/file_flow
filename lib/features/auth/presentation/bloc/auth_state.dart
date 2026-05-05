@@ -1,67 +1,67 @@
 part of 'auth_bloc.dart';
 
-sealed class AuthState extends Equatable {
-  const AuthState();
+class AuthState extends Equatable {
+  final AuthAppStatus status;
+  final String? errorMessage;
+  final String? phoneNumber;
+  final String? verificationId;
+  final UserEntity? user;
+  final String? uid;
+  final bool isNewUser;
+  final int resendSeconds;
+  final bool canResend;
+  final String? imageUrl;
+
+  const AuthState({
+    this.status = AuthAppStatus.initial,
+    this.errorMessage,
+    this.phoneNumber,
+    this.verificationId,
+    this.user,
+    this.uid,
+    this.isNewUser = false,
+    this.resendSeconds = 45,
+    this.canResend = false,
+    this.imageUrl,
+  });
+
+  AuthState copyWith({
+    AuthAppStatus? status,
+    String? errorMessage,
+    String? phoneNumber,
+    String? verificationId,
+    UserEntity? user,
+    String? uid,
+    bool? isNewUser,
+    int? resendSeconds,
+    bool? canResend,
+    String? imageUrl,
+  }) {
+    return AuthState(
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      verificationId: verificationId ?? this.verificationId,
+      user: user ?? this.user,
+      uid: uid ?? this.uid,
+      isNewUser: isNewUser ?? this.isNewUser,
+      resendSeconds: resendSeconds ?? this.resendSeconds,
+      canResend: canResend ?? this.canResend,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 
   @override
-  List<Object> get props => [];
-}
-
-final class AuthInitial extends AuthState {
-  const AuthInitial();
-}
-
-final class AuthLoading extends AuthState {
-  const AuthLoading();
-}
-
-final class AuthOtpSentSuccess extends AuthState {
-  final String phoneNumber;
-  final String verificationId;
-
-  const AuthOtpSentSuccess({required this.phoneNumber, required this.verificationId});
-
-  @override
-  List<Object> get props => [phoneNumber, verificationId];
-}
-
-final class AuthOtpResentSuccess extends AuthState {
-  final String phoneNumber;
-
-  const AuthOtpResentSuccess({required this.phoneNumber});
-
-  @override
-  List<Object> get props => [phoneNumber];
-}
-
-final class AuthAuthenticated extends AuthState {
-  final UserEntity user;
-
-  const AuthAuthenticated({required this.user});
-
-  @override
-  List<Object> get props => [user];
-}
-
-final class AuthNewUserDetected extends AuthState {
-  final String uid;
-  final String phoneNumber;
-
-  const AuthNewUserDetected({required this.uid, required this.phoneNumber});
-
-  @override
-  List<Object> get props => [uid, phoneNumber];
-}
-
-final class AuthUnauthenticated extends AuthState {
-  const AuthUnauthenticated();
-}
-
-final class AuthFailureState extends AuthState {
-  final String message;
-
-  const AuthFailureState(this.message);
-
-  @override
-  List<Object> get props => [message];
+  List<Object?> get props => [
+    status,
+    errorMessage,
+    phoneNumber,
+    verificationId,
+    user,
+    uid,
+    isNewUser,
+    resendSeconds,
+    canResend,
+    imageUrl,
+  ];
 }

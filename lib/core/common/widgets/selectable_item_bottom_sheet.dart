@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/shapes/sharp_divider_painter.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/extensions/widget_extension.dart';
 import 'package:fileflow/core/resources/common/image_resources.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:fileflow/core/utilities/custom_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -186,14 +187,14 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                           }
                         },
                         child: Container(
-                          color: Colors.white,
+                          color: AppColors.white,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               // Header
                               Container(
                                 width: MediaQuery.of(context).size.width,
-                                color: Colors.grey,
+                                color: AppColors.grey,
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 10),
                                   child: Row(
@@ -202,7 +203,7 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                       Text(
                                         widget.title,
                                         style: CustomTextStyles.custom14Bold.copyWith(
-                                          color: Colors.black,
+                                          color: AppColors.black,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -226,8 +227,8 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                   padding: const EdgeInsets.only(left: 24, right: 14, top: 10),
                                   child: TextField(
                                     controller: _searchController,
-                                    cursorColor: Colors.black,
-                                    style: CustomTextStyles.custom12Medium.copyWith(color: Colors.black),
+                                    cursorColor: AppColors.black,
+                                    style: CustomTextStyles.custom12Medium.copyWith(color: AppColors.black),
                                     onChanged: (value) {
                                       setState(() {
                                         _searchItems(value);
@@ -235,11 +236,11 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                     },
                                     decoration: InputDecoration(
                                       hintText: widget.searchHintText,
-                                      hintStyle: CustomTextStyles.custom11Regular.copyWith(color: Colors.grey),
-                                      prefixIcon: const Icon(Icons.search, color: Colors.grey, size: 20),
+                                      hintStyle: CustomTextStyles.custom11Regular.copyWith(color: AppColors.grey),
+                                      prefixIcon: const Icon(Icons.search, color: AppColors.grey, size: 20),
                                       suffixIcon: _searchController.text.isNotEmpty
                                           ? IconButton(
-                                              icon: const Icon(Icons.clear, color: Colors.grey, size: 20),
+                                              icon: const Icon(Icons.clear, color: AppColors.grey, size: 20),
                                               onPressed: () {
                                                 setState(() {
                                                   _searchController.clear();
@@ -272,10 +273,10 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                                         text: item.title,
                                                         style: CustomTextStyles.custom12Regular.copyWith(
                                                           color: _tempSelectedItems.contains(item)
-                                                              ? Colors.black
+                                                              ? AppColors.black
                                                               : (item.isEnabled)
-                                                              ? Colors.grey
-                                                              : Colors.grey,
+                                                              ? AppColors.grey
+                                                              : AppColors.grey,
                                                         ),
                                                       ),
                                                       if (!item.isEnabled)
@@ -283,8 +284,8 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                                           text: '  (disabled)',
                                                           style: CustomTextStyles.custom10Light.copyWith(
                                                             color: _tempSelectedItems.contains(item)
-                                                                ? Colors.black
-                                                                : Colors.red,
+                                                                ? AppColors.black
+                                                                : AppColors.red,
                                                           ),
                                                         ),
                                                     ],
@@ -300,11 +301,11 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                                         margin: const EdgeInsets.only(right: 8),
                                                         decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.circular(100),
-                                                          border: Border.all(color: Colors.black, width: 1.5),
+                                                          border: Border.all(color: AppColors.black, width: 1.5),
                                                         ),
                                                         child: const Icon(
                                                           Icons.check_rounded,
-                                                          color: Colors.black,
+                                                          color: AppColors.black,
                                                           size: 16,
                                                         ),
                                                       )
@@ -324,7 +325,7 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                               if (index != _filteredItems.length - 1)
                                                 const Padding(
                                                   padding: EdgeInsets.symmetric(horizontal: 25),
-                                                  child: Divider(color: Colors.black, thickness: .2, height: .5),
+                                                  child: Divider(color: AppColors.black, thickness: .2, height: .5),
                                                 ),
                                             ],
                                           );
@@ -336,10 +337,10 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                 Container(
                                   padding: const EdgeInsets.only(left: 24, right: 14, top: 10, bottom: 10),
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.withAlpha((.4 * 255).toInt()),
+                                        color: AppColors.grey.withAlpha((.4 * 255).toInt()),
                                         spreadRadius: 5,
                                         blurRadius: 7,
                                         offset: const Offset(0, 3),
@@ -359,7 +360,7 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                         child: Text(
                                           'Cancel',
                                           style: CustomTextStyles.custom11Medium.copyWith(
-                                            color: Colors.black,
+                                            color: AppColors.black,
                                             decoration: TextDecoration.underline,
                                           ),
                                         ),
@@ -374,11 +375,11 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                                         },
                                         style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                                          backgroundColor: Colors.black,
+                                          backgroundColor: AppColors.black,
                                         ),
                                         child: Text(
                                           'Save',
-                                          style: CustomTextStyles.custom12Medium.copyWith(color: Colors.white),
+                                          style: CustomTextStyles.custom12Medium.copyWith(color: AppColors.white),
                                         ),
                                       ),
                                     ],
@@ -429,7 +430,7 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
         padding: widget.childPadding,
         child: Container(
           padding: const EdgeInsets.only(left: 24, right: 18, top: 11, bottom: 11),
-          decoration: BoxDecoration(color: Colors.white60, borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(color: AppColors.white60, borderRadius: BorderRadius.circular(5)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -439,7 +440,7 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
                     : _selectedItems.length == 1
                     ? _selectedItems.first.title
                     : '${_selectedItems.length} items selected',
-                style: CustomTextStyles.custom12Regular.copyWith(color: Colors.black),
+                style: CustomTextStyles.custom12Regular.copyWith(color: AppColors.black),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ).withFlexible(),
@@ -463,14 +464,14 @@ class _SelectableItemBottomSheetState<T> extends State<SelectableItemBottomSheet
           _searchController.clear();
           setState(() {});
         },
-        title: Text(_searchController.text.trim(), style: CustomTextStyles.custom12Medium.copyWith(color: Colors.grey)),
-        trailing: const Icon(Icons.add_circle_outline, color: Colors.black),
+        title: Text(_searchController.text.trim(), style: CustomTextStyles.custom12Medium.copyWith(color: AppColors.grey)),
+        trailing: const Icon(Icons.add_circle_outline, color: AppColors.black),
       );
     }
     return Center(
       child: Text(
         'No data found\ntry again later',
-        style: CustomTextStyles.custom10SemiBold.copyWith(color: Colors.black),
+        style: CustomTextStyles.custom10SemiBold.copyWith(color: AppColors.black),
       ),
     );
   }

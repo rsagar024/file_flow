@@ -9,6 +9,7 @@ class DeviceModel extends DeviceEntity {
     super.appVersion,
     super.fcmToken,
     super.isActive,
+    super.lastLoginAt,
   });
 
   factory DeviceModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +21,7 @@ class DeviceModel extends DeviceEntity {
       appVersion: json['appVersion'] as String?,
       fcmToken: json['fcmToken'] as String?,
       isActive: json['isActive'] as bool?,
+      lastLoginAt: json['lastLoginAt'] != null ? DateTime.parse(json['lastLoginAt'] as String) : null,
     );
   }
 
@@ -32,6 +34,7 @@ class DeviceModel extends DeviceEntity {
       'appVersion': appVersion,
       'fcmToken': fcmToken,
       'isActive': isActive,
+      'lastLoginAt': lastLoginAt?.toIso8601String(),
     };
   }
 
@@ -44,6 +47,7 @@ class DeviceModel extends DeviceEntity {
       appVersion: appVersion,
       fcmToken: fcmToken,
       isActive: isActive,
+      lastLoginAt: lastLoginAt,
     );
   }
 }

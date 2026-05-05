@@ -7,9 +7,7 @@ sealed class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-final class AuthCheckStatusEvent extends AuthEvent {
-  const AuthCheckStatusEvent();
-}
+final class AuthCheckStatusEvent extends AuthEvent {}
 
 final class OtpSendEvent extends AuthEvent {
   final String phoneNumber;
@@ -19,6 +17,8 @@ final class OtpSendEvent extends AuthEvent {
   @override
   List<Object?> get props => [phoneNumber];
 }
+
+final class OtpTimerTickEvent extends AuthEvent {}
 
 final class OtpVerifyEvent extends AuthEvent {
   final String otp;
@@ -38,23 +38,26 @@ final class OtpResendEvent extends AuthEvent {
   List<Object?> get props => [phoneNumber];
 }
 
+final class UpdateProfileImageEvent extends AuthEvent {
+  final String imagePath;
+
+  const UpdateProfileImageEvent({required this.imagePath});
+
+  @override
+  List<Object?> get props => [imagePath];
+}
+
+final class UpdateDeviceInfoEvent extends AuthEvent {}
+
 final class CreateAccountEvent extends AuthEvent {
-  final String uid;
   final String phoneNumber;
   final String displayName;
   final String email;
-  final String? photoUrl;
 
-  const CreateAccountEvent({
-    required this.uid,
-    required this.phoneNumber,
-    required this.displayName,
-    required this.email,
-    this.photoUrl,
-  });
+  const CreateAccountEvent({required this.phoneNumber, required this.displayName, required this.email});
 
   @override
-  List<Object?> get props => [uid, phoneNumber, displayName, email, photoUrl];
+  List<Object?> get props => [phoneNumber, displayName, email];
 }
 
 final class SignOutEvent extends AuthEvent {

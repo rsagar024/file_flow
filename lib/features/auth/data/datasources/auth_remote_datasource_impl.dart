@@ -28,7 +28,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (!completer.isCompleted) {
-          completer.completeError(Failure(e.code));
+          completer.completeError(e.message ?? e.code);
         }
       },
       codeSent: (String verificationId, int? resendToken) {
@@ -123,21 +123,45 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     final userData = doc.data()!;
     final existingDevices =
         (userData['devices'] as List<dynamic>?)
-            ?.map((device) => DeviceModel.fromJson(device as Map<String, dynamic>))
+            ?.map(
+              (deviceMap) => (deviceMap as Map<String, dynamic>).map(
+                (key, value) => MapEntry(key, DeviceModel.fromJson(value as Map<String, dynamic>)),
+              ),
+            )
             .toList() ??
         [];
 
-    final index = existingDevices.indexWhere((device) => device.deviceId == deviceModel.deviceId);
-
+    final index = existingDevices.indexWhere((map) => map.containsKey(deviceModel.deviceId));
     if (index != -1) {
-      existingDevices[index] = deviceModel;
+      existingDevices[index] = {
+        ?deviceModel.deviceId: DeviceModel(
+          deviceId: deviceModel.deviceId,
+          deviceName: deviceModel.deviceName,
+          deviceModel: deviceModel.deviceModel,
+          platform: deviceModel.platform,
+          appVersion: deviceModel.appVersion,
+          fcmToken: deviceModel.fcmToken,
+          isActive: deviceModel.isActive,
+          lastLoginAt: deviceModel.lastLoginAt,
+        ),
+      };
     } else {
-      existingDevices.add(deviceModel);
+      existingDevices.add({
+        ?deviceModel.deviceId: DeviceModel(
+          deviceId: deviceModel.deviceId,
+          deviceName: deviceModel.deviceName,
+          deviceModel: deviceModel.deviceModel,
+          platform: deviceModel.platform,
+          appVersion: deviceModel.appVersion,
+          fcmToken: deviceModel.fcmToken,
+          isActive: deviceModel.isActive,
+          lastLoginAt: DateTime.now().toUtc(),
+        ),
+      });
     }
 
     await _firestore.collection('users').doc(uid).update({
-      'devices': existingDevices.map((e) => e.toJson()).toList(),
-      'updatedAt': DateTime.now().toUtc().toIso8601String(),
+      'devices': existingDevices.map((map) => map.map((k, v) => MapEntry(k, v.toJson()))).toList(),
     });
   }
 

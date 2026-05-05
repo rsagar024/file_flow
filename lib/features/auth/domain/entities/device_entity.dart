@@ -9,6 +9,7 @@ class DeviceEntity extends Equatable {
   final String? appVersion;
   final String? fcmToken;
   final bool? isActive;
+  final DateTime? lastLoginAt;
 
   const DeviceEntity({
     this.deviceId,
@@ -18,10 +19,11 @@ class DeviceEntity extends Equatable {
     this.appVersion,
     this.fcmToken,
     this.isActive,
+    this.lastLoginAt,
   });
 
   @override
-  List<Object?> get props => [deviceId, deviceName, deviceModel, platform, appVersion, fcmToken, isActive];
+  List<Object?> get props => [deviceId, deviceName, deviceModel, platform, appVersion, fcmToken, isActive, lastLoginAt];
 
   DeviceEntity copyWith({
     String? deviceId,
@@ -31,6 +33,7 @@ class DeviceEntity extends Equatable {
     String? appVersion,
     String? fcmToken,
     bool? isActive,
+    DateTime? lastLoginAt,
   }) {
     return DeviceEntity(
       deviceId: deviceId ?? this.deviceId,
@@ -40,6 +43,7 @@ class DeviceEntity extends Equatable {
       appVersion: appVersion ?? this.appVersion,
       fcmToken: fcmToken ?? this.fcmToken,
       isActive: isActive ?? this.isActive,
+      lastLoginAt: lastLoginAt ?? this.lastLoginAt,
     );
   }
 
@@ -52,6 +56,7 @@ class DeviceEntity extends Equatable {
       appVersion: appVersion,
       fcmToken: fcmToken,
       isActive: isActive,
+      lastLoginAt: lastLoginAt,
     );
   }
 }
