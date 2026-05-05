@@ -10,16 +10,12 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource _authRemoteDatasource;
   final DeviceInfoService _deviceInfoService;
 
-  PhoneAuthCredential? _pendingAuthCredential;
-
   AuthRepositoryImpl(this._authRemoteDatasource, this._deviceInfoService);
 
   @override
   Future<Either<Failure, String>> sendOtp(String phoneNumber) async {
     try {
-      final verificationId = await _authRemoteDatasource.sendOtp(phoneNumber, (credential) {
-        _pendingAuthCredential = credential;
-      });
+      final verificationId = await _authRemoteDatasource.sendOtp(phoneNumber, (credential) {});
       return Right(verificationId);
     } catch (e) {
       return Left(Failure(e.toString()));
@@ -39,9 +35,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, String>> resendOtp(String phoneNumber) async {
     try {
-      final verificationId = await _authRemoteDatasource.resendOtp(phoneNumber, (credential) {
-        _pendingAuthCredential = credential;
-      });
+      final verificationId = await _authRemoteDatasource.resendOtp(phoneNumber, (credential) {});
       return Right(verificationId);
     } catch (e) {
       return Left(Failure(e.toString()));

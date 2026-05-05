@@ -1,7 +1,7 @@
 part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
-  final AuthAppState state;
+  final AuthAppStatus status;
   final String? errorMessage;
   final String? phoneNumber;
   final String? verificationId;
@@ -13,7 +13,7 @@ class AuthState extends Equatable {
   final String? imageUrl;
 
   const AuthState({
-    this.state = AuthAppState.initial,
+    this.status = AuthAppStatus.initial,
     this.errorMessage,
     this.phoneNumber,
     this.verificationId,
@@ -26,7 +26,7 @@ class AuthState extends Equatable {
   });
 
   AuthState copyWith({
-    AuthAppState? state,
+    AuthAppStatus? status,
     String? errorMessage,
     String? phoneNumber,
     String? verificationId,
@@ -38,7 +38,7 @@ class AuthState extends Equatable {
     String? imageUrl,
   }) {
     return AuthState(
-      state: state ?? this.state,
+      status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       verificationId: verificationId ?? this.verificationId,
@@ -53,7 +53,7 @@ class AuthState extends Equatable {
 
   @override
   List<Object?> get props => [
-    state,
+    status,
     errorMessage,
     phoneNumber,
     verificationId,

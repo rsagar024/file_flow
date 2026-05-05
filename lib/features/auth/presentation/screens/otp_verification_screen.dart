@@ -1,7 +1,7 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
-import 'package:fileflow/core/enums/app_state/app_state.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/utilities/custom_snackbar.dart';
@@ -40,11 +40,11 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
         ),
       ),
       body: BlocListener<AuthBloc, AuthState>(
-        listenWhen: (prev, curr) => prev.state != curr.state,
+        listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
-          if (state.state == AuthAppState.newUserDetected) {
+          if (state.status == AuthAppStatus.newUserDetected) {
             context.go(CreateAccountScreen.routeName);
-          } else if (state.state == AuthAppState.failure) {
+          } else if (state.status == AuthAppStatus.failure) {
             printError(state.errorMessage ?? 'Unknown error');
             CustomSnackbar.show(
               context: context,
@@ -108,7 +108,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                   },
                 ),
                 BlocSelector<AuthBloc, AuthState, bool>(
-                  selector: (state) => state.state == AuthAppState.loading,
+                  selector: (state) => state.status == AuthAppStatus.loading,
                   builder: (context, isLoading) {
                     return FileFlowButton(
                       text: StringConstants.kVerify,

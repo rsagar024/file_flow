@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fileflow/core/enums/app_state/app_state.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
 import 'package:fileflow/core/usecase/usecase.dart';
 import 'package:fileflow/features/auth/domain/entities/user_entity.dart';
 import 'package:fileflow/features/auth/domain/usecases/check_auth_status_usecase.dart';
@@ -52,41 +52,44 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onCheckStatus(AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _checkAuthStatusUsecase(const NoParams());
 
-    result.fold((failure) => emit(state.copyWith(state: AuthAppState.unAuthenticated, errorMessage: failure.message)), (
-      authStatus,
-    ) {
-      if (!authStatus.isLoggedIn) {
-        emit(state.copyWith(state: AuthAppState.unAuthenticated));
-      } else if (authStatus.isNewUser) {
-        phoneController.text = authStatus.phoneNumber ?? '';
-        emit(
-          state.copyWith(
-            state: AuthAppState.newUserDetected,
-            uid: authStatus.uid,
-            phoneNumber: authStatus.phoneNumber,
-            isNewUser: true,
-          ),
-        );
-      } else {
-        emit(state.copyWith(state: AuthAppState.authenticated, user: authStatus.user));
-      }
-    });
+    result.fold(
+      (failure) => emit(state.copyWith(status: AuthAppStatus.unAuthenticated, errorMessage: failure.message)),
+      (authStatus) {
+        if (!authStatus.isLoggedIn) {
+          emit(state.copyWith(status: AuthAppStatus.unAuthenticated));
+        } else if (authStatus.isNewUser) {
+          phoneController.text = authStatus.phoneNumber ?? '';
+          emit(
+            state.copyWith(
+              status: AuthAppStatus.newUserDetected,
+              uid: authStatus.uid,
+              phoneNumber: authStatus.phoneNumber,
+              isNewUser: true,
+            ),
+          );
+        } else {
+          emit(state.copyWith(status: AuthAppStatus.authenticated, user: authStatus.user));
+        }
+      },
+    );
   }
 
   FutureOr<void> _onSendOtp(OtpSendEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _sendOtpUsecase(SendOtpParams(event.phoneNumber));
 
-    result.fold((failure) => emit(state.copyWith(state: AuthAppState.failure, errorMessage: failure.message)), (
+    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (
       verificationId,
     ) {
       _startTimer();
-      emit(state.copyWith(state: AuthAppState.otpSent, phoneNumber: event.phoneNumber, verificationId: verificationId));
+      emit(
+        state.copyWith(status: AuthAppStatus.otpSent, phoneNumber: event.phoneNumber, verificationId: verificationId),
+      );
     });
   }
 
@@ -108,11 +111,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<void> _onVerifyOtp(OtpVerifyEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _verifyOtpUsecase(VerifyOtpParams(event.otp));
 
-    result.fold((failure) => emit(state.copyWith(state: AuthAppState.failure, errorMessage: failure.message)), (
+    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (
       authResult,
     ) {
       _timer?.cancel();
@@ -120,40 +123,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         phoneController.text = authResult.phoneNumber;
         emit(
           state.copyWith(
-            state: AuthAppState.newUserDetected,
+            status: AuthAppStatus.newUserDetected,
             uid: authResult.uid,
             phoneNumber: authResult.phoneNumber,
             isNewUser: true,
           ),
         );
       } else {
-        emit(state.copyWith(state: AuthAppState.authenticated, user: authResult.existingUser));
+        emit(state.copyWith(status: AuthAppStatus.authenticated, user: authResult.existingUser));
       }
     });
   }
 
   FutureOr<void> _onResendOtp(OtpResendEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading, resendSeconds: 45));
+    emit(state.copyWith(status: AuthAppStatus.loading, resendSeconds: 45));
 
     final result = await _resendOtpUsecase(ResendOtpParams(event.phoneNumber));
 
-    result.fold((failure) => emit(state.copyWith(state: AuthAppState.failure, errorMessage: failure.message)), (_) {
+    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (_) {
       _startTimer();
-      emit(state.copyWith(state: AuthAppState.otpResent, phoneNumber: event.phoneNumber));
+      emit(state.copyWith(status: AuthAppStatus.otpResent, phoneNumber: event.phoneNumber));
     });
   }
 
-  FutureOr<void> _onUpdateDeviceInfo(UpdateDeviceInfoEvent event, Emitter<AuthState> emit) {
-
-  }
-
+  FutureOr<void> _onUpdateDeviceInfo(UpdateDeviceInfoEvent event, Emitter<AuthState> emit) {}
 
   FutureOr<void> _onUpdateProfileImage(UpdateProfileImageEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(imageUrl: event.imagePath));
   }
 
   FutureOr<void> _onCreateAccount(CreateAccountEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _createAccountUsecase(
       CreateAccountParams(
@@ -166,19 +166,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(state: AuthAppState.failure, errorMessage: failure.message)),
-      (user) => emit(state.copyWith(state: AuthAppState.authenticated, user: user)),
+      (failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)),
+      (user) => emit(state.copyWith(status: AuthAppStatus.authenticated, user: user)),
     );
   }
 
   FutureOr<void> _onSignOut(SignOutEvent event, Emitter<AuthState> emit) async {
-    emit(state.copyWith(state: AuthAppState.loading));
+    emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _signOutUsecase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(state: AuthAppState.failure, errorMessage: failure.message)),
-      (_) => emit(const AuthState(state: AuthAppState.unAuthenticated)),
+      (failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)),
+      (_) => emit(const AuthState(status: AuthAppStatus.unAuthenticated)),
     );
   }
 
@@ -191,5 +191,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _timer?.cancel();
     return super.close();
   }
-
 }

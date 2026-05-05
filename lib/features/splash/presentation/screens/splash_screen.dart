@@ -1,6 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
-import 'package:fileflow/core/enums/app_state/app_state.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
 import 'package:fileflow/features/auth/presentation/screens/login_screen.dart';
@@ -29,13 +29,13 @@ class _SplashScreenState extends FileFlowBackgroundState<SplashScreen> {
   @override
   Widget buildContent(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-      listenWhen: (prev, curr) => prev.state != curr.state,
+      listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
-        if (state.state == AuthAppState.newUserDetected) {
+        if (state.status == AuthAppStatus.newUserDetected) {
           context.go(CreateAccountScreen.routeName);
-        } else if (state.state == AuthAppState.authenticated) {
+        } else if (state.status == AuthAppStatus.authenticated) {
           context.go(DashboardScreen.routeName);
-        } else if (state.state == AuthAppState.unAuthenticated || state.state == AuthAppState.initial) {
+        } else if (state.status == AuthAppStatus.unAuthenticated || state.status == AuthAppStatus.initial) {
           context.go(LoginScreen.routeName);
         }
       },

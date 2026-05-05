@@ -2,7 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_background_stat
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/phone_field/phone_field.dart';
-import 'package:fileflow/core/enums/app_state/app_state.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -43,11 +43,11 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
     return Scaffold(
       backgroundColor: AppColors.transparent,
       body: BlocListener<AuthBloc, AuthState>(
-        listenWhen: (prev, curr) => prev.state != curr.state,
+        listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
-          if (state.state == AuthAppState.otpSent) {
+          if (state.status == AuthAppStatus.otpSent) {
             context.push(OtpVerificationScreen.routeName);
-          } else if (state.state == AuthAppState.failure) {
+          } else if (state.status == AuthAppStatus.failure) {
             printError(state.errorMessage ?? 'Unknown error');
             CustomSnackbar.show(
               context: context,
@@ -132,7 +132,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                   ),
                 ),
                 BlocSelector<AuthBloc, AuthState, bool>(
-                  selector: (state) => state.state == AuthAppState.loading,
+                  selector: (state) => state.status == AuthAppStatus.loading,
                   builder: (context, isLoading) {
                     return FileFlowButton(
                       text: StringConstants.kSendOtp,
