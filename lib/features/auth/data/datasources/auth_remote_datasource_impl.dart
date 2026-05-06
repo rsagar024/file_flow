@@ -100,6 +100,32 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   @override
   Future<UserModel> createUserInFirestore(UserModel userModel) async {
+    // Validate email is not already taken
+    if (userModel.email != null && userModel.email!.isNotEmpty) {
+      final emailQuery = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: userModel.email)
+          .limit(1)
+          .get();
+
+      if (emailQuery.docs.isNotEmpty) {
+        throw Failure('Email already taken');
+      }
+    }
+
+    // Validate username (username) is not already taken
+    if (userModel.username != null && userModel.username!.isNotEmpty) {
+      final usernameQuery = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: userModel.username)
+          .limit(1)
+          .get();
+
+      if (usernameQuery.docs.isNotEmpty) {
+        throw Failure('Username already taken');
+      }
+    }
+
     userModel = userModel
         .copyWith(
           storageUsedBytes: 0,

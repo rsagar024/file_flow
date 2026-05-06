@@ -180,6 +180,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                     CreateAccountEvent(
                       phoneNumber: authBloc.phoneController.text,
                       displayName: authBloc.nameController.text,
+                      username: authBloc.usernameController.text,
                       email: authBloc.emailController.text,
                     ),
                   );

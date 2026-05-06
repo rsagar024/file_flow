@@ -160,6 +160,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         uid: state.uid ?? '',
         phoneNumber: event.phoneNumber,
         displayName: event.displayName,
+        username: event.username,
         email: event.email,
         photoUrl: state.imageUrl ?? '',
       ),
