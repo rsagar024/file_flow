@@ -4,6 +4,7 @@ import 'package:fileflow/core/common/widgets/folder_card.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UploadScreen extends FileFlowStatelessWidget {
   static const routeName = '/upload';
@@ -20,7 +21,11 @@ class UploadScreen extends FileFlowStatelessWidget {
         animateColor: false,
         toolbarHeight: 40,
         centerTitle: true,
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.circle), color: AppColors.white),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
+        ),
+        leadingWidth: 76,
         actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_rounded), color: AppColors.white)],
         title: RichText(
           text: const TextSpan(
