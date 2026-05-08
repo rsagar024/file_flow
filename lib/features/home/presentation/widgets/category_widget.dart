@@ -22,7 +22,7 @@ class CategoryWidget extends FileFlowStatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: EdgeInsets.fromLTRB(16, 0, 16, MediaQuery.paddingOf(context).bottom + 30),
+          padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 30),
           sliver: SliverMasonryGrid.count(
             crossAxisCount: 2,
             mainAxisSpacing: 20,

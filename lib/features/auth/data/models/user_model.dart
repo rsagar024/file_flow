@@ -6,6 +6,7 @@ class UserModel extends UserEntity {
     super.uid,
     super.email,
     super.displayName,
+    super.username,
     super.photoUrl,
     super.phoneNumber,
     super.storageUsedBytes,
@@ -22,6 +23,7 @@ class UserModel extends UserEntity {
       uid: json['uid'] as String?,
       email: json['email'] as String?,
       displayName: json['displayName'] as String?,
+      username: json['username'] as String?,
       photoUrl: json['photoUrl'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
       storageUsedBytes: json['storageUsedBytes'] as int?,
@@ -45,6 +47,7 @@ class UserModel extends UserEntity {
       'uid': uid,
       'email': email,
       'displayName': displayName,
+      'username': username,
       'photoUrl': photoUrl,
       'phoneNumber': phoneNumber,
       'storageUsedBytes': storageUsedBytes,
@@ -52,7 +55,9 @@ class UserModel extends UserEntity {
       'totalFilesCount': totalFilesCount,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
-      'devices': devices?.map((e) => (e as DeviceModel).toJson()).toList(),
+      'devices': devices
+          ?.map((deviceMap) => deviceMap.map((key, value) => MapEntry(key, (value as DeviceModel).toJson())))
+          .toList(),
       'isNewUser': isNewUser,
     };
   }
@@ -62,6 +67,7 @@ class UserModel extends UserEntity {
       uid: uid,
       email: email,
       displayName: displayName,
+      username: username,
       photoUrl: photoUrl,
       phoneNumber: phoneNumber,
       storageUsedBytes: storageUsedBytes,

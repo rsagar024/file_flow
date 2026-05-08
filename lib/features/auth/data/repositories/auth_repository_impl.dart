@@ -54,9 +54,6 @@ class AuthRepositoryImpl implements AuthRepository {
       final userModel = await _authRemoteDatasource.getUserFromFirestore(user.uid);
 
       if (userModel != null) {
-        final deviceInfo = await _deviceInfoService.getDeviceInfo();
-        await _authRemoteDatasource.updateDeviceInfo(user.uid, deviceInfo.toModel());
-
         return Right(
           AuthStatusResult(
             isLoggedIn: true,

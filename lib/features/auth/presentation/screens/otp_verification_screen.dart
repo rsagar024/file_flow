@@ -8,6 +8,7 @@ import 'package:fileflow/core/utilities/custom_snackbar.dart';
 import 'package:fileflow/core/utilities/debug_logger.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
+import 'package:fileflow/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,6 +45,8 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
         listener: (context, state) {
           if (state.status == AuthAppStatus.newUserDetected) {
             context.go(CreateAccountScreen.routeName);
+          } else if (state.status == AuthAppStatus.authenticated) {
+            context.go(DashboardScreen.routeName);
           } else if (state.status == AuthAppStatus.failure) {
             printError(state.errorMessage ?? 'Unknown error');
             CustomSnackbar.show(

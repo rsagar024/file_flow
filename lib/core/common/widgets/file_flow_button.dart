@@ -38,7 +38,7 @@ class FileFlowButton extends FileFlowStatelessWidget {
       width: isFullWidth ? double.infinity : null,
       height: height,
       child: ElevatedButton(
-        onPressed: isDisabled ? null : onPressed,
+        onPressed: isDisabled ? () {} : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           disabledBackgroundColor: backgroundColor.withValues(alpha: 0.6),

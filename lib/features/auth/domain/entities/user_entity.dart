@@ -6,6 +6,7 @@ class UserEntity extends Equatable {
   final String? uid;
   final String? email;
   final String? displayName;
+  final String? username;
   final String? photoUrl;
   final String? phoneNumber;
   final int? storageUsedBytes;
@@ -20,6 +21,7 @@ class UserEntity extends Equatable {
     this.uid,
     this.email,
     this.displayName,
+    this.username,
     this.photoUrl,
     this.phoneNumber,
     this.storageUsedBytes,
@@ -56,6 +58,7 @@ class UserEntity extends Equatable {
     uid,
     email,
     displayName,
+    username,
     photoUrl,
     phoneNumber,
     storageUsedBytes,
@@ -70,6 +73,7 @@ class UserEntity extends Equatable {
   UserEntity copyWith({
     String? email,
     String? displayName,
+    String? username,
     String? photoUrl,
     String? phoneNumber,
     int? storageUsedBytes,
@@ -84,6 +88,7 @@ class UserEntity extends Equatable {
       uid: uid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
+      username: username ?? this.username,
       photoUrl: photoUrl ?? this.photoUrl,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       storageUsedBytes: storageUsedBytes ?? this.storageUsedBytes,
@@ -101,6 +106,7 @@ class UserEntity extends Equatable {
       uid: uid,
       email: email,
       displayName: displayName,
+      username: username,
       photoUrl: photoUrl,
       phoneNumber: phoneNumber,
       storageUsedBytes: storageUsedBytes,

@@ -10,6 +10,8 @@ jobs:
   build_and_release_prod:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       # 🧩 Checkout repository
@@ -23,49 +25,78 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: latest
 
       # 📦 Install dependencies
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter clean
 
-      # 🧹 Clean build artifacts
-      - name: Flutter clean
-        run: flutter clean
-
-      # 🏗️ Build production APK
+      # 🏗️ Build Production Split APKs
       - name: Build Flutter release APK
-        run: flutter build apk --release
+        run: flutter build apk --release --split-per-abi
 
-      # 🏗️ Build production AAB
+      # 🏗️ Build Production AAB
       - name: Build Flutter release AAB
         run: flutter build appbundle --release
 
-      # 🏷️ Bump version for production release (minor bump)
+      # 📂 Rename files to file_hub format
+      - name: Rename Artifacts
+        run: |
+          # Rename APKs
+          cd build/app/outputs/flutter-apk/
+          mv app-armeabi-v7a-release.apk file-hub-armeabi-v7a.apk
+          mv app-arm64-v8a-release.apk file-hub-arm64-v8a.apk
+          mv app-x86_64-release.apk file-hub-x86_64.apk
+          
+          # Rename AAB
+          cd ../bundle/release/
+          mv app-release.aab file_hub-release.aab
+          echo "✅ Files renamed to file_hub format"
+
+      # 🏷️ Bump version (Minor bump for Master: v1.0.0 -> v1.1.0)
       - name: Bump version and create new tag
         id: tag
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: master
-          default_bump: minor      # master => minor bump (v1.0.0 → v1.1.0)
+          default_bump: minor
           tag_prefix: "v"
 
-      # 📢 Create GitHub Release with APK and AAB
+      # 📝 Extract "Release Note:" from PR Description
+      - name: Extract Release Notes
+        id: pr_notes
+        run: |
+          BODY="${{ github.event.pull_request.body }}"
+          # Extracts everything after 'Release Note:'
+          NOTES=$(echo "$BODY" | perl -0777 -ne 'print $1 if /(?i)Release Note:\s*(.*)/s')
+          
+          if [ -z "$NOTES" ]; then NOTES="Production release stability improvements."; fi
+          
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # 🚀 Create Production GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.new_tag }}
           name: "🚀 Production Release ${{ steps.tag.outputs.new_tag }}"
+          generate_release_notes: true # This creates the "What's Changed" and "New Contributors" logs
           body: |
-            ## What's Changed
-            ${{ steps.tag.outputs.changelog }}
-
-            **Full Changelog:** [${{ steps.tag.outputs.previous_tag }}...${{ steps.tag.outputs.new_tag }}](${{ github.server_url }}/${{ github.repository }}/compare/${{ steps.tag.outputs.previous_tag }}...${{ steps.tag.outputs.new_tag }})
-
+            ### Release Note:
+            ${{ steps.pr_notes.outputs.release_notes }}
+            
+            ---
             👤 Released by **${{ github.actor }}**
           files: |
-            build/app/outputs/flutter-apk/app-release.apk
-            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/file_hub-armeabi-v7a.apk
+            build/app/outputs/flutter-apk/file_hub-arm64-v8a.apk
+            build/app/outputs/flutter-apk/file_hub-x86_64.apk
+            build/app/outputs/bundle/release/file_hub-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,7 +105,4 @@ jobs:
         run: |
           echo "✅ Production release created successfully!"
           echo "🏷️ Tag: ${{ steps.tag.outputs.new_tag }}"
-          echo "📦 Uploaded files:"
-          echo "   • build/app/outputs/flutter-apk/app-release.apk"
-          echo "   • build/app/outputs/bundle/release/app-release.aab"
           echo "👤 Released by: ${{ github.actor }}"

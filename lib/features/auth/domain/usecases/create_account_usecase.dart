@@ -17,6 +17,7 @@ class CreateAccountUsecase implements Usecase<UserEntity, CreateAccountParams> {
         uid: params.uid,
         phoneNumber: params.phoneNumber,
         displayName: params.displayName,
+        username: params.username,
         email: params.email,
         photoUrl: params.photoUrl,
       ),
@@ -28,6 +29,7 @@ class CreateAccountParams extends Equatable {
   final String uid;
   final String phoneNumber;
   final String displayName;
+  final String username;
   final String email;
   final String photoUrl;
 
@@ -35,10 +37,11 @@ class CreateAccountParams extends Equatable {
     required this.uid,
     required this.phoneNumber,
     required this.displayName,
+    required this.username,
     required this.email,
     required this.photoUrl,
   });
 
   @override
-  List<Object?> get props => [uid, phoneNumber, displayName, email, photoUrl];
+  List<Object?> get props => [uid, phoneNumber, displayName, username, email, photoUrl];
 }

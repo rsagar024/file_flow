@@ -52,12 +52,18 @@ final class UpdateDeviceInfoEvent extends AuthEvent {}
 final class CreateAccountEvent extends AuthEvent {
   final String phoneNumber;
   final String displayName;
+  final String username;
   final String email;
 
-  const CreateAccountEvent({required this.phoneNumber, required this.displayName, required this.email});
+  const CreateAccountEvent({
+    required this.phoneNumber,
+    required this.displayName,
+    required this.username,
+    required this.email,
+  });
 
   @override
-  List<Object?> get props => [phoneNumber, displayName, email];
+  List<Object?> get props => [phoneNumber, displayName, username, email];
 }
 
 final class SignOutEvent extends AuthEvent {

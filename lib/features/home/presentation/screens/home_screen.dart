@@ -1,4 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
+import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/widgets/all_category_widget.dart';
@@ -33,40 +35,31 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.transparent,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        surfaceTintColor: AppColors.transparent,
-        animateColor: false,
-        toolbarHeight: 170,
-        title: Column(
+      appBar: FileFlowAppBar(
+        leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
+        titleWidget: RichText(
+          text: const TextSpan(
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
+            children: [
+              TextSpan(text: StringConstants.kFile),
+              TextSpan(
+                text: StringConstants.kFlow,
+                style: TextStyle(color: AppColors.primary),
+              ),
+            ],
+          ),
+        ),
+        trailing: InkWell(
+          splashFactory: NoSplash.splashFactory,
+          onTap: () {},
+          child: const Icon(Icons.notifications_rounded, color: AppColors.white),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
-                  iconSize: 40,
-                  color: AppColors.white,
-                ),
-                const Spacer(flex: 4),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
-                    children: [
-                      TextSpan(text: StringConstants.kFile),
-                      TextSpan(
-                        text: StringConstants.kFlow,
-                        style: TextStyle(color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(flex: 5),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_rounded), color: AppColors.white),
-              ],
-            ),
-            _customTextField(
+            FileFlowTextFieldWidget(
               hintText: StringConstants.kSearchInFileFlow,
               keyboardType: TextInputType.text,
               prefixIcon: const Icon(Icons.search, color: AppColors.grey, size: 20),
@@ -77,44 +70,12 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
               child: Row(children: List.generate(categories.length, (index) => _getChip(label: categories[index]))),
             ),
             const SizedBox(height: 20),
+            const Expanded(child: AllCategoryWidget()),
           ],
         ),
       ),
-      body: const AllCategoryWidget(),
       // body: const FolderCategoryWidget(),
       // body: const CategoryWidget(),
-    );
-  }
-
-  Widget _customTextField({
-    required String hintText,
-    TextInputType? keyboardType,
-    Widget? prefixIcon,
-    Widget? suffixIcon,
-    EdgeInsetsGeometry margin = EdgeInsets.zero,
-  }) {
-    return Padding(
-      padding: margin,
-      child: TextFormField(
-        keyboardType: keyboardType,
-        maxLength: 10,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.white),
-        cursorColor: AppColors.white,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: AppColors.grey700),
-          counterText: '',
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.white, width: 2),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-        // validator: InputValidators.validatePhoneNumber,
-      ),
     );
   }
 
