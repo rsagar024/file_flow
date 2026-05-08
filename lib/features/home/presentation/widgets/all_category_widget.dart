@@ -45,72 +45,63 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16).copyWith(top: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    StringConstants.kPinnedFolder,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  StringConstants.kPinnedFolder,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      StringConstants.kViewAll,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary),
-                    ),
+                  onPressed: () {},
+                  child: const Text(
+                    StringConstants.kViewAll,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.primary),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  const spacing = 10.0;
-                  final int crossAxisCount = constraints.maxWidth < 600
-                      ? 3
-                      : constraints.maxWidth < 900
-                      ? 4
-                      : 6;
-                  final itemWidth = (constraints.maxWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                const spacing = 10.0;
+                final int crossAxisCount = constraints.maxWidth < 600
+                    ? 3
+                    : constraints.maxWidth < 900
+                    ? 4
+                    : 6;
+                final itemWidth = (constraints.maxWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
 
-                  return Align(
-                    alignment: Alignment.topLeft,
-                    child: Wrap(
-                      spacing: spacing,
-                      runSpacing: 20,
-                      children: List.generate(5, (index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const FolderDetailsScreen()),
-                            );
-                          },
-                          child: SizedBox(
-                            width: itemWidth,
-                            child: const FolderItemWidget(name: 'Work Folder'),
-                          ),
-                        );
-                      }),
-                    ),
-                  );
-                },
-              ),
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Wrap(
+                    spacing: spacing,
+                    runSpacing: 20,
+                    children: List.generate(5, (index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const FolderDetailsScreen()));
+                        },
+                        child: SizedBox(
+                          width: itemWidth,
+                          child: const FolderItemWidget(name: 'Work Folder'),
+                        ),
+                      );
+                    }),
+                  ),
+                );
+              },
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Row(
                 children: [
                   const Text(
@@ -134,7 +125,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
           ),
           if (_isGridView)
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, MediaQuery.paddingOf(context).bottom + 10),
+              padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 10),
               sliver: SliverMasonryGrid.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 12,
@@ -172,7 +163,7 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
             )
           else
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, MediaQuery.paddingOf(context).bottom + 10),
+              padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 10),
               sliver: SliverList.builder(
                 itemCount: _files.length,
                 itemBuilder: (context, index) {

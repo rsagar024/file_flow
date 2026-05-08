@@ -55,7 +55,9 @@ class UserModel extends UserEntity {
       'totalFilesCount': totalFilesCount,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
-      'devices': devices?.map((e) => (e as DeviceModel).toJson()).toList(),
+      'devices': devices
+          ?.map((deviceMap) => deviceMap.map((key, value) => MapEntry(key, (value as DeviceModel).toJson())))
+          .toList(),
       'isNewUser': isNewUser,
     };
   }

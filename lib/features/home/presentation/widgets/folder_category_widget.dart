@@ -11,9 +11,7 @@ class FolderCategoryWidget extends FileFlowStatelessWidget {
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ).copyWith(bottom: MediaQuery.paddingOf(context).bottom + 30),
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom + 30),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 const spacing = 10.0;

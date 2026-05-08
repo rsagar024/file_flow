@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -34,41 +35,30 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.transparent,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        surfaceTintColor: AppColors.transparent,
-        animateColor: false,
-        toolbarHeight: 170,
-        title: Column(
+      appBar: FileFlowAppBar(
+        leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
+        titleWidget: RichText(
+          text: const TextSpan(
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
+            children: [
+              TextSpan(text: StringConstants.kFile),
+              TextSpan(
+                text: StringConstants.kFlow,
+                style: TextStyle(color: AppColors.primary),
+              ),
+            ],
+          ),
+        ),
+        trailing: InkWell(
+          splashFactory: NoSplash.splashFactory,
+          onTap: () {},
+          child: const Icon(Icons.notifications_rounded, color: AppColors.white),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
           children: [
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
-                const Spacer(flex: 3),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
-                    children: [
-                      TextSpan(text: StringConstants.kFile),
-                      TextSpan(
-                        text: StringConstants.kFlow,
-                        style: TextStyle(color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(flex: 4),
-                IconButton(
-                  onPressed: () {},
-                  padding: EdgeInsets.zero,
-                  visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-                  icon: const Icon(Icons.notifications_rounded),
-                  color: AppColors.white,
-                ),
-              ],
-            ),
             FileFlowTextFieldWidget(
               hintText: StringConstants.kSearchInFileFlow,
               keyboardType: TextInputType.text,
@@ -80,10 +70,10 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
               child: Row(children: List.generate(categories.length, (index) => _getChip(label: categories[index]))),
             ),
             const SizedBox(height: 20),
+            const Expanded(child: AllCategoryWidget()),
           ],
         ),
       ),
-      body: const AllCategoryWidget(),
       // body: const FolderCategoryWidget(),
       // body: const CategoryWidget(),
     );

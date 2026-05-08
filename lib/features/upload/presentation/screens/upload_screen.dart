@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
 import 'package:fileflow/core/common/shapes/dotted_border_painter.dart';
+import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/common/widgets/folder_card.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -15,19 +16,9 @@ class UploadScreen extends FileFlowStatelessWidget {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.transparent,
-      appBar: AppBar(
-        backgroundColor: AppColors.transparent,
-        surfaceTintColor: AppColors.transparent,
-        animateColor: false,
-        toolbarHeight: 40,
-        centerTitle: true,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
-        ),
-        leadingWidth: 76,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_rounded), color: AppColors.white)],
-        title: RichText(
+      appBar: FileFlowAppBar(
+        leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
+        titleWidget: RichText(
           text: const TextSpan(
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
             children: [
@@ -38,6 +29,11 @@ class UploadScreen extends FileFlowStatelessWidget {
               ),
             ],
           ),
+        ),
+        trailing: InkWell(
+          splashFactory: NoSplash.splashFactory,
+          onTap: () {},
+          child: const Icon(Icons.notifications_rounded, color: AppColors.white),
         ),
       ),
       body: Column(
