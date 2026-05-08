@@ -89,3 +89,10 @@ jobs:
             build/app/outputs/flutter-apk/file_hub-x86_64.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 🧾 Summary
+      - name: Print summary
+        run: |
+          echo "✅ New release created by: ${{ github.actor }}"
+          echo "🏷️ Tag: ${{ steps.tag.outputs.new_tag }}"
+          echo "📦 APK attached to the release."
