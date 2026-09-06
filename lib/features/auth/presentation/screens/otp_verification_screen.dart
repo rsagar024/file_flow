@@ -57,7 +57,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
           }
         },
         child: SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -129,7 +129,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                     );
                   },
                 ),
-                const Spacer(),
+                // const Spacer(),
               ],
             ),
           ),

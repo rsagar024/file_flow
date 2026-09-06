@@ -9,7 +9,6 @@ import 'package:fileflow/features/auth/domain/usecases/resend_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/verify_otp_usecase.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -26,11 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignOutUsecase _signOutUsecase;
 
   Timer? _timer;
-
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
 
   AuthBloc(
     this._sendOtpUsecase,
@@ -62,7 +56,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (!authStatus.isLoggedIn) {
           emit(state.copyWith(status: AuthAppStatus.unAuthenticated));
         } else if (authStatus.isNewUser) {
-          phoneController.text = authStatus.phoneNumber ?? '';
           emit(
             state.copyWith(
               status: AuthAppStatus.newUserDetected,
@@ -120,7 +113,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ) {
       _timer?.cancel();
       if (authResult.isNewUser) {
-        phoneController.text = authResult.phoneNumber;
         emit(
           state.copyWith(
             status: AuthAppStatus.newUserDetected,
@@ -185,10 +177,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Future<void> close() {
-    nameController.dispose();
-    usernameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
     _timer?.cancel();
     return super.close();
   }

@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_background_stat
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/screens/home_screen.dart';
+import 'package:fileflow/features/profile/presentation/screens/profile_screen.dart';
 import 'package:fileflow/features/upload/presentation/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -65,9 +66,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
           Center(
             child: Text('Coming Soon', style: TextStyle(color: AppColors.white)),
           ),
-          Center(
-            child: Text('Profile', style: TextStyle(color: AppColors.white)),
-          ),
+          ProfileScreen(),
         ],
       ),
       floatingActionButton: GestureDetector(

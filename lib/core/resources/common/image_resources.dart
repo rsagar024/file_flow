@@ -52,4 +52,6 @@ class ImageResources {
   // Lotties
   static const String lottieLoading = '$_lottieAssetsResources/loading_anim.json';
   static const String lottieTelegram = '$_lottieAssetsResources/telegram_anim.json';
+
+  static const String profileBannerUrl = 'https://images.pexels.com/photos/6984991/pexels-photo-6984991.jpeg';
 }

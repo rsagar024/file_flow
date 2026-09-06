@@ -28,6 +28,30 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authBloc = getIt<AuthBloc>();
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final currentState = authBloc.state;
+    phoneController.text = currentState.user?.phoneNumber ?? currentState.phoneNumber ?? '';
+    nameController.text = currentState.user?.displayName ?? '';
+    usernameController.text = currentState.user?.username ?? '';
+    emailController.text = currentState.user?.email ?? '';
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    nameController.dispose();
+    usernameController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget buildContent(BuildContext context) {
     return Scaffold(
@@ -111,7 +135,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                         ),
                         FileFlowTextFieldWidget(
-                          controller: authBloc.nameController,
+                          controller: nameController,
                           hintText: StringConstants.kHintName,
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.badge, color: AppColors.grey, size: 20),
@@ -123,7 +147,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                         ),
                         FileFlowTextFieldWidget(
-                          controller: authBloc.usernameController,
+                          controller: usernameController,
                           hintText: StringConstants.kHintUsername,
                           keyboardType: TextInputType.text,
                           prefixIcon: const Icon(Icons.perm_identity, color: AppColors.grey, size: 20),
@@ -135,7 +159,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                         ),
                         FileFlowTextFieldWidget(
-                          controller: authBloc.emailController,
+                          controller: emailController,
                           hintText: StringConstants.kHintEmailAddress,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: const Icon(Icons.email_rounded, color: AppColors.grey, size: 20),
@@ -147,7 +171,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
                         ),
                         FileFlowTextFieldWidget(
-                          controller: authBloc.phoneController,
+                          controller: phoneController,
                           hintText: StringConstants.kHintPhoneNumber,
                           keyboardType: TextInputType.phone,
                           prefixIcon: const Icon(Icons.phone, color: AppColors.grey, size: 20),
@@ -178,10 +202,10 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                 if (_formKey.currentState?.validate() ?? false) {
                   authBloc.add(
                     CreateAccountEvent(
-                      phoneNumber: authBloc.phoneController.text,
-                      displayName: authBloc.nameController.text,
-                      username: authBloc.usernameController.text,
-                      email: authBloc.emailController.text,
+                      phoneNumber: phoneController.text,
+                      displayName: nameController.text,
+                      username: usernameController.text,
+                      email: emailController.text,
                     ),
                   );
                 } else {

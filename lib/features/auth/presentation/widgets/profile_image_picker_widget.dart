@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -80,28 +81,23 @@ class ProfileImagePickerWidget extends FormField<String> {
 
     if (imagePath.isNetworkUrl) {
       return ClipOval(
-        child: Image.network(
-          imagePath,
+        child: CachedNetworkImage(
+          imageUrl: imagePath,
           fit: BoxFit.cover,
           width: 100,
           height: 100,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-              child: SizedBox(
-                width: 30,
-                height: 30,
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                      : null,
-                  strokeWidth: 2,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                ),
+          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+            child: SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
+                value: downloadProgress.progress,
+                strokeWidth: 2,
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
+            ),
+          ),
+          errorWidget: (context, error, stackTrace) {
             return const Icon(Icons.broken_image, size: 30, color: AppColors.error);
           },
         ),
