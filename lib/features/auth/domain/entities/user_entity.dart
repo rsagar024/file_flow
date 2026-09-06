@@ -14,7 +14,7 @@ class UserEntity extends Equatable {
   final int? totalFilesCount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final List<Map<String, DeviceEntity>>? devices;
+  final Map<String, DeviceEntity>? devices;
   final bool isNewUser;
 
   const UserEntity({
@@ -34,7 +34,9 @@ class UserEntity extends Equatable {
   });
 
   double get storageUsedPercentage {
-    if (storageLimitBytes == null || storageLimitBytes == 0 || storageUsedBytes == null) {
+    if (storageLimitBytes == null ||
+        storageLimitBytes == 0 ||
+        storageUsedBytes == null) {
       return 0.0;
     }
     return (storageUsedBytes! / storageLimitBytes!) * 100;
@@ -44,7 +46,8 @@ class UserEntity extends Equatable {
     final bytes = storageUsedBytes ?? 0;
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    if (bytes < 1024 * 1024 * 1024) return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    if (bytes < 1024 * 1024 * 1024)
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 
@@ -81,7 +84,7 @@ class UserEntity extends Equatable {
     int? totalFilesCount,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<Map<String, DeviceEntity>>? devices,
+    Map<String, DeviceEntity>? devices,
     bool? isNewUser,
   }) {
     return UserEntity(
@@ -114,8 +117,7 @@ class UserEntity extends Equatable {
       totalFilesCount: totalFilesCount,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      devices: devices?.map((deviceMap) => deviceMap.map((key, value) => MapEntry(key, value.toModel()))).toList(),
-      // devices: devices?.map((e) => e.toModel()).toList(),
+      devices: devices?.map((key, value) => MapEntry(key, value.toModel())),
       isNewUser: isNewUser,
     );
   }

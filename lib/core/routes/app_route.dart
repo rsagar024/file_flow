@@ -4,6 +4,7 @@ import 'package:fileflow/features/auth/presentation/screens/otp_verification_scr
 import 'package:fileflow/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:fileflow/features/home/presentation/screens/folder_details_screen.dart';
 import 'package:fileflow/features/home/presentation/screens/home_screen.dart';
+import 'package:fileflow/features/profile/presentation/screens/devices_screen.dart';
 import 'package:fileflow/features/upload/presentation/screens/upload_screen.dart';
 import 'package:fileflow/features/splash/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class AppRoute {
       GoRoute(path: HomeScreen.routeName, builder: (context, state) => const HomeScreen()),
       GoRoute(path: FolderDetailsScreen.routeName, builder: (context, state) => const FolderDetailsScreen()),
       GoRoute(path: UploadScreen.routeName, builder: (context, state) => const UploadScreen()),
+      GoRoute(path: DevicesScreen.routeName, builder: (context, state) => const DevicesScreen()),
     ],
   );
 }

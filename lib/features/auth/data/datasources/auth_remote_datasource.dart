@@ -17,6 +17,12 @@ abstract interface class AuthRemoteDatasource {
 
   Future<void> updateDeviceInfo(String uid, DeviceModel deviceModel);
 
+  Stream<UserModel?> watchUser(String uid);
+
+  Future<void> setDeviceActive(String uid, String deviceId, {required bool isActive});
+
+  Future<void> deactivateOtherDevices(String uid, String excludeDeviceId);
+
   Future<UserCredential> signInWithCredential(PhoneAuthCredential credential);
 
   Future<void> signOut();

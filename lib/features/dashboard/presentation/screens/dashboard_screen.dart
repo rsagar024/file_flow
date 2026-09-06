@@ -1,10 +1,15 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fileflow/features/auth/presentation/screens/login_screen.dart';
 import 'package:fileflow/features/home/presentation/screens/home_screen.dart';
 import 'package:fileflow/features/profile/presentation/screens/profile_screen.dart';
 import 'package:fileflow/features/upload/presentation/screens/upload_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class DashboardScreen extends FileFlowBackgroundStatefulWidget {
   static const routeName = '/dashboard';
@@ -15,7 +20,8 @@ class DashboardScreen extends FileFlowBackgroundStatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> with SingleTickerProviderStateMixin {
+class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
+    with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   final ValueNotifier _currentIndex = ValueNotifier(0);
   late AnimationController _controller;
@@ -24,7 +30,10 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
   @override
   void onInit() {
     super.onInit();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
   }
 
   @override
@@ -51,136 +60,150 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen> wit
 
   @override
   Widget buildContent(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.transparent,
-      body: PageView(
-        controller: _pageController,
-        // onPageChanged: _onTapNav,
-        physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          HomeScreen(),
-          Center(
-            child: Text('Sharing', style: TextStyle(color: AppColors.white)),
-          ),
-          UploadScreen(),
-          Center(
-            child: Text('Coming Soon', style: TextStyle(color: AppColors.white)),
-          ),
-          ProfileScreen(),
-        ],
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: () async {
-          _onTapNav(2);
-          startLoading();
-          await Future.delayed(const Duration(seconds: 20));
-          stopLoading();
-        },
-        child: SizedBox(
-          height: 70,
-          width: 70,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              if (isLoading)
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (_, _) {
-                    return Transform.rotate(
-                      angle: _controller.value * 2 * 3.1416,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: SweepGradient(
-                            colors: [
-                              AppColors.red,
-                              AppColors.orange,
-                              AppColors.yellow,
-                              AppColors.green,
-                              AppColors.blue,
-                              AppColors.indigo,
-                              AppColors.purple,
-                            ],
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (previous, current) => previous.status != current.status,
+      listener: (context, state) {
+        if (state.status == AuthAppStatus.unAuthenticated) {
+          context.go(LoginScreen.routeName);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.transparent,
+        body: PageView(
+          controller: _pageController,
+          // onPageChanged: _onTapNav,
+          physics: const NeverScrollableScrollPhysics(),
+          children: const [
+            HomeScreen(),
+            Center(
+              child: Text('Sharing', style: TextStyle(color: AppColors.white)),
+            ),
+            UploadScreen(),
+            Center(
+              child: Text(
+                'Coming Soon',
+                style: TextStyle(color: AppColors.white),
+              ),
+            ),
+            ProfileScreen(),
+          ],
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () async {
+            _onTapNav(2);
+            startLoading();
+            await Future.delayed(const Duration(seconds: 20));
+            stopLoading();
+          },
+          child: SizedBox(
+            height: 70,
+            width: 70,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (isLoading)
+                  AnimatedBuilder(
+                    animation: _controller,
+                    builder: (_, _) {
+                      return Transform.rotate(
+                        angle: _controller.value * 2 * 3.1416,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: SweepGradient(
+                              colors: [
+                                AppColors.red,
+                                AppColors.orange,
+                                AppColors.yellow,
+                                AppColors.green,
+                                AppColors.blue,
+                                AppColors.indigo,
+                                AppColors.purple,
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
+                Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primary,
+                  ),
                 ),
-              Container(
-                margin: const EdgeInsets.all(3),
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
-              ),
-              const Icon(Icons.upload_sharp, color: AppColors.white),
-            ],
+                const Icon(Icons.upload_sharp, color: AppColors.white),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsets.only(top: 10),
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6,
-        elevation: 10,
-        color: AppColors.white12,
-        height: 58,
-        child: Container(
-          height: 20,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ValueListenableBuilder(
-            valueListenable: _currentIndex,
-            builder: (context, value, child) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _NavItem(
-                    icon: Icons.home,
-                    index: 0,
-                    selectedIndex: value,
-                    activeColor: AppColors.primary,
-                    inactiveColor: AppColors.neutral500,
-                    onTap: _onTapNav,
-                    label: StringConstants.kHome,
-                  ),
-                  _NavItem(
-                    icon: Icons.people_alt,
-                    index: 1,
-                    selectedIndex: value,
-                    activeColor: AppColors.primary,
-                    inactiveColor: AppColors.neutral500,
-                    onTap: _onTapNav,
-                    label: StringConstants.kSharing,
-                  ),
-                  _NavItem(
-                    icon: Icons.person_outline_rounded,
-                    index: 2,
-                    selectedIndex: value,
-                    activeColor: AppColors.transparent,
-                    inactiveColor: AppColors.transparent,
-                    onTap: (value) {},
-                    label: '',
-                  ),
-                  _NavItem(
-                    icon: Icons.settings,
-                    index: 3,
-                    selectedIndex: value,
-                    activeColor: AppColors.primary,
-                    inactiveColor: AppColors.neutral500,
-                    onTap: _onTapNav,
-                    label: StringConstants.kComing,
-                  ),
-                  _NavItem(
-                    icon: Icons.person_outline_rounded,
-                    index: 4,
-                    selectedIndex: value,
-                    activeColor: AppColors.primary,
-                    inactiveColor: AppColors.neutral500,
-                    onTap: _onTapNav,
-                    label: StringConstants.kProfile,
-                  ),
-                ],
-              );
-            },
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          padding: const EdgeInsets.only(top: 10),
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6,
+          elevation: 10,
+          color: AppColors.white12,
+          height: 58,
+          child: Container(
+            height: 20,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ValueListenableBuilder(
+              valueListenable: _currentIndex,
+              builder: (context, value, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _NavItem(
+                      icon: Icons.home,
+                      index: 0,
+                      selectedIndex: value,
+                      activeColor: AppColors.primary,
+                      inactiveColor: AppColors.neutral500,
+                      onTap: _onTapNav,
+                      label: StringConstants.kHome,
+                    ),
+                    _NavItem(
+                      icon: Icons.people_alt,
+                      index: 1,
+                      selectedIndex: value,
+                      activeColor: AppColors.primary,
+                      inactiveColor: AppColors.neutral500,
+                      onTap: _onTapNav,
+                      label: StringConstants.kSharing,
+                    ),
+                    _NavItem(
+                      icon: Icons.person_outline_rounded,
+                      index: 2,
+                      selectedIndex: value,
+                      activeColor: AppColors.transparent,
+                      inactiveColor: AppColors.transparent,
+                      onTap: (value) {},
+                      label: '',
+                    ),
+                    _NavItem(
+                      icon: Icons.settings,
+                      index: 3,
+                      selectedIndex: value,
+                      activeColor: AppColors.primary,
+                      inactiveColor: AppColors.neutral500,
+                      onTap: _onTapNav,
+                      label: StringConstants.kComing,
+                    ),
+                    _NavItem(
+                      icon: Icons.person_outline_rounded,
+                      index: 4,
+                      selectedIndex: value,
+                      activeColor: AppColors.primary,
+                      inactiveColor: AppColors.neutral500,
+                      onTap: _onTapNav,
+                      label: StringConstants.kProfile,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -220,7 +243,11 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: _isSelected ? activeColor : inactiveColor, size: 26),
+            Icon(
+              icon,
+              color: _isSelected ? activeColor : inactiveColor,
+              size: 26,
+            ),
             const SizedBox(height: 4),
             Text(
               label,

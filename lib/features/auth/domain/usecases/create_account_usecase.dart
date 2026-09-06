@@ -43,5 +43,12 @@ class CreateAccountParams extends Equatable {
   });
 
   @override
-  List<Object?> get props => [uid, phoneNumber, displayName, username, email, photoUrl];
+  List<Object?> get props => [
+    uid,
+    phoneNumber,
+    displayName,
+    username,
+    email,
+    photoUrl,
+  ];
 }

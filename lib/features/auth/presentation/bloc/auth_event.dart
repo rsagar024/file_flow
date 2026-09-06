@@ -47,8 +47,6 @@ final class UpdateProfileImageEvent extends AuthEvent {
   List<Object?> get props => [imagePath];
 }
 
-final class UpdateDeviceInfoEvent extends AuthEvent {}
-
 final class CreateAccountEvent extends AuthEvent {
   final String phoneNumber;
   final String displayName;
@@ -68,4 +66,8 @@ final class CreateAccountEvent extends AuthEvent {
 
 final class SignOutEvent extends AuthEvent {
   const SignOutEvent();
+}
+
+final class _RemoteDeviceDeactivatedEvent extends AuthEvent {
+  const _RemoteDeviceDeactivatedEvent();
 }

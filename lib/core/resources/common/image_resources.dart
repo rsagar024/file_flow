@@ -23,14 +23,17 @@ class ImageResources {
   static const String iconEq = '$_iconAssetsResources/ic_eq.svg';
   static const String iconRepeat = '$_iconAssetsResources/ic_repeat.svg';
   static const String iconFavorite = '$_iconAssetsResources/ic_favorite.svg';
-  static const String iconPlayColored = '$_iconAssetsResources/ic_play_colored.svg';
+  static const String iconPlayColored =
+      '$_iconAssetsResources/ic_play_colored.svg';
   static const String iconAudio = '$_iconAssetsResources/ic_audio.svg';
   static const String iconVideo = '$_iconAssetsResources/ic_video.svg';
   static const String iconImage = '$_iconAssetsResources/ic_image.svg';
   static const String iconDocument = '$_iconAssetsResources/ic_document.svg';
+  static const String iconLogo = '$_iconAssetsResources/ic_logo.svg';
 
   // Images
-  static const String imageFacebook = '$_imageAssetsResources/image_facebook.svg';
+  static const String imageFacebook =
+      '$_imageAssetsResources/image_facebook.svg';
   static const String imageGithub = '$_imageAssetsResources/image_github.svg';
   static const String imageGoogle = '$_imageAssetsResources/image_google.svg';
   static const String imagePerson = '$_imageAssetsResources/image_person.jpg';
@@ -50,8 +53,13 @@ class ImageResources {
   static const String riveShapes = '$_riveAssetsResources/shapes.riv';
 
   // Lotties
-  static const String lottieLoading = '$_lottieAssetsResources/loading_anim.json';
-  static const String lottieTelegram = '$_lottieAssetsResources/telegram_anim.json';
+  static const String lottieLoading =
+      '$_lottieAssetsResources/loading_anim.json';
+  static const String lottieTelegram =
+      '$_lottieAssetsResources/telegram_anim.json';
 
-  static const String profileBannerUrl = 'https://images.pexels.com/photos/6984991/pexels-photo-6984991.jpeg';
+  static const String profileBannerUrl =
+      'https://images.pexels.com/photos/6984991/pexels-photo-6984991.jpeg';
+  static const String profileAvatarPlaceholderUrl =
+      'https://images.pexels.com/photos/36485668/pexels-photo-36485668.jpeg';
 }

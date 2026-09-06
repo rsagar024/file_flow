@@ -5,10 +5,13 @@ import 'package:fileflow/core/usecase/usecase.dart';
 import 'package:fileflow/features/auth/domain/entities/user_entity.dart';
 import 'package:fileflow/features/auth/domain/usecases/check_auth_status_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/create_account_usecase.dart';
+import 'package:fileflow/features/auth/domain/usecases/get_current_device_id_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/resend_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/send_otp_usecase.dart';
+import 'package:fileflow/features/auth/domain/usecases/sign_out_local_only_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/verify_otp_usecase.dart';
+import 'package:fileflow/features/auth/domain/usecases/watch_current_device_active_status_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -23,8 +26,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final CheckAuthStatusUsecase _checkAuthStatusUsecase;
   final CreateAccountUsecase _createAccountUsecase;
   final SignOutUsecase _signOutUsecase;
+  final GetCurrentDeviceIdUsecase _getCurrentDeviceIdUsecase;
+  final WatchCurrentDeviceActiveStatusUsecase
+  _watchCurrentDeviceActiveStatusUsecase;
+  final SignOutLocalOnlyUsecase _signOutLocalOnlyUsecase;
 
   Timer? _timer;
+  StreamSubscription<bool>? _deviceActiveSubscription;
 
   AuthBloc(
     this._sendOtpUsecase,
@@ -33,29 +41,68 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._checkAuthStatusUsecase,
     this._createAccountUsecase,
     this._signOutUsecase,
+    this._getCurrentDeviceIdUsecase,
+    this._watchCurrentDeviceActiveStatusUsecase,
+    this._signOutLocalOnlyUsecase,
   ) : super(const AuthState()) {
     on<AuthCheckStatusEvent>(_onCheckStatus);
     on<OtpSendEvent>(_onSendOtp);
     on<OtpTimerTickEvent>(_onStartTimer);
     on<OtpVerifyEvent>(_onVerifyOtp);
     on<OtpResendEvent>(_onResendOtp);
-    on<UpdateDeviceInfoEvent>(_onUpdateDeviceInfo);
     on<UpdateProfileImageEvent>(_onUpdateProfileImage);
     on<CreateAccountEvent>(_onCreateAccount);
     on<SignOutEvent>(_onSignOut);
+    on<_RemoteDeviceDeactivatedEvent>(_onRemoteDeviceDeactivated);
   }
 
-  FutureOr<void> _onCheckStatus(AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
+  Future<void> _startDeviceEnforcement(String uid, {String? deviceId}) async {
+    await _deviceActiveSubscription?.cancel();
+    final id =
+        deviceId ??
+        (await _getCurrentDeviceIdUsecase(
+          const NoParams(),
+        )).getOrElse((_) => '');
+    if (id.isEmpty) return;
+    _deviceActiveSubscription =
+        _watchCurrentDeviceActiveStatusUsecase(
+          WatchCurrentDeviceActiveStatusParams(uid: uid, deviceId: id),
+        ).listen((isActive) {
+          if (!isActive) add(const _RemoteDeviceDeactivatedEvent());
+        });
+  }
+
+  FutureOr<void> _onRemoteDeviceDeactivated(
+    _RemoteDeviceDeactivatedEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _deviceActiveSubscription?.cancel();
+    _deviceActiveSubscription = null;
+    await _signOutLocalOnlyUsecase(const NoParams());
+    emit(const AuthState(status: AuthAppStatus.unAuthenticated));
+  }
+
+  FutureOr<void> _onCheckStatus(
+    AuthCheckStatusEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _checkAuthStatusUsecase(const NoParams());
 
-    result.fold(
-      (failure) => emit(state.copyWith(status: AuthAppStatus.unAuthenticated, errorMessage: failure.message)),
-      (authStatus) {
+    await result.fold(
+      (failure) async => emit(
+        state.copyWith(
+          status: AuthAppStatus.unAuthenticated,
+          errorMessage: failure.message,
+        ),
+      ),
+      (authStatus) async {
         if (!authStatus.isLoggedIn) {
           emit(state.copyWith(status: AuthAppStatus.unAuthenticated));
-        } else if (authStatus.isNewUser) {
+          return;
+        }
+        if (authStatus.isNewUser) {
           emit(
             state.copyWith(
               status: AuthAppStatus.newUserDetected,
@@ -64,9 +111,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               isNewUser: true,
             ),
           );
-        } else {
-          emit(state.copyWith(status: AuthAppStatus.authenticated, user: authStatus.user));
+          return;
         }
+
+        final deviceIdResult = await _getCurrentDeviceIdUsecase(
+          const NoParams(),
+        );
+        final deviceId = deviceIdResult.getOrElse((_) => '');
+        final userDevices = authStatus.user?.devices;
+        final ownDevice = deviceId.isEmpty ? null : userDevices?[deviceId];
+
+        if (ownDevice != null && ownDevice.isActive == false) {
+          await _signOutLocalOnlyUsecase(const NoParams());
+          emit(const AuthState(status: AuthAppStatus.unAuthenticated));
+          return;
+        }
+
+        emit(
+          state.copyWith(
+            status: AuthAppStatus.authenticated,
+            user: authStatus.user,
+          ),
+        );
+        _startDeviceEnforcement(
+          authStatus.uid ?? authStatus.user?.uid ?? '',
+          deviceId: deviceId.isEmpty ? null : deviceId,
+        );
       },
     );
   }
@@ -76,14 +146,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final result = await _sendOtpUsecase(SendOtpParams(event.phoneNumber));
 
-    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (
-      verificationId,
-    ) {
-      _startTimer();
-      emit(
-        state.copyWith(status: AuthAppStatus.otpSent, phoneNumber: event.phoneNumber, verificationId: verificationId),
-      );
-    });
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.failure,
+          errorMessage: failure.message,
+        ),
+      ),
+      (verificationId) {
+        _startTimer();
+        emit(
+          state.copyWith(
+            status: AuthAppStatus.otpSent,
+            phoneNumber: event.phoneNumber,
+            verificationId: verificationId,
+          ),
+        );
+      },
+    );
   }
 
   void _startTimer() {
@@ -94,57 +174,100 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
   }
 
-  FutureOr<void> _onStartTimer(OtpTimerTickEvent event, Emitter<AuthState> emit) {
+  FutureOr<void> _onStartTimer(
+    OtpTimerTickEvent event,
+    Emitter<AuthState> emit,
+  ) {
     if (state.resendSeconds == 0) {
       _timer?.cancel();
       emit(state.copyWith(canResend: true));
     } else {
-      emit(state.copyWith(resendSeconds: state.resendSeconds - 1, canResend: false));
+      emit(
+        state.copyWith(
+          resendSeconds: state.resendSeconds - 1,
+          canResend: false,
+        ),
+      );
     }
   }
 
-  FutureOr<void> _onVerifyOtp(OtpVerifyEvent event, Emitter<AuthState> emit) async {
+  FutureOr<void> _onVerifyOtp(
+    OtpVerifyEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _verifyOtpUsecase(VerifyOtpParams(event.otp));
 
-    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (
-      authResult,
-    ) {
-      _timer?.cancel();
-      if (authResult.isNewUser) {
-        emit(
-          state.copyWith(
-            status: AuthAppStatus.newUserDetected,
-            uid: authResult.uid,
-            phoneNumber: authResult.phoneNumber,
-            isNewUser: true,
-          ),
-        );
-      } else {
-        emit(state.copyWith(status: AuthAppStatus.authenticated, user: authResult.existingUser));
-      }
-    });
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.failure,
+          errorMessage: failure.message,
+        ),
+      ),
+      (authResult) {
+        _timer?.cancel();
+        if (authResult.isNewUser) {
+          emit(
+            state.copyWith(
+              status: AuthAppStatus.newUserDetected,
+              uid: authResult.uid,
+              phoneNumber: authResult.phoneNumber,
+              isNewUser: true,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              status: AuthAppStatus.authenticated,
+              user: authResult.existingUser,
+            ),
+          );
+          _startDeviceEnforcement(authResult.uid);
+        }
+      },
+    );
   }
 
-  FutureOr<void> _onResendOtp(OtpResendEvent event, Emitter<AuthState> emit) async {
+  FutureOr<void> _onResendOtp(
+    OtpResendEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(status: AuthAppStatus.loading, resendSeconds: 45));
 
     final result = await _resendOtpUsecase(ResendOtpParams(event.phoneNumber));
 
-    result.fold((failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)), (_) {
-      _startTimer();
-      emit(state.copyWith(status: AuthAppStatus.otpResent, phoneNumber: event.phoneNumber));
-    });
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.failure,
+          errorMessage: failure.message,
+        ),
+      ),
+      (_) {
+        _startTimer();
+        emit(
+          state.copyWith(
+            status: AuthAppStatus.otpResent,
+            phoneNumber: event.phoneNumber,
+          ),
+        );
+      },
+    );
   }
 
-  FutureOr<void> _onUpdateDeviceInfo(UpdateDeviceInfoEvent event, Emitter<AuthState> emit) {}
-
-  FutureOr<void> _onUpdateProfileImage(UpdateProfileImageEvent event, Emitter<AuthState> emit) {
+  FutureOr<void> _onUpdateProfileImage(
+    UpdateProfileImageEvent event,
+    Emitter<AuthState> emit,
+  ) {
     emit(state.copyWith(imageUrl: event.imagePath));
   }
 
-  FutureOr<void> _onCreateAccount(CreateAccountEvent event, Emitter<AuthState> emit) async {
+  FutureOr<void> _onCreateAccount(
+    CreateAccountEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(state.copyWith(status: AuthAppStatus.loading));
 
     final result = await _createAccountUsecase(
@@ -159,18 +282,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)),
-      (user) => emit(state.copyWith(status: AuthAppStatus.authenticated, user: user)),
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.failure,
+          errorMessage: failure.message,
+        ),
+      ),
+      (user) {
+        emit(state.copyWith(status: AuthAppStatus.authenticated, user: user));
+        _startDeviceEnforcement(state.uid ?? user.uid ?? '');
+      },
     );
   }
 
   FutureOr<void> _onSignOut(SignOutEvent event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: AuthAppStatus.loading));
+    await _deviceActiveSubscription?.cancel();
+    _deviceActiveSubscription = null;
 
     final result = await _signOutUsecase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(status: AuthAppStatus.failure, errorMessage: failure.message)),
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.failure,
+          errorMessage: failure.message,
+        ),
+      ),
       (_) => emit(const AuthState(status: AuthAppStatus.unAuthenticated)),
     );
   }
@@ -178,6 +316,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   @override
   Future<void> close() {
     _timer?.cancel();
+    _deviceActiveSubscription?.cancel();
     return super.close();
   }
 }

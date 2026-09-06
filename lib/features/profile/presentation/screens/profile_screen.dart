@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
 import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/resources/common/image_resources.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:fileflow/features/auth/presentation/widgets/profile_image_picker_widget.dart';
 import 'package:fileflow/features/profile/presentation/items/profile_item.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,10 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> {
   void onInit() {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      precacheImage(const CachedNetworkImageProvider(ImageResources.profileBannerUrl), context);
+      precacheImage(
+        const CachedNetworkImageProvider(ImageResources.profileBannerUrl),
+        context,
+      );
     });
   }
 
@@ -28,7 +33,10 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> {
   Widget buildContent(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.transparent,
-      appBar: FileFlowAppBar(leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30), title: 'Profile'),
+      appBar: FileFlowAppBar(
+        leading: SvgPicture.asset(ImageResources.iconLogo, height: 30),
+        title: StringConstants.kProfile,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -41,7 +49,9 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> {
                     height: 100,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: CachedNetworkImageProvider(ImageResources.profileBannerUrl),
+                        image: CachedNetworkImageProvider(
+                          ImageResources.profileBannerUrl,
+                        ),
                         fit: BoxFit.fitWidth,
                       ),
                     ),
@@ -52,7 +62,7 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> {
                     top: 25,
                     child: ProfileImagePickerWidget(
                       context: context,
-                      imagePath: 'https://images.pexels.com/photos/36485668/pexels-photo-36485668.jpeg',
+                      imagePath: ImageResources.profileAvatarPlaceholderUrl,
                       onChanged: (value) {},
                       isEditing: false,
                     ),
@@ -61,26 +71,40 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> {
               ),
             ),
             // Name
-            const Padding(
-              padding: EdgeInsetsGeometry.fromLTRB(16, 5, 16, 5),
+            Padding(
+              padding: const EdgeInsetsGeometry.fromLTRB(16, 5, 16, 5),
               child: Text(
-                'Hrithik Lal',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white),
+                StringConstants.kSampleUserName,
+                style: CustomTextStyles.custom18Bold.copyWith(
+                  color: AppColors.white,
+                ),
               ),
             ),
             // Username
             Padding(
               padding: const EdgeInsetsGeometry.fromLTRB(16, 0, 16, 5),
-              child: Text('@hrithiklal', style: TextStyle(fontSize: 16, color: AppColors.white.withValues(alpha: 0.8))),
+              child: Text(
+                StringConstants.kSampleUsername,
+                style: CustomTextStyles.custom16Regular.copyWith(
+                  color: AppColors.white.withValues(alpha: 0.8),
+                ),
+              ),
             ),
             const SizedBox(height: 24),
             // Options
-            ...profileItems.map((item) {
+            ...buildProfileItems(context).map((item) {
               return ListTile(
                 leading: Icon(item.icon, color: item.color),
-                title: Text(item.title, style: TextStyle(color: item.color)),
+                title: Text(
+                  item.title,
+                  style: CustomTextStyles.custom16Regular.copyWith(
+                    color: item.color,
+                  ),
+                ),
                 onTap: item.onTap,
-                trailing: item.title == 'Light Mode' ? Switch(value: false, onChanged: (value) {}) : null,
+                trailing: item.title == StringConstants.kLightMode
+                    ? Switch(value: false, onChanged: (value) {})
+                    : null,
               );
             }),
           ],
