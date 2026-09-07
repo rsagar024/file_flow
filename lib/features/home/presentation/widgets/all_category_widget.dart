@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/screens/folder_details_screen.dart';
@@ -48,9 +49,9 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   StringConstants.kPinnedFolder,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
@@ -104,20 +105,20 @@ class _AllCategoryWidgetState extends FileFlowState<AllCategoryWidget> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Row(
                 children: [
-                  const Text(
+                  Text(
                     StringConstants.kRecentFiles,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
                   ),
                   const Spacer(),
                   GestureDetector(
                     onTap: () => setState(() => _isGridView = true),
-                    child: Icon(Icons.grid_view, color: _isGridView ? AppColors.primary : AppColors.white),
+                    child: Icon(Icons.grid_view, color: _isGridView ? AppColors.primary : context.colors.textPrimary),
                   ),
                   const SizedBox(width: 10),
                   // List icon
                   GestureDetector(
                     onTap: () => setState(() => _isGridView = false),
-                    child: Icon(Icons.list_outlined, color: !_isGridView ? AppColors.primary : AppColors.white),
+                    child: Icon(Icons.list_outlined, color: !_isGridView ? AppColors.primary : context.colors.textPrimary),
                   ),
                 ],
               ),

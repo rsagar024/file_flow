@@ -36,10 +36,7 @@ abstract class FileFlowStatelessWidget extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Theme(
-        data: ThemeData.dark(),
-        child: buildContent(context),
-      ),
+      child: buildContent(context),
     );
   }
 

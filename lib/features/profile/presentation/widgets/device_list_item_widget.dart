@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
@@ -56,12 +57,12 @@ class DeviceListItemWidget extends FileFlowStatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.white12,
+        color: context.colors.surfaceVariant,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(_platformIcon, color: AppColors.white, size: 32),
+          Icon(_platformIcon, color: context.colors.textPrimary, size: 32),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -77,7 +78,7 @@ class DeviceListItemWidget extends FileFlowStatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.custom14SemiBold.copyWith(
-                          color: AppColors.white,
+                          color: context.colors.textPrimary,
                         ),
                       ),
                     ),
@@ -106,7 +107,7 @@ class DeviceListItemWidget extends FileFlowStatelessWidget {
                 Text(
                   subtitleParts.where((p) => p.isNotEmpty).join(' • '),
                   style: CustomTextStyles.custom12Regular.copyWith(
-                    color: AppColors.white54,
+                    color: context.colors.textSecondary,
                   ),
                 ),
               ],

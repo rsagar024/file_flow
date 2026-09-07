@@ -3,6 +3,7 @@ import 'package:fileflow/core/common/widgets/confirmation_dialog_widget.dart';
 import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
@@ -36,7 +37,7 @@ class _DevicesScreenState extends FileFlowBackgroundState<DevicesScreen> {
           title: StringConstants.kDevices,
           leading: IconButton(
             onPressed: () => Navigator.of(context).maybePop(),
-            icon: const Icon(Icons.arrow_back, color: AppColors.white),
+            icon: Icon(Icons.arrow_back, color: context.colors.textPrimary),
           ),
         ),
         body: BlocConsumer<DevicesBloc, DevicesState>(
@@ -64,7 +65,7 @@ class _DevicesScreenState extends FileFlowBackgroundState<DevicesScreen> {
                 child: Text(
                   StringConstants.kNoDevicesFound,
                   style: CustomTextStyles.custom14Regular.copyWith(
-                    color: AppColors.white54,
+                    color: context.colors.textSecondary,
                   ),
                 ),
               );

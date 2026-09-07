@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fileflow/core/services/device_info_service.dart';
 import 'package:fileflow/core/services/image_picker_service.dart';
+import 'package:fileflow/core/services/theme_preferences_service.dart';
+import 'package:fileflow/core/themes/cubit/theme_cubit.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource_impl.dart';
 import 'package:fileflow/features/auth/data/repositories/auth_repository_impl.dart';
@@ -44,7 +46,8 @@ void _registerFirebase() {
 void _registerCoreService() {
   getIt
     ..registerLazySingleton<DeviceInfoService>(() => DeviceInfoService())
-    ..registerLazySingleton<ImagePickerService>(() => ImagePickerService());
+    ..registerLazySingleton<ImagePickerService>(() => ImagePickerService())
+    ..registerLazySingleton<ThemePreferencesService>(() => ThemePreferencesService());
 }
 
 void _registerDataSources() {
@@ -94,5 +97,6 @@ void _registerBlocs() {
     )
     ..registerFactory<DevicesBloc>(
       () => DevicesBloc(getIt(), getIt(), getIt(), getIt()),
-    );
+    )
+    ..registerLazySingleton<ThemeCubit>(() => ThemeCubit(getIt()));
 }

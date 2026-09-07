@@ -1,4 +1,5 @@
 import 'package:fileflow/core/di/injection_container.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/services/image_picker_service.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -12,7 +13,7 @@ class ImageDialogManager {
 
     await showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.background,
+      backgroundColor: context.colors.background,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) => SafeArea(
         child: Column(
@@ -25,14 +26,14 @@ class ImageDialogManager {
               decoration: BoxDecoration(color: AppColors.grey, borderRadius: BorderRadius.circular(2)),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               StringConstants.kChooseImageSource,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
             ),
             const SizedBox(height: 16),
             ListTile(
               leading: const Icon(Icons.photo_library, color: AppColors.primary),
-              title: const Text(StringConstants.kGallery, style: TextStyle(color: AppColors.white)),
+              title: Text(StringConstants.kGallery, style: TextStyle(color: context.colors.textPrimary)),
               onTap: () async {
                 context.pop();
                 try {
@@ -51,7 +52,7 @@ class ImageDialogManager {
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt, color: AppColors.primary),
-              title: const Text(StringConstants.kCamera, style: TextStyle(color: AppColors.white)),
+              title: Text(StringConstants.kCamera, style: TextStyle(color: context.colors.textPrimary)),
               onTap: () async {
                 context.pop();
                 try {

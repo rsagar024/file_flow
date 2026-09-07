@@ -10,13 +10,13 @@ import 'package:go_router/go_router.dart';
 class ProfileItem {
   final String title;
   final IconData icon;
-  final Color color;
+  final Color? color;
   final VoidCallback onTap;
 
   ProfileItem({
     required this.title,
     required this.icon,
-    this.color = AppColors.white,
+    this.color,
     required this.onTap,
   });
 }
@@ -39,7 +39,7 @@ List<ProfileItem> buildProfileItems(BuildContext context) {
       onTap: () => context.push(DevicesScreen.routeName),
     ),
     ProfileItem(
-      title: StringConstants.kLightMode,
+      title: StringConstants.kAppearance,
       icon: Icons.palette,
       onTap: () {},
     ),

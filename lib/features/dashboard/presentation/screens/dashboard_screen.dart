@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
 import 'package:fileflow/core/enums/app_state/app_status.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
@@ -73,19 +74,19 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
           controller: _pageController,
           // onPageChanged: _onTapNav,
           physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            HomeScreen(),
+          children: [
+            const HomeScreen(),
             Center(
-              child: Text('Sharing', style: TextStyle(color: AppColors.white)),
+              child: Text('Sharing', style: TextStyle(color: context.colors.textPrimary)),
             ),
-            UploadScreen(),
+            const UploadScreen(),
             Center(
               child: Text(
                 'Coming Soon',
-                style: TextStyle(color: AppColors.white),
+                style: TextStyle(color: context.colors.textPrimary),
               ),
             ),
-            ProfileScreen(),
+            const ProfileScreen(),
           ],
         ),
         floatingActionButton: GestureDetector(
@@ -133,7 +134,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
                     color: AppColors.primary,
                   ),
                 ),
-                const Icon(Icons.upload_sharp, color: AppColors.white),
+                Icon(Icons.upload_sharp, color: context.colors.textPrimary),
               ],
             ),
           ),
@@ -144,7 +145,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
           shape: const CircularNotchedRectangle(),
           notchMargin: 6,
           elevation: 10,
-          color: AppColors.white12,
+          color: context.colors.surfaceVariant,
           height: 58,
           child: Container(
             height: 20,
@@ -160,7 +161,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
                       index: 0,
                       selectedIndex: value,
                       activeColor: AppColors.primary,
-                      inactiveColor: AppColors.neutral500,
+                      inactiveColor: context.colors.inactive,
                       onTap: _onTapNav,
                       label: StringConstants.kHome,
                     ),
@@ -169,7 +170,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
                       index: 1,
                       selectedIndex: value,
                       activeColor: AppColors.primary,
-                      inactiveColor: AppColors.neutral500,
+                      inactiveColor: context.colors.inactive,
                       onTap: _onTapNav,
                       label: StringConstants.kSharing,
                     ),
@@ -187,7 +188,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
                       index: 3,
                       selectedIndex: value,
                       activeColor: AppColors.primary,
-                      inactiveColor: AppColors.neutral500,
+                      inactiveColor: context.colors.inactive,
                       onTap: _onTapNav,
                       label: StringConstants.kComing,
                     ),
@@ -196,7 +197,7 @@ class _DashboardScreenState extends FileFlowBackgroundState<DashboardScreen>
                       index: 4,
                       selectedIndex: value,
                       activeColor: AppColors.primary,
-                      inactiveColor: AppColors.neutral500,
+                      inactiveColor: context.colors.inactive,
                       onTap: _onTapNav,
                       label: StringConstants.kProfile,
                     ),

@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widget.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/widgets/folder_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,12 +35,12 @@ class FolderDetailsScreen extends FileFlowStatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
+          icon: Icon(Icons.arrow_back, color: context.colors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Work Folder',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
         ),
         centerTitle: true,
       ),

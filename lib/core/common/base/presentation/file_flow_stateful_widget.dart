@@ -85,10 +85,7 @@ abstract class FileFlowState<T extends FileFlowStatefulWidget> extends State<T> 
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Theme(
-        data: ThemeData.dark(),
-        child: buildContent(context),
-      ),
+      child: buildContent(context),
     );
   }
 

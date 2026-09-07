@@ -3,6 +3,7 @@ import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/phone_field/phone_field.dart';
 import 'package:fileflow/core/enums/app_state/app_status.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/extensions/string_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
@@ -73,9 +74,9 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                       SvgPicture.asset('assets/icons/ic_logo.svg', height: 80),
                       const SizedBox(height: 10),
                       RichText(
-                        text: const TextSpan(
-                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
-                          children: [
+                        text: TextSpan(
+                          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
+                          children: const [
                             TextSpan(text: StringConstants.kFile),
                             TextSpan(
                               text: StringConstants.kFlow,
@@ -84,30 +85,30 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 8, bottom: 48),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 48),
                         child: Text(
                           StringConstants.kSecureSyncYourWorkflowAnywhere,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Text(
+                Text(
                   StringConstants.kWelcomeBack,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 32),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 32),
                   child: Text(
                     StringConstants.kEnterYourMobileNumberToSignIn,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
                   ),
                 ),
                 Text(
                   StringConstants.kMobileNumber.toUpperCase(),
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
                 ),
                 Form(
                   key: _formKey,
@@ -150,9 +151,9 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     );
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: Divider(color: AppColors.surface),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Divider(color: context.colors.surface),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -160,7 +161,7 @@ class _LoginScreenState extends FileFlowBackgroundState<LoginScreen> {
                     actions.length,
                     (index) => Text(
                       actions[index],
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.textSecondary),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
                     ),
                   ),
                 ),

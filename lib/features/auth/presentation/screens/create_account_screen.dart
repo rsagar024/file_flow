@@ -3,6 +3,7 @@ import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
 import 'package:fileflow/core/di/injection_container.dart';
 import 'package:fileflow/core/enums/app_state/app_status.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/utilities/custom_snackbar.dart';
@@ -61,9 +62,9 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
         animateColor: false,
         automaticallyImplyLeading: true,
         backgroundColor: AppColors.transparent,
-        title: const Text(
+        title: Text(
           StringConstants.kCreateAccount,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
         ),
         centerTitle: true,
       ),
@@ -108,7 +109,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                             );
                           },
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.center,
                           child: Column(
                             spacing: 3,
@@ -116,23 +117,23 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                             children: [
                               Text(
                                 StringConstants.kProfilePhoto,
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.white),
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
                               ),
                               Text(
                                 StringConstants.kPngJpgUpTo10MB,
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColors.textSecondary,
+                                  color: context.colors.textSecondary,
                                 ),
                               ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 32),
-                        const Text(
+                        Text(
                           StringConstants.kFullName,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                         ),
                         FileFlowTextFieldWidget(
                           controller: nameController,
@@ -142,9 +143,9 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           margin: const EdgeInsets.only(top: 8, bottom: 20),
                           validator: Validator.validateFullName,
                         ),
-                        const Text(
+                        Text(
                           StringConstants.kUsername,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                         ),
                         FileFlowTextFieldWidget(
                           controller: usernameController,
@@ -154,9 +155,9 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           margin: const EdgeInsets.only(top: 8, bottom: 20),
                           validator: Validator.validateUsername,
                         ),
-                        const Text(
+                        Text(
                           StringConstants.kEmailAddress,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                         ),
                         FileFlowTextFieldWidget(
                           controller: emailController,
@@ -166,9 +167,9 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           margin: const EdgeInsets.only(top: 8, bottom: 20),
                           validator: Validator.validateEmail,
                         ),
-                        const Text(
+                        Text(
                           StringConstants.kPhoneNumber,
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                         ),
                         FileFlowTextFieldWidget(
                           controller: phoneController,

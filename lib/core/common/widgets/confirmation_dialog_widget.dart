@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class ConfirmationDialogWidget {
       context: context,
       barrierColor: AppColors.black.withValues(alpha: 0.6),
       builder: (dialogContext) => Dialog(
-        backgroundColor: AppColors.surface,
+        backgroundColor: dialogContext.colors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -27,14 +28,14 @@ class ConfirmationDialogWidget {
               Text(
                 title,
                 style: CustomTextStyles.custom18SemiBold.copyWith(
-                  color: AppColors.white,
+                  color: dialogContext.colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
               Text(
                 message,
                 style: CustomTextStyles.custom14Regular.copyWith(
-                  color: AppColors.textSecondary,
+                  color: dialogContext.colors.textSecondary,
                 ),
               ),
               const SizedBox(height: 24),
@@ -43,8 +44,8 @@ class ConfirmationDialogWidget {
                   Expanded(
                     child: FileFlowButton(
                       text: cancelText,
-                      backgroundColor: AppColors.surfaceVariant,
-                      textColor: AppColors.white,
+                      backgroundColor: dialogContext.colors.surfaceVariant,
+                      textColor: dialogContext.colors.textPrimary,
                       onPressed: () => Navigator.of(dialogContext).pop(false),
                     ),
                   ),

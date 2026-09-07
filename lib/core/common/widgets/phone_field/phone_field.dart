@@ -1,5 +1,6 @@
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/selectable_item_bottom_sheet.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
@@ -257,7 +258,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                 color: _backgroundColorAnimation.value,
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
-                  color: _isFocused ? AppColors.white : AppColors.white.withAlpha((0.7 * 255).toInt()),
+                  color: _isFocused ? context.colors.textPrimary : context.colors.textSecondary,
                 ),
               ),
               child: Stack(
@@ -276,11 +277,11 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                             children: [
                               TextSpan(
                                 text: typedText,
-                                style: baseTextStyle.copyWith(color: AppColors.white),
+                                style: baseTextStyle.copyWith(color: context.colors.textPrimary),
                               ),
                               TextSpan(
                                 text: hintZeros,
-                                style: baseTextStyle.copyWith(color: AppColors.white.withAlpha((0.5 * 255).toInt())),
+                                style: baseTextStyle.copyWith(color: context.colors.textTertiary),
                               ),
                             ],
                           ),
@@ -316,7 +317,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(prefixText, style: baseTextStyle.copyWith(color: AppColors.white)),
+                                  Text(prefixText, style: baseTextStyle.copyWith(color: context.colors.textPrimary)),
                                   Container(
                                     width: 1.5,
                                     height: 40,
@@ -338,7 +339,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                       ),
                     ),
                     style: baseTextStyle.copyWith(
-                      color: isComplete ? AppColors.white : AppColors.transparent,
+                      color: isComplete ? context.colors.textPrimary : AppColors.transparent,
                       overflow: TextOverflow.ellipsis,
                     ),
                     maxLines: 1,
@@ -351,7 +352,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
                       );
                     },
                     enabled: widget.isEnabled,
-                    cursorColor: AppColors.white,
+                    cursorColor: context.colors.textPrimary,
                     onChanged: (value) {
                       if (value.isEmpty) {
                         _triggerValidationCallback(false, _selectedCountry?.value, null);

@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_background_stat
 import 'package:fileflow/core/common/widgets/file_flow_button.dart';
 import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
 import 'package:fileflow/core/enums/app_state/app_status.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/utilities/custom_snackbar.dart';
@@ -36,7 +37,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.white),
+          icon: Icon(Icons.arrow_back, color: context.colors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -67,21 +68,21 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                 const SizedBox(height: 30),
                 SvgPicture.asset('assets/icons/ic_logo.svg', height: 80),
                 const SizedBox(height: 10),
-                const Text(
+                Text(
                   StringConstants.kOtpVerification,
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
                   child: Text(
                     StringConstants.kEnterThe6DigitCode,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral300),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
                   ),
                 ),
                 Padding(padding: const EdgeInsets.symmetric(vertical: 32), child: pinTextField),
-                const Text(
+                Text(
                   StringConstants.kDidNtReceiveTheCode,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.neutral400),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textTertiary),
                 ),
                 BlocSelector<AuthBloc, AuthState, ({int seconds, bool canResend})>(
                   selector: (state) => (seconds: state.resendSeconds, canResend: state.canResend),
@@ -103,7 +104,7 @@ class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificatio
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: data.canResend ? AppColors.primary : AppColors.neutral400,
+                            color: data.canResend ? AppColors.primary : context.colors.textTertiary,
                           ),
                         ),
                       ),

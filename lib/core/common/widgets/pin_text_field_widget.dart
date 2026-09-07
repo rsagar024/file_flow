@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -140,14 +141,17 @@ class _PinTextFieldWidgetState extends State<PinTextFieldWidget> {
       height: 52,
       padding: EdgeInsets.only(top: obscure ? 8 : 0),
       decoration: BoxDecoration(
-        color: AppColors.white.withAlpha((0.3 * 255).toInt()),
+        color: context.colors.surfaceVariant,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: index == _currentFocusedIndex ? AppColors.white : AppColors.transparent, width: 2),
+        border: Border.all(
+          color: index == _currentFocusedIndex ? context.colors.textPrimary : AppColors.transparent,
+          width: 2,
+        ),
       ),
       alignment: Alignment.center,
       child: Text(
         _obsValues[index],
-        style: CustomTextStyles.baseStyle.copyWith(fontSize: 25, fontWeight: FontWeight.w900, color: AppColors.white),
+        style: CustomTextStyles.baseStyle.copyWith(fontSize: 25, fontWeight: FontWeight.w900, color: context.colors.textPrimary),
       ),
     );
   }

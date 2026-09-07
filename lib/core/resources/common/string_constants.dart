@@ -78,7 +78,10 @@ class StringConstants {
   static const String kEditProfile = 'Edit Profile';
   static const String kNotification = 'Notification';
   static const String kDevices = 'Devices';
+  static const String kAppearance = 'Appearance';
+  static const String kSystemDefault = 'System Default';
   static const String kLightMode = 'Light Mode';
+  static const String kDarkMode = 'Dark Mode';
   static const String kRecycleBin = 'Recycle Bin';
   static const String kLogout = 'Logout';
   static const String kLogoutAll = 'Logout all';

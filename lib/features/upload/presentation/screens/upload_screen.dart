@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/base/presentation/file_flow_stateless_widge
 import 'package:fileflow/core/common/shapes/dotted_border_painter.dart';
 import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/common/widgets/folder_card.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class UploadScreen extends FileFlowStatelessWidget {
       appBar: FileFlowAppBar(
         leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
         titleWidget: RichText(
-          text: const TextSpan(
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
-            children: [
+          text: TextSpan(
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
+            children: const [
               TextSpan(text: StringConstants.kFile),
               TextSpan(
                 text: StringConstants.kFlow,
@@ -33,7 +34,7 @@ class UploadScreen extends FileFlowStatelessWidget {
         trailing: InkWell(
           splashFactory: NoSplash.splashFactory,
           onTap: () {},
-          child: const Icon(Icons.notifications_rounded, color: AppColors.white),
+          child: Icon(Icons.notifications_rounded, color: context.colors.textPrimary),
         ),
       ),
       body: Column(
@@ -51,14 +52,14 @@ class UploadScreen extends FileFlowStatelessWidget {
                 color: AppColors.transparent,
                 height: 195,
                 width: double.infinity,
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.upload_sharp, color: AppColors.white),
-                    SizedBox(height: 5),
+                    Icon(Icons.upload_sharp, color: context.colors.textPrimary),
+                    const SizedBox(height: 5),
                     Text(
                       StringConstants.kSelectYourFiles,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.white),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                     ),
                   ],
                 ),
@@ -79,16 +80,16 @@ class UploadScreen extends FileFlowStatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: AppColors.grey),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      FolderCard(size: 50, tabWidth: 1),
-                      SizedBox(width: 20),
+                      const FolderCard(size: 50, tabWidth: 1),
+                      const SizedBox(width: 20),
                       Text(
                         StringConstants.kRoot,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: context.colors.textPrimary),
                       ),
-                      Spacer(),
-                      Icon(Icons.arrow_drop_down, size: 35, color: AppColors.white),
+                      const Spacer(),
+                      Icon(Icons.arrow_drop_down, size: 35, color: context.colors.textPrimary),
                     ],
                   ),
                 ),
@@ -100,11 +101,11 @@ class UploadScreen extends FileFlowStatelessWidget {
                     children: [
                       Expanded(flex: 1, child: Container(height: 1, color: AppColors.grey)),
                       Container(
-                        color: AppColors.neutral900,
+                        color: context.colors.background,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: const Text(
+                        child: Text(
                           StringConstants.kLocation,
-                          style: TextStyle(color: AppColors.white, fontSize: 12),
+                          style: TextStyle(color: context.colors.textPrimary, fontSize: 12),
                         ),
                       ),
                       Expanded(flex: 25, child: Container(height: 1, color: AppColors.grey)),
