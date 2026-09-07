@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fileflow/core/error/failure.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:fileflow/features/auth/data/models/device_model.dart';
 import 'package:fileflow/features/auth/data/models/user_model.dart';
@@ -118,7 +119,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
           .get();
 
       if (emailQuery.docs.isNotEmpty) {
-        throw Failure('Email already taken');
+        throw Failure(StringConstants.kEmailAlreadyTaken);
       }
     }
 
@@ -131,7 +132,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
           .get();
 
       if (usernameQuery.docs.isNotEmpty) {
-        throw Failure('Username already taken');
+        throw Failure(StringConstants.kUsernameAlreadyTaken);
       }
     }
 
@@ -206,6 +207,54 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     if (updates.isNotEmpty) {
       await docRef.update(updates);
     }
+  }
+
+  @override
+  Future<UserModel> updateUserProfile({
+    required String uid,
+    String? displayName,
+    String? username,
+    String? email,
+    String? photoUrl,
+  }) async {
+    if (username != null && username.isNotEmpty) {
+      final usernameQuery = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+
+      final takenByAnotherUser = usernameQuery.docs.any((doc) => doc.id != uid);
+      if (takenByAnotherUser) {
+        throw Failure(StringConstants.kUsernameAlreadyTaken);
+      }
+    }
+
+    if (email != null && email.isNotEmpty) {
+      final emailQuery = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      final takenByAnotherUser = emailQuery.docs.any((doc) => doc.id != uid);
+      if (takenByAnotherUser) {
+        throw Failure(StringConstants.kEmailAlreadyTaken);
+      }
+    }
+
+    final docRef = _firestore.collection('users').doc(uid);
+    final updates = <String, dynamic>{
+      'updatedAt': DateTime.now().toUtc().toIso8601String(),
+      'displayName': ?displayName,
+      'username': ?username,
+      'email': ?email,
+      'photoUrl': ?photoUrl,
+    };
+    await docRef.update(updates);
+
+    final snapshot = await docRef.get();
+    return UserModel.fromJson(snapshot.data()!);
   }
 
   @override

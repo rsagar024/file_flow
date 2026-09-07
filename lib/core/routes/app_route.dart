@@ -26,6 +26,7 @@ class AppRoute {
       GoRoute(path: FolderDetailsScreen.routeName, builder: (context, state) => const FolderDetailsScreen()),
       GoRoute(path: UploadScreen.routeName, builder: (context, state) => const UploadScreen()),
       GoRoute(path: DevicesScreen.routeName, builder: (context, state) => const DevicesScreen()),
+      GoRoute(path: CreateAccountScreen.editRouteName, builder: (context, state) => const CreateAccountScreen()),
     ],
   );
 }

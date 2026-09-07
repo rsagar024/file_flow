@@ -23,6 +23,14 @@ abstract interface class AuthRemoteDatasource {
 
   Future<void> deactivateOtherDevices(String uid, String excludeDeviceId);
 
+  Future<UserModel> updateUserProfile({
+    required String uid,
+    String? displayName,
+    String? username,
+    String? email,
+    String? photoUrl,
+  });
+
   Future<UserCredential> signInWithCredential(PhoneAuthCredential credential);
 
   Future<void> signOut();

@@ -6,4 +6,7 @@ class Failure {
   factory Failure.handleException(Object e) {
     return Failure(e.toString());
   }
+
+  @override
+  String toString() => message;
 }

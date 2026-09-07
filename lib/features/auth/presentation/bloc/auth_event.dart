@@ -64,6 +64,23 @@ final class CreateAccountEvent extends AuthEvent {
   List<Object?> get props => [phoneNumber, displayName, username, email];
 }
 
+final class UpdateProfileDetailsEvent extends AuthEvent {
+  final String displayName;
+  final String username;
+  final String email;
+  final String? photoUrl;
+
+  const UpdateProfileDetailsEvent({
+    required this.displayName,
+    required this.username,
+    required this.email,
+    this.photoUrl,
+  });
+
+  @override
+  List<Object?> get props => [displayName, username, email, photoUrl];
+}
+
 final class SignOutEvent extends AuthEvent {
   const SignOutEvent();
 }

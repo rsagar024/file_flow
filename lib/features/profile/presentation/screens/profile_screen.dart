@@ -9,6 +9,7 @@ import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/cubit/theme_cubit.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:fileflow/core/themes/theme_reveal_controller.dart';
+import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:fileflow/features/auth/presentation/widgets/profile_image_picker_widget.dart';
 import 'package:fileflow/features/profile/presentation/items/profile_item.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,8 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> with TickerProvid
 
   @override
   Widget buildContent(BuildContext context) {
+    final user = context.watch<AuthBloc>().state.user;
+
     return Scaffold(
       backgroundColor: AppColors.transparent,
       appBar: FileFlowAppBar(
@@ -67,7 +70,7 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> with TickerProvid
                     top: 25,
                     child: ProfileImagePickerWidget(
                       context: context,
-                      imagePath: ImageResources.profileAvatarPlaceholderUrl,
+                      imagePath: user?.photoUrl ?? ImageResources.profileAvatarPlaceholderUrl,
                       onChanged: (value) {},
                       isEditing: false,
                     ),
@@ -79,7 +82,7 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> with TickerProvid
             Padding(
               padding: const EdgeInsetsGeometry.fromLTRB(16, 5, 16, 5),
               child: Text(
-                StringConstants.kSampleUserName,
+                user?.displayName ?? StringConstants.kSampleUserName,
                 style: CustomTextStyles.custom18Bold.copyWith(
                   color: context.colors.textPrimary,
                 ),
@@ -89,7 +92,7 @@ class _ProfileScreenState extends FileFlowState<ProfileScreen> with TickerProvid
             Padding(
               padding: const EdgeInsetsGeometry.fromLTRB(16, 0, 16, 5),
               child: Text(
-                StringConstants.kSampleUsername,
+                user?.username != null ? '@${user!.username}' : StringConstants.kSampleUsername,
                 style: CustomTextStyles.custom16Regular.copyWith(
                   color: context.colors.textSecondary,
                 ),

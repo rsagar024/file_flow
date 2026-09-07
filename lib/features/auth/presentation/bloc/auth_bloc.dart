@@ -10,6 +10,7 @@ import 'package:fileflow/features/auth/domain/usecases/resend_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_local_only_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_usecase.dart';
+import 'package:fileflow/features/auth/domain/usecases/update_profile_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/verify_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/watch_current_device_active_status_usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final WatchCurrentDeviceActiveStatusUsecase
   _watchCurrentDeviceActiveStatusUsecase;
   final SignOutLocalOnlyUsecase _signOutLocalOnlyUsecase;
+  final UpdateProfileUsecase _updateProfileUsecase;
 
   Timer? _timer;
   StreamSubscription<bool>? _deviceActiveSubscription;
@@ -44,6 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._getCurrentDeviceIdUsecase,
     this._watchCurrentDeviceActiveStatusUsecase,
     this._signOutLocalOnlyUsecase,
+    this._updateProfileUsecase,
   ) : super(const AuthState()) {
     on<AuthCheckStatusEvent>(_onCheckStatus);
     on<OtpSendEvent>(_onSendOtp);
@@ -52,6 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<OtpResendEvent>(_onResendOtp);
     on<UpdateProfileImageEvent>(_onUpdateProfileImage);
     on<CreateAccountEvent>(_onCreateAccount);
+    on<UpdateProfileDetailsEvent>(_onUpdateProfileDetails);
     on<SignOutEvent>(_onSignOut);
     on<_RemoteDeviceDeactivatedEvent>(_onRemoteDeviceDeactivated);
   }
@@ -292,6 +296,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(state.copyWith(status: AuthAppStatus.authenticated, user: user));
         _startDeviceEnforcement(state.uid ?? user.uid ?? '');
       },
+    );
+  }
+
+  FutureOr<void> _onUpdateProfileDetails(
+    UpdateProfileDetailsEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthAppStatus.profileUpdating));
+
+    final result = await _updateProfileUsecase(
+      UpdateProfileParams(
+        uid: state.user?.uid ?? '',
+        displayName: event.displayName,
+        username: event.username,
+        email: event.email,
+        photoUrl: event.photoUrl,
+      ),
+    );
+
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          status: AuthAppStatus.profileUpdateFailure,
+          errorMessage: failure.message,
+        ),
+      ),
+      (user) => emit(
+        state.copyWith(status: AuthAppStatus.profileUpdateSuccess, user: user),
+      ),
     );
   }
 

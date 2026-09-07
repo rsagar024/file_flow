@@ -2,6 +2,7 @@ import 'package:fileflow/core/common/widgets/confirmation_dialog_widget.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
 import 'package:fileflow/features/profile/presentation/screens/devices_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,7 @@ List<ProfileItem> buildProfileItems(BuildContext context) {
     ProfileItem(
       title: StringConstants.kEditProfile,
       icon: Icons.edit,
-      onTap: () {},
+      onTap: () => context.push(CreateAccountScreen.editRouteName),
     ),
     ProfileItem(
       title: StringConstants.kNotification,

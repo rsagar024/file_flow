@@ -38,6 +38,14 @@ abstract interface class AuthRepository {
   });
 
   Future<Either<Failure, void>> signOutLocalOnly();
+
+  Future<Either<Failure, UserEntity>> updateProfile({
+    required String uid,
+    String? displayName,
+    String? username,
+    String? email,
+    String? photoUrl,
+  });
 }
 
 class AuthResult extends Equatable {

@@ -16,6 +16,7 @@ import 'package:fileflow/features/auth/domain/usecases/resend_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/send_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_local_only_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/sign_out_usecase.dart';
+import 'package:fileflow/features/auth/domain/usecases/update_profile_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/verify_otp_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/watch_current_device_active_status_usecase.dart';
 import 'package:fileflow/features/auth/domain/usecases/watch_devices_usecase.dart';
@@ -77,13 +78,15 @@ void _registerUseCase() {
     ..registerLazySingleton(() => SignOutLocalOnlyUsecase(getIt()))
     ..registerLazySingleton(() => WatchDevicesUsecase(getIt()))
     ..registerLazySingleton(() => LogoutDeviceUsecase(getIt()))
-    ..registerLazySingleton(() => LogoutAllOtherDevicesUsecase(getIt()));
+    ..registerLazySingleton(() => LogoutAllOtherDevicesUsecase(getIt()))
+    ..registerLazySingleton(() => UpdateProfileUsecase(getIt()));
 }
 
 void _registerBlocs() {
   getIt
     ..registerLazySingleton<AuthBloc>(
       () => AuthBloc(
+        getIt(),
         getIt(),
         getIt(),
         getIt(),

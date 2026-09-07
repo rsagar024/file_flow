@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 
 class CreateAccountScreen extends FileFlowBackgroundStatefulWidget {
   static const routeName = '/create-account';
+  static const editRouteName = '/edit-profile';
 
   const CreateAccountScreen({super.key});
 
@@ -28,6 +29,7 @@ class CreateAccountScreen extends FileFlowBackgroundStatefulWidget {
 class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final authBloc = getIt<AuthBloc>();
+  late final bool isEditMode;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
@@ -38,6 +40,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
   void initState() {
     super.initState();
     final currentState = authBloc.state;
+    isEditMode = currentState.user != null;
     phoneController.text = currentState.user?.phoneNumber ?? currentState.phoneNumber ?? '';
     nameController.text = currentState.user?.displayName ?? '';
     usernameController.text = currentState.user?.username ?? '';
@@ -63,7 +66,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
         automaticallyImplyLeading: true,
         backgroundColor: AppColors.transparent,
         title: Text(
-          StringConstants.kCreateAccount,
+          isEditMode ? StringConstants.kEditProfile : StringConstants.kCreateAccount,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
         ),
         centerTitle: true,
@@ -73,11 +76,19 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
         listener: (context, state) {
           if (state.status == AuthAppStatus.authenticated) {
             context.go(DashboardScreen.routeName);
-          } else if (state.status == AuthAppStatus.failure) {
+          } else if (state.status == AuthAppStatus.profileUpdateSuccess) {
+            CustomSnackbar.show(
+              context: context,
+              message: StringConstants.kProfileUpdated,
+              type: SnackbarType.success,
+            );
+            Navigator.of(context).maybePop();
+          } else if (state.status == AuthAppStatus.failure ||
+              state.status == AuthAppStatus.profileUpdateFailure) {
             printError(state.errorMessage ?? 'Unknown error');
             CustomSnackbar.show(
               context: context,
-              message: state.errorMessage ?? 'Unknown error',
+              message: state.errorMessage ?? StringConstants.kFailedToUpdateProfile,
               type: SnackbarType.error,
             );
           }
@@ -99,7 +110,7 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
                           builder: (context, state) {
                             return ProfileImagePickerWidget(
                               context: context,
-                              imagePath: state.imageUrl,
+                              imagePath: state.imageUrl ?? state.user?.photoUrl,
                               onChanged: (value) {
                                 if (value != null) {
                                   authBloc.add(UpdateProfileImageEvent(imagePath: value));
@@ -191,24 +202,36 @@ class _CreateAccountScreenState extends FileFlowBackgroundState<CreateAccountScr
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: MediaQuery.paddingOf(context).bottom),
         child: BlocSelector<AuthBloc, AuthState, bool>(
-          selector: (state) => state.status == AuthAppStatus.loading,
+          selector: (state) =>
+              state.status == AuthAppStatus.loading || state.status == AuthAppStatus.profileUpdating,
           builder: (context, isLoading) {
             return FileFlowButton(
-              text: StringConstants.kCreateAccount,
+              text: isEditMode ? StringConstants.kSaveChanges : StringConstants.kCreateAccount,
               textColor: AppColors.white,
-              icon: const Icon(Icons.arrow_forward, color: AppColors.white),
+              icon: isEditMode ? null : const Icon(Icons.arrow_forward, color: AppColors.white),
               iconAlignment: IconAlignment.end,
               isLoading: isLoading,
               onPressed: () {
                 if (_formKey.currentState?.validate() ?? false) {
-                  authBloc.add(
-                    CreateAccountEvent(
-                      phoneNumber: phoneController.text,
-                      displayName: nameController.text,
-                      username: usernameController.text,
-                      email: emailController.text,
-                    ),
-                  );
+                  if (isEditMode) {
+                    authBloc.add(
+                      UpdateProfileDetailsEvent(
+                        displayName: nameController.text.trim(),
+                        username: usernameController.text.trim(),
+                        email: emailController.text.trim(),
+                        photoUrl: authBloc.state.imageUrl,
+                      ),
+                    );
+                  } else {
+                    authBloc.add(
+                      CreateAccountEvent(
+                        phoneNumber: phoneController.text,
+                        displayName: nameController.text,
+                        username: usernameController.text,
+                        email: emailController.text,
+                      ),
+                    );
+                  }
                 } else {
                   printError('Not validate');
                 }
