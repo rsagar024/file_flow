@@ -4,7 +4,7 @@ Securely sync your workflow anywhere.
 
 FileFlow is a Flutter app for storing, organizing, and sharing files across devices, built on Firebase (Auth, Firestore). Sign-in is phone-number + OTP based, and each account tracks and manages its own logged-in devices.
 
-> **Status**: early-stage. Auth and device/session management are fully built; file browsing, upload, and sharing are UI scaffolding only (no backend wiring yet). See [Current status](#current-status) below, and [`flow.md`](flow.md) / [`design.md`](design.md) for details.
+> **Status**: early-stage. Auth, device/session management, profile editing, and theming are fully built; file browsing, upload, and sharing are UI scaffolding only (no backend wiring yet). See [Current status](#current-status) below, and [`flow.md`](flow.md) / [`design.md`](design.md) for details.
 
 ## Current status
 
@@ -12,6 +12,8 @@ FileFlow is a Flutter app for storing, organizing, and sharing files across devi
 - Phone number + OTP sign-in (Firebase Auth), with auto-verification and resend support
 - Account creation with unique email/username validation against Firestore
 - Per-account device/session tracking in Firestore, with remote logout of a single device or all other devices
+- Profile editing (display name, username, email, photo) and an avatar component with network/local/initials fallback
+- Light/dark/system theming with persisted preference and an animated transition on brightness change
 - Bottom-nav dashboard shell (Home / Sharing / Upload / Settings / Profile tabs)
 
 **UI scaffolding only — not wired to real data yet**
@@ -76,7 +78,7 @@ lib/
 │   ├── resources/           # centralized strings, image paths
 │   ├── routes/               # go_router route table
 │   ├── services/             # device info, image picker services
-│   ├── themes/                # colors, text styles
+│   ├── themes/                # colors, text styles, semantic color tokens, theme cubit
 │   ├── usecase/               # base Usecase/StreamUseCase (Either-returning)
 │   └── validator/
 └── features/

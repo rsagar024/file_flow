@@ -4,6 +4,10 @@ All notable changes to this project are documented here. Format loosely follows 
 
 ## [Unreleased]
 
+- Theme management: light/dark/system mode selection, persisted across launches, with semantic color tokens (`SemanticColors`) replacing hardcoded colors in themed widgets and an animated circular-reveal transition when switching brightness
+- Profile editing: update display name, username, email, and photo from the profile screen (reuses the create-account form in an edit mode)
+- Avatar component (`UserAvatar`) with network image, local file, and initials/icon fallback, integrated into the profile screen alongside a storage-usage summary
+
 ## [1.0.0] — seeded from project history
 
 Initial build-out of the app, in roughly the order it happened:

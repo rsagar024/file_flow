@@ -6,8 +6,9 @@
 main()
   → Firebase.initializeApp() (lib/firebase_options.dart)
   → initDependencies()        # get_it DI, see design.md
-  → runApp(MultiBlocProvider(AuthBloc, child: FileFlowApp))
-  → MaterialApp.router(routerConfig: AppRoute.routes)  # go_router, initialLocation = Splash
+  → runApp(FileFlowApp)
+  → MultiBlocProvider(AuthBloc, ThemeCubit)
+  → MaterialApp.router(theme/darkTheme/themeMode from ThemeCubit, routerConfig: AppRoute.routes)  # go_router, initialLocation = Splash
 ```
 
 ## Route table
@@ -25,6 +26,7 @@ Flat declarative routes (`lib/core/routes/app_route.dart`) — no nested/shell r
 | folder details | `FolderDetailsScreen` |
 | upload | `UploadScreen` |
 | devices | `DevicesScreen` |
+| edit profile | `CreateAccountScreen` (`editRouteName`, same screen in edit mode) |
 
 `HomeScreen`, `UploadScreen`, and `ProfileScreen` are also embedded directly as pages inside `DashboardScreen`'s tab `PageView` — they're reachable both as standalone routes and as dashboard tabs.
 
@@ -79,6 +81,22 @@ ProfileScreen → DevicesScreen
 ```
 
 If the current device is remotely logged out from another session (its `isActive` flips to `false` in Firestore), `watchCurrentDeviceActiveStatus` picks that up and the same sign-out/redirect path applies.
+
+## Edit profile & theme switching
+
+```
+ProfileScreen
+  → push(CreateAccountScreen.editRouteName)
+      CreateAccountScreen(isEditMode: true)   # detected from AuthBloc's already-loaded user
+      → UpdateProfileUsecase(uid, displayName, username, email, photoUrl)
+      → pop back to ProfileScreen
+  → ThemeModeSelector (Appearance row)
+      → ThemeCubit.updateMode(mode)
+      → if brightness actually changes (light↔dark), ThemeRevealController.toggleWithReveal
+        plays a circular-reveal animation from the tap origin before/while applying the new theme
+```
+
+`ProfileScreen` also renders the user's avatar via the shared `UserAvatar` widget (network photo, local file, or initials/icon fallback) and a storage-usage summary alongside these actions.
 
 ## What's UI-only today
 

@@ -15,7 +15,7 @@ Follow the `[TAG]: description` convention used throughout the git history, e.g.
 [ADD]: implement device management features including logout and device status tracking.
 [FIX]: github workflows.
 ```
-Common tags seen so far: `ADD`, `FIX`. Use whichever best describes the change.
+Common tags seen so far: `ADD`, `FIX`, `REFACTOR`. Use whichever best describes the change.
 
 ## Pull requests
 
