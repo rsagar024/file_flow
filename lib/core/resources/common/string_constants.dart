@@ -114,4 +114,7 @@ class StringConstants {
   static const String kSampleUsername = '@hrithiklal';
   static const String kConfirm = 'Confirm';
   static const String kCancel = 'Cancel';
+  static const String kStorage = 'Storage';
+  static const String kAccount = 'Account';
+  static const String kPreferences = 'Preferences';
 }
