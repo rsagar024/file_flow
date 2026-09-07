@@ -2,17 +2,25 @@ import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundPainter extends CustomPainter {
+  final Color backgroundColor;
+  final bool isDark;
+
+  BackgroundPainter({required this.backgroundColor, required this.isDark});
+
   @override
   void paint(Canvas canvas, Size size) {
     // Base background
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = AppColors.neutral900);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), Paint()..color = backgroundColor);
+
+    final primaryAlpha = isDark ? 0.8 : 0.25;
+    final secondaryAlpha = isDark ? 0.2 : 0.08;
 
     // Top-left purple radial glow
     final topLeftPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          AppColors.topLeftCirclePrimary.withValues(alpha: 0.8),
-          AppColors.topLeftCircleSecondary.withValues(alpha: 0.2),
+          AppColors.topLeftCirclePrimary.withValues(alpha: primaryAlpha),
+          AppColors.topLeftCircleSecondary.withValues(alpha: secondaryAlpha),
           AppColors.transparent,
         ],
         stops: const [0.0, 0.5, 1.0],
@@ -23,8 +31,8 @@ class BackgroundPainter extends CustomPainter {
     final bottomRightPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          AppColors.bottomRightCirclePrimary.withValues(alpha: 0.8),
-          AppColors.bottomRightCircleSecondary.withValues(alpha: 0.2),
+          AppColors.bottomRightCirclePrimary.withValues(alpha: primaryAlpha),
+          AppColors.bottomRightCircleSecondary.withValues(alpha: secondaryAlpha),
           AppColors.transparent,
         ],
         stops: const [0.0, 0.5, 1.0],
@@ -33,5 +41,6 @@ class BackgroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant BackgroundPainter oldDelegate) =>
+      oldDelegate.backgroundColor != backgroundColor || oldDelegate.isDark != isDark;
 }

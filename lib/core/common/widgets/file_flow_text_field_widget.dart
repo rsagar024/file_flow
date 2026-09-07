@@ -1,3 +1,4 @@
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
     bool obscureText = false,
     TextStyle? textStyle,
     TextStyle? hintStyle,
-    Color cursorColor = AppColors.white,
+    Color? cursorColor,
     bool readOnly = false,
     bool enabled = true,
     int maxLines = 1,
@@ -27,6 +28,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
          initialValue: controller?.text,
          builder: (field) {
            final hasError = field.hasError;
+           final colors = field.context.colors;
 
            return Padding(
              padding: margin ?? EdgeInsets.zero,
@@ -46,9 +48,9 @@ class FileFlowTextFieldWidget extends FormField<String> {
                        TextStyle(
                          fontSize: 15,
                          fontWeight: FontWeight.w500,
-                         color: enabled ? AppColors.white : AppColors.grey,
+                         color: enabled ? colors.textPrimary : colors.disabled,
                        ),
-                   cursorColor: cursorColor,
+                   cursorColor: cursorColor ?? colors.textPrimary,
                    onTap: onTap,
                    onChanged: (value) {
                      field.didChange(value); // 👈 important
@@ -56,8 +58,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
                    },
                    decoration: InputDecoration(
                      hintText: hintText,
-                     hintStyle:
-                         hintStyle ?? TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: AppColors.grey700),
+                     hintStyle: hintStyle ?? TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: colors.textTertiary),
                      counterText: '',
                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                      prefixIcon: prefixIcon,
@@ -65,7 +66,7 @@ class FileFlowTextFieldWidget extends FormField<String> {
                      errorText: null,
                      focusedBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),
-                       borderSide: BorderSide(color: hasError ? AppColors.red : AppColors.white, width: 2),
+                       borderSide: BorderSide(color: hasError ? AppColors.red : colors.textPrimary, width: 2),
                      ),
                      enabledBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.circular(12),

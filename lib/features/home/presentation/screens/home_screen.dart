@@ -1,6 +1,7 @@
 import 'package:fileflow/core/common/base/presentation/file_flow_stateful_widget.dart';
 import 'package:fileflow/core/common/widgets/file_flow_app_bar.dart';
 import 'package:fileflow/core/common/widgets/file_flow_text_field_widget.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/features/home/presentation/widgets/all_category_widget.dart';
@@ -38,9 +39,9 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
       appBar: FileFlowAppBar(
         leading: SvgPicture.asset('assets/icons/ic_logo.svg', height: 30),
         titleWidget: RichText(
-          text: const TextSpan(
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: AppColors.white),
-            children: [
+          text: TextSpan(
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
+            children: const [
               TextSpan(text: StringConstants.kFile),
               TextSpan(
                 text: StringConstants.kFlow,
@@ -52,7 +53,7 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
         trailing: InkWell(
           splashFactory: NoSplash.splashFactory,
           onTap: () {},
-          child: const Icon(Icons.notifications_rounded, color: AppColors.white),
+          child: Icon(Icons.notifications_rounded, color: context.colors.textPrimary),
         ),
       ),
       body: Padding(
@@ -83,15 +84,15 @@ class _HomeScreenState extends FileFlowState<HomeScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 8, 16, 8),
       margin: const EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(color: AppColors.white12, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: context.colors.surfaceVariant, borderRadius: BorderRadius.circular(8)),
       child: Row(
         spacing: 4,
         children: [
           Text(
             label,
-            style: const TextStyle(color: AppColors.white, fontSize: 14, fontWeight: FontWeight.w500),
+            style: TextStyle(color: context.colors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
           ),
-          const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.white),
+          Icon(Icons.keyboard_arrow_down_rounded, color: context.colors.textPrimary),
         ],
       ),
     );

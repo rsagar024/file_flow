@@ -1,4 +1,5 @@
 import 'package:fileflow/core/common/shapes/background_painter.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
 import 'package:fileflow/core/extensions/object_extension.dart';
 import 'package:fileflow/core/utilities/dialog_manager.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +38,12 @@ abstract class FileFlowBackgroundStatelessWidget extends StatelessWidget {
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: Theme(
-        data: ThemeData.dark(),
-        child: CustomPaint(painter: BackgroundPainter(), child: buildContent(context)),
+      child: CustomPaint(
+        painter: BackgroundPainter(
+          backgroundColor: context.colors.background,
+          isDark: Theme.of(context).brightness == Brightness.dark,
+        ),
+        child: buildContent(context),
       ),
     );
   }
