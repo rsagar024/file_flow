@@ -6,6 +6,7 @@ class UserEntity extends Equatable {
   final String? uid;
   final String? email;
   final String? displayName;
+  final String? username;
   final String? photoUrl;
   final String? phoneNumber;
   final int? storageUsedBytes;
@@ -13,13 +14,14 @@ class UserEntity extends Equatable {
   final int? totalFilesCount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final List<DeviceEntity>? devices;
+  final Map<String, DeviceEntity>? devices;
   final bool isNewUser;
 
   const UserEntity({
     this.uid,
     this.email,
     this.displayName,
+    this.username,
     this.photoUrl,
     this.phoneNumber,
     this.storageUsedBytes,
@@ -32,7 +34,9 @@ class UserEntity extends Equatable {
   });
 
   double get storageUsedPercentage {
-    if (storageLimitBytes == null || storageLimitBytes == 0 || storageUsedBytes == null) {
+    if (storageLimitBytes == null ||
+        storageLimitBytes == 0 ||
+        storageUsedBytes == null) {
       return 0.0;
     }
     return (storageUsedBytes! / storageLimitBytes!) * 100;
@@ -42,7 +46,8 @@ class UserEntity extends Equatable {
     final bytes = storageUsedBytes ?? 0;
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
-    if (bytes < 1024 * 1024 * 1024) return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    if (bytes < 1024 * 1024 * 1024)
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 
@@ -56,6 +61,7 @@ class UserEntity extends Equatable {
     uid,
     email,
     displayName,
+    username,
     photoUrl,
     phoneNumber,
     storageUsedBytes,
@@ -70,6 +76,7 @@ class UserEntity extends Equatable {
   UserEntity copyWith({
     String? email,
     String? displayName,
+    String? username,
     String? photoUrl,
     String? phoneNumber,
     int? storageUsedBytes,
@@ -77,13 +84,14 @@ class UserEntity extends Equatable {
     int? totalFilesCount,
     DateTime? createdAt,
     DateTime? updatedAt,
-    List<DeviceEntity>? devices,
+    Map<String, DeviceEntity>? devices,
     bool? isNewUser,
   }) {
     return UserEntity(
       uid: uid,
       email: email ?? this.email,
       displayName: displayName ?? this.displayName,
+      username: username ?? this.username,
       photoUrl: photoUrl ?? this.photoUrl,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       storageUsedBytes: storageUsedBytes ?? this.storageUsedBytes,
@@ -101,6 +109,7 @@ class UserEntity extends Equatable {
       uid: uid,
       email: email,
       displayName: displayName,
+      username: username,
       photoUrl: photoUrl,
       phoneNumber: phoneNumber,
       storageUsedBytes: storageUsedBytes,
@@ -108,7 +117,7 @@ class UserEntity extends Equatable {
       totalFilesCount: totalFilesCount,
       createdAt: createdAt,
       updatedAt: updatedAt,
-      devices: devices?.map((e) => e.toModel()).toList(),
+      devices: devices?.map((key, value) => MapEntry(key, value.toModel())),
       isNewUser: isNewUser,
     );
   }

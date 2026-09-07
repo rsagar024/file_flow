@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fileflow/core/error/failure.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:fileflow/features/auth/data/models/device_model.dart';
 import 'package:fileflow/features/auth/data/models/user_model.dart';
@@ -17,7 +18,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   AuthRemoteDatasourceImpl(this._firebaseAuth, this._firestore);
 
   @override
-  Future<String> sendOtp(String phoneNumber, Function(PhoneAuthCredential) onAutoVerified) async {
+  Future<String> sendOtp(
+    String phoneNumber,
+    Function(PhoneAuthCredential) onAutoVerified,
+  ) async {
     final completer = Completer<String>();
 
     await _firebaseAuth.verifyPhoneNumber(
@@ -28,7 +32,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (!completer.isCompleted) {
-          completer.completeError(Failure(e.code));
+          completer.completeError(e.message ?? e.code);
         }
       },
       codeSent: (String verificationId, int? resendToken) {
@@ -50,12 +54,18 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     if (_verificationId == null) {
       throw Failure('Otp verification failed');
     }
-    final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otp);
+    final credential = PhoneAuthProvider.credential(
+      verificationId: _verificationId!,
+      smsCode: otp,
+    );
     return await _firebaseAuth.signInWithCredential(credential);
   }
 
   @override
-  Future<String> resendOtp(String phoneNumber, Function(PhoneAuthCredential) onAutoVerified) async {
+  Future<String> resendOtp(
+    String phoneNumber,
+    Function(PhoneAuthCredential) onAutoVerified,
+  ) async {
     final completer = Completer<String>();
 
     await _firebaseAuth.verifyPhoneNumber(
@@ -100,6 +110,32 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   @override
   Future<UserModel> createUserInFirestore(UserModel userModel) async {
+    // Validate email is not already taken
+    if (userModel.email != null && userModel.email!.isNotEmpty) {
+      final emailQuery = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: userModel.email)
+          .limit(1)
+          .get();
+
+      if (emailQuery.docs.isNotEmpty) {
+        throw Failure(StringConstants.kEmailAlreadyTaken);
+      }
+    }
+
+    // Validate username (username) is not already taken
+    if (userModel.username != null && userModel.username!.isNotEmpty) {
+      final usernameQuery = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: userModel.username)
+          .limit(1)
+          .get();
+
+      if (usernameQuery.docs.isNotEmpty) {
+        throw Failure(StringConstants.kUsernameAlreadyTaken);
+      }
+    }
+
     userModel = userModel
         .copyWith(
           storageUsedBytes: 0,
@@ -110,39 +146,121 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         )
         .toModel();
 
-    await _firestore.collection('users').doc(userModel.uid).set(userModel.toJson());
+    await _firestore
+        .collection('users')
+        .doc(userModel.uid)
+        .set(userModel.toJson());
     return userModel;
   }
 
   @override
   Future<void> updateDeviceInfo(String uid, DeviceModel deviceModel) async {
-    final doc = await _firestore.collection('users').doc(uid).get();
+    final deviceId = deviceModel.deviceId ?? 'unknown';
+    final docRef = _firestore.collection('users').doc(uid);
+    final snapshot = await docRef.get();
+    final rawDevices = snapshot.data()?['devices'];
 
-    if (!doc.exists) return;
-
-    final userData = doc.data()!;
-    final existingDevices =
-        (userData['devices'] as List<dynamic>?)
-            ?.map((device) => DeviceModel.fromJson(device as Map<String, dynamic>))
-            .toList() ??
-        [];
-
-    final index = existingDevices.indexWhere((device) => device.deviceId == deviceModel.deviceId);
-
-    if (index != -1) {
-      existingDevices[index] = deviceModel;
+    if (rawDevices is List) {
+      // Legacy shape on this account — self-heal by replacing entirely with the new map shape.
+      await docRef.update({
+        'devices': {deviceId: deviceModel.toJson()},
+      });
     } else {
-      existingDevices.add(deviceModel);
+      await docRef.update({'devices.$deviceId': deviceModel.toJson()});
     }
+  }
 
-    await _firestore.collection('users').doc(uid).update({
-      'devices': existingDevices.map((e) => e.toJson()).toList(),
-      'updatedAt': DateTime.now().toUtc().toIso8601String(),
+  @override
+  Stream<UserModel?> watchUser(String uid) {
+    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
+      if (!doc.exists || doc.data() == null) return null;
+      return UserModel.fromJson(doc.data()!);
     });
   }
 
   @override
-  Future<UserCredential> signInWithCredential(PhoneAuthCredential credential) async {
+  Future<void> setDeviceActive(
+    String uid,
+    String deviceId, {
+    required bool isActive,
+  }) async {
+    await _firestore.collection('users').doc(uid).update({
+      'devices.$deviceId.isActive': isActive,
+    });
+  }
+
+  @override
+  Future<void> deactivateOtherDevices(
+    String uid,
+    String excludeDeviceId,
+  ) async {
+    final docRef = _firestore.collection('users').doc(uid);
+    final snapshot = await docRef.get();
+    final rawDevices = snapshot.data()?['devices'];
+    if (rawDevices is! Map) return;
+
+    final updates = <String, dynamic>{};
+    for (final key in rawDevices.keys) {
+      if (key == excludeDeviceId) continue;
+      updates['devices.$key.isActive'] = false;
+    }
+    if (updates.isNotEmpty) {
+      await docRef.update(updates);
+    }
+  }
+
+  @override
+  Future<UserModel> updateUserProfile({
+    required String uid,
+    String? displayName,
+    String? username,
+    String? email,
+    String? photoUrl,
+  }) async {
+    if (username != null && username.isNotEmpty) {
+      final usernameQuery = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+
+      final takenByAnotherUser = usernameQuery.docs.any((doc) => doc.id != uid);
+      if (takenByAnotherUser) {
+        throw Failure(StringConstants.kUsernameAlreadyTaken);
+      }
+    }
+
+    if (email != null && email.isNotEmpty) {
+      final emailQuery = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      final takenByAnotherUser = emailQuery.docs.any((doc) => doc.id != uid);
+      if (takenByAnotherUser) {
+        throw Failure(StringConstants.kEmailAlreadyTaken);
+      }
+    }
+
+    final docRef = _firestore.collection('users').doc(uid);
+    final updates = <String, dynamic>{
+      'updatedAt': DateTime.now().toUtc().toIso8601String(),
+      'displayName': ?displayName,
+      'username': ?username,
+      'email': ?email,
+      'photoUrl': ?photoUrl,
+    };
+    await docRef.update(updates);
+
+    final snapshot = await docRef.get();
+    return UserModel.fromJson(snapshot.data()!);
+  }
+
+  @override
+  Future<UserCredential> signInWithCredential(
+    PhoneAuthCredential credential,
+  ) async {
     return await _firebaseAuth.signInWithCredential(credential);
   }
 

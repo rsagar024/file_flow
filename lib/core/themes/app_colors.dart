@@ -1,60 +1,67 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary Brand Colors
-  static const primary = Color(0xFFD9519D);
-  static const secondary = Color(0xFFED8770);
-  static const accent = Color(0xFFE1914B);
+  // Primary Colors
+  static const Color primary = Color(0xFF0062FF);
 
-  // Neutral Colors - Dark Theme
-  static const background = Color(0xFF0F172A); // Slate 900
-  static const surface = Color(0xFF1E293B); // Slate 800
-  static const surfaceLight = Color(0xFF334155); // Slate 700
+  // Neutral Colors - Light
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color neutral50 = Color(0xFFF8FAFC);
+  static const Color neutral100 = Color(0xFFF1F5F9);
 
-  // Gray Scale
-  static const neutral50 = Color(0xFFF8FAFC);
-  static const neutral100 = Color(0xFFE2E8F0);
-  static const neutral200 = Color(0xFFCBD5E1);
-  static const neutral300 = Color(0xFF94A3B8);
-  static const neutral400 = Color(0xFF64748B);
+  // Neutral Colors - Medium
+  static const Color neutral200 = Color(0xFFCBD5E1);
+  static const Color neutral300 = Color(0xFF94A3B8);
+  static const Color neutral400 = Color(0xFF64748B);
+  static const Color neutral500 = Color(0xFF9A9AB0);
 
-  static const black = Color(0xFF000000);
+  // Neutral Colors - Dark
+  static const Color neutral900 = Color(0xFF070D1F);
+  static const Color black = Color(0xFF000000);
+
+  // Status Colors
+  static const Color success = Color(0xFF10B981);
+  static const Color error = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFF59E0B);
+  static const Color info = primary;
+  static const Color redAccent = Colors.redAccent;
+  static const Color yellowAccent = Colors.yellowAccent;
+  static const Color greenAccent = Colors.greenAccent;
+  static const Color blueAccent = Colors.blueAccent;
 
   // Semantic Colors
-  static const success = Color(0xFF10B981); // Emerald
-  static const warning = Color(0xFFF59E0B); // Amber
-  static const error = Color(0xFFEF4444); // Red
-  static const info = Color(0xFF0EA5E9); // Sky
+  static const Color background = Color(0xFF0F172A);
+  static const Color surface = Color(0xFF1E293B);
+  static const Color surfaceVariant = Color(0xFF334155);
 
-  // Gradient Collections
-  static const LinearGradient primaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [primary, secondary],
-  );
+  // Text Colors
+  static const Color textPrimary = Color(0xFFFFFFFF);
+  static const Color textSecondary = Color(0xFF94A3B8);
+  static const Color textTertiary = Color(0xFF64748B);
+  static const Color textDisabled = Color(0xFF9A9AB0);
 
-  static const LinearGradient surfaceGradient = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [surface, background],
-  );
+  // Interactive Colors
+  static const Color inactive = Color(0xFF9A9AB0);
+  static const Color active = primary;
+  static const Color pressed = Color(0xFF0051CC);
+  static const Color disabled = Color(0xFF64748B);
 
-  static const LinearGradient glassGradient = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [
-      Color(0x40FFFFFF), // White with opacity
-      Color(0x10FFFFFF), // White with opacity
-    ],
-  );
+  static const Color topLeftCirclePrimary = Color(0xFF2D1B5E);
+  static const Color topLeftCircleSecondary = Color(0xFF1A1040);
+  static const Color bottomRightCirclePrimary = Color(0xFF0D3B5E);
+  static const Color bottomRightCircleSecondary = Color(0xFF081E35);
 
-  // Overlay Colors
-  static const overlay20 = Color(0x33000000); // Black with 20% opacity
-  static const overlay40 = Color(0x66000000); // Black with 40% opacity
-  static const overlay60 = Color(0x99000000); // Black with 60% opacity
-
-  // Glass Effect Colors
-  static const glassLight = Color(0x0DFFFFFF); // White with 5% opacity
-  static const glassMedium = Color(0x1AFFFFFF); // White with 10% opacity
-  static const glassDark = Color(0x26FFFFFF); // White with 15% opacity
+  static const Color transparent = Colors.transparent;
+  static const Color grey = Colors.grey;
+  static Color grey700 = Colors.grey.shade700;
+  static const Color white60 = Colors.white60;
+  static const Color white54 = Colors.white54;
+  static const Color white12 = Colors.white12;
+  static const Color red = Colors.red;
+  static const Color orange = Colors.orange;
+  static const Color yellow = Colors.yellow;
+  static const Color green = Colors.green;
+  static const Color blue = Colors.blue;
+  static const Color indigo = Colors.indigo;
+  static const Color purple = Colors.purple;
 }

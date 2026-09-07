@@ -1,5 +1,7 @@
 import 'package:fileflow/core/common/widgets/phone_field/countries.dart';
 import 'package:fileflow/core/common/widgets/selectable_item_bottom_sheet.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
 import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
   late Animation<Color?> _backgroundColorAnimation;
   final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
+  String? _errorText;
 
   TextEditingController get _effectiveController => widget.controller ?? _internalController;
 
@@ -79,7 +82,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
   }
 
   void _updateSelectedCountry() {
-    final dialCode = widget.selectedDialCode?.replaceAll('+', '') ?? '91';
+    final dialCode = widget.selectedDialCode?.replaceAll('+', '') ?? StringConstants.kIndianDialCode;
     setState(() {
       _selectedCountry = _countries.firstWhere(
         (element) => element.value?.dialCode == dialCode,
@@ -102,7 +105,7 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
     _animationController = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
     _backgroundColorAnimation =
         ColorTween(
-          begin: Colors.transparent,
+          begin: AppColors.transparent,
           end: AppColors.neutral50.withAlpha((0.1 * 255).toInt()),
         ).animate(_animationController)..addListener(() {
           setState(() {});
@@ -145,28 +148,45 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
 
   String? _baseValidator(String? value) {
     final digitsOnly = RegExp(r'^\d+$');
-    final maxLength = _selectedCountry?.value?.maxLength ?? 10;
+    final country = _selectedCountry?.value;
+    final maxLength = country?.maxLength ?? 10;
 
     if (value == null || value.isEmpty) {
       if (widget.isRequired) {
+        _errorText = '${widget.labelText} ${StringConstants.kIsRequiredField}';
         _triggerValidationCallback(false, null, null);
-        return '${widget.labelText} is required field';
+        return _errorText;
       } else {
-        _triggerValidationCallback(true, _selectedCountry?.value, null);
+        _errorText = null;
+        _triggerValidationCallback(true, country, null);
         return null;
       }
     }
+
     if (!digitsOnly.hasMatch(value)) {
+      _errorText = StringConstants.kOnlyDigitsAreAllowed;
       _triggerValidationCallback(false, null, null);
-      return 'Only digits are allowed';
+      return _errorText;
+    }
+
+    final startingDigits = country?.startingDigits ?? [];
+    if (startingDigits.isNotEmpty) {
+      final isValidStart = startingDigits.any((prefix) => value.startsWith(prefix));
+      if (!isValidStart) {
+        _errorText = '${StringConstants.kNumberMustStartWith} ${startingDigits.join(', ')}';
+        _triggerValidationCallback(false, country, null);
+        return _errorText;
+      }
     }
 
     if (value.length != maxLength || (int.tryParse(value) ?? 0) <= 0) {
-      _triggerValidationCallback(false, _selectedCountry?.value, null);
-      return 'Invalid contact number';
+      _errorText = StringConstants.kInvalidContactNumber;
+      _triggerValidationCallback(false, country, null);
+      return _errorText;
     }
 
-    _triggerValidationCallback(true, _selectedCountry?.value, value);
+    _errorText = null;
+    _triggerValidationCallback(true, country, value);
     return null;
   }
 
@@ -224,119 +244,137 @@ class _PhoneFieldState extends State<PhoneField> with SingleTickerProviderStateM
     final prefixText = ' +${_selectedCountry?.value?.dialCode ?? ''} ${_selectedCountry?.value?.flag ?? ''}';
     final prefixTextWidth = _calculateTextWidth(prefixText, baseTextStyle);
 
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 56.0, minWidth: 200.0),
-      child: Padding(
-        padding: widget.padding,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: _backgroundColorAnimation.value,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: _isFocused ? AppColors.black : AppColors.black.withAlpha((0.7 * 255).toInt()),
-            ),
-          ),
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              if (!isComplete)
-                Transform.translate(
-                  offset: Offset(
-                    prefixTextWidth + 8 + 4 + 1.5 + 5, // Prefix text + padding + separator + margin
-                    0,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 13, 0, 12),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: typedText,
-                            style: baseTextStyle.copyWith(color: Colors.black),
-                          ),
-                          TextSpan(
-                            text: hintZeros,
-                            style: baseTextStyle.copyWith(color: AppColors.black.withAlpha((0.5 * 255).toInt())),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 56.0, minWidth: 200.0),
+          child: Padding(
+            padding: widget.padding,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: _backgroundColorAnimation.value,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: _isFocused ? context.colors.textPrimary : context.colors.textSecondary,
                 ),
-              // TextFormField
-              TextFormField(
-                keyboardType: TextInputType.phone,
-                controller: _effectiveController,
-                focusNode: _focusNode,
-                autofocus: false,
-                inputFormatters: [PhoneNumberFormatter(maxLength)],
-                decoration: InputDecoration(
-                  isDense: false,
-                  counterText: '',
-                  hintText: '',
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0),
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SelectableItemBottomSheet(
-                          title: 'select country',
-                          selectableItems: _countries,
-                          selectedItem: _selectedCountry,
-                          canSearchItems: true,
-                          isEnabled: widget.isEnabled,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  if (!isComplete)
+                    Transform.translate(
+                      offset: Offset(
+                        prefixTextWidth + 8 + 4 + 1.5 + 5, // Prefix text + padding + separator + margin
+                        0,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 13, 0, 12),
+                        child: RichText(
+                          text: TextSpan(
                             children: [
-                              Text(prefixText, style: baseTextStyle.copyWith(color: Colors.black)),
-                              Container(
-                                width: 1.5,
-                                height: 40,
-                                color: Colors.grey.withAlpha((0.3 * 255).toInt()),
-                                margin: const EdgeInsets.only(left: 10, right: 5),
+                              TextSpan(
+                                text: typedText,
+                                style: baseTextStyle.copyWith(color: context.colors.textPrimary),
+                              ),
+                              TextSpan(
+                                text: hintZeros,
+                                style: baseTextStyle.copyWith(color: context.colors.textTertiary),
                               ),
                             ],
                           ),
-                          onItemSelected: (selectedValue) {
-                            setState(() {
-                              _selectedCountry = selectedValue;
-                              _effectiveController.text = '';
-                              _effectiveController.selection = const TextSelection.collapsed(offset: 0);
-                            });
-                          },
                         ),
-                      ],
+                      ),
                     ),
+                  // TextFormField
+                  TextFormField(
+                    keyboardType: TextInputType.phone,
+                    controller: _effectiveController,
+                    focusNode: _focusNode,
+                    autofocus: false,
+                    inputFormatters: [PhoneNumberFormatter(maxLength)],
+                    decoration: InputDecoration(
+                      isDense: false,
+                      counterText: '',
+                      hintText: '',
+                      border: InputBorder.none,
+                      errorText: null,
+                      errorStyle: const TextStyle(height: 0, fontSize: 0),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 0),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SelectableItemBottomSheet(
+                              title: StringConstants.kSelectCountry,
+                              selectableItems: _countries,
+                              selectedItem: _selectedCountry,
+                              canSearchItems: true,
+                              isEnabled: widget.isEnabled,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(prefixText, style: baseTextStyle.copyWith(color: context.colors.textPrimary)),
+                                  Container(
+                                    width: 1.5,
+                                    height: 40,
+                                    color: AppColors.grey.withAlpha((0.3 * 255).toInt()),
+                                    margin: const EdgeInsets.only(left: 10, right: 5),
+                                  ),
+                                ],
+                              ),
+                              onItemSelected: (selectedValue) {
+                                setState(() {
+                                  _selectedCountry = selectedValue;
+                                  _effectiveController.text = '';
+                                  _effectiveController.selection = const TextSelection.collapsed(offset: 0);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    style: baseTextStyle.copyWith(
+                      color: isComplete ? context.colors.textPrimary : AppColors.transparent,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 1,
+                    maxLength: maxLength,
+                    readOnly: false,
+                    onTap: () {
+                      _focusNode.requestFocus();
+                      _effectiveController.selection = TextSelection.collapsed(
+                        offset: _effectiveController.text.length,
+                      );
+                    },
+                    enabled: widget.isEnabled,
+                    cursorColor: context.colors.textPrimary,
+                    onChanged: (value) {
+                      if (value.isEmpty) {
+                        _triggerValidationCallback(false, _selectedCountry?.value, null);
+                      }
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      _baseValidator(value);
+                      return null;
+                    },
                   ),
-                ),
-                style: baseTextStyle.copyWith(
-                  color: isComplete ? Colors.black : Colors.transparent,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                maxLines: 1,
-                maxLength: maxLength,
-                readOnly: false,
-                onTap: () {
-                  _focusNode.requestFocus();
-                  _effectiveController.selection = TextSelection.collapsed(offset: _effectiveController.text.length);
-                },
-                enabled: widget.isEnabled,
-                cursorColor: AppColors.black,
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    _triggerValidationCallback(false, _selectedCountry?.value, null);
-                  }
-                  setState(() {});
-                },
-                validator: _baseValidator,
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        if (_errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 6, left: 12),
+            child: Text(_errorText!, style: const TextStyle(color: AppColors.red, fontSize: 12)),
+          ),
+      ],
     );
   }
 }

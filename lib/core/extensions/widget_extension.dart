@@ -1,3 +1,4 @@
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ extension TextWidgetExtension on Text {
             ),
           ),
           const SizedBox(width: 6),
-          Text('\u2022', style: CustomTextStyles.custom10Bold.copyWith(color: Colors.grey)),
+          Text('\u2022', style: CustomTextStyles.custom10Bold.copyWith(color: AppColors.grey)),
           const SizedBox(width: 6),
         ],
       ),

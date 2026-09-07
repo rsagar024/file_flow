@@ -1,3 +1,4 @@
+import 'package:fileflow/core/themes/app_colors.dart';
 import 'package:fileflow/core/themes/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -115,23 +116,23 @@ class _SnackbarContentWidgetState extends State<_SnackbarContentWidget> with Sin
         direction: DismissDirection.horizontal,
         onDismissed: (direction) => widget.onDismissed(),
         child: Material(
-          color: Colors.transparent,
+          color: AppColors.transparent,
           child: Container(
             padding: const EdgeInsets.all(16).copyWith(top: 46),
             decoration: BoxDecoration(color: backgroundColor),
             child: Row(
               children: [
-                Icon(icon, color: Colors.white),
+                Icon(icon, color: AppColors.white),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(widget.message, style: CustomTextStyles.custom14Regular.copyWith(color: Colors.white)),
+                  child: Text(widget.message, style: CustomTextStyles.custom14Regular.copyWith(color: AppColors.white)),
                 ),
                 if (widget.actionLabel != null && widget.onAction != null)
                   TextButton(
                     onPressed: widget.onAction,
                     child: Text(
                       widget.actionLabel!,
-                      style: CustomTextStyles.custom14Regular.copyWith(color: Colors.white),
+                      style: CustomTextStyles.custom14Regular.copyWith(color: AppColors.white),
                     ),
                   ),
               ],
@@ -156,11 +157,11 @@ class _SnackbarContentWidgetState extends State<_SnackbarContentWidget> with Sin
   Color _getBackgroundColorForType(SnackbarType type) {
     switch (type) {
       case SnackbarType.error:
-        return Colors.redAccent;
+        return AppColors.redAccent;
       case SnackbarType.warning:
-        return Colors.yellowAccent;
+        return AppColors.yellowAccent;
       case SnackbarType.success:
-        return Colors.greenAccent;
+        return AppColors.greenAccent;
     }
   }
 }

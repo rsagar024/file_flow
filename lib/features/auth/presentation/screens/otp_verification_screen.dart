@@ -1,0 +1,141 @@
+import 'package:fileflow/core/common/base/presentation/file_flow_background_stateful_widget.dart';
+import 'package:fileflow/core/common/widgets/file_flow_button.dart';
+import 'package:fileflow/core/common/widgets/pin_text_field_widget.dart';
+import 'package:fileflow/core/enums/app_state/app_status.dart';
+import 'package:fileflow/core/extensions/build_context_theme_extension.dart';
+import 'package:fileflow/core/resources/common/string_constants.dart';
+import 'package:fileflow/core/themes/app_colors.dart';
+import 'package:fileflow/core/utilities/custom_snackbar.dart';
+import 'package:fileflow/core/utilities/debug_logger.dart';
+import 'package:fileflow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:fileflow/features/auth/presentation/screens/create_account_screen.dart';
+import 'package:fileflow/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+
+class OtpVerificationScreen extends FileFlowBackgroundStatefulWidget {
+  static const routeName = '/otp-verification';
+
+  const OtpVerificationScreen({super.key});
+
+  @override
+  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
+}
+
+class _OtpVerificationScreenState extends FileFlowBackgroundState<OtpVerificationScreen> {
+  final pinTextField = PinTextFieldWidget(length: 6, obscure: false);
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.transparent,
+      appBar: AppBar(
+        surfaceTintColor: AppColors.transparent,
+        animateColor: false,
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: context.colors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: BlocListener<AuthBloc, AuthState>(
+        listenWhen: (prev, curr) => prev.status != curr.status,
+        listener: (context, state) {
+          if (state.status == AuthAppStatus.newUserDetected) {
+            context.go(CreateAccountScreen.routeName);
+          } else if (state.status == AuthAppStatus.authenticated) {
+            context.go(DashboardScreen.routeName);
+          } else if (state.status == AuthAppStatus.failure) {
+            printError(state.errorMessage ?? 'Unknown error');
+            CustomSnackbar.show(
+              context: context,
+              message: state.errorMessage ?? 'Unknown error',
+              type: SnackbarType.error,
+            );
+          }
+        },
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 30),
+                SvgPicture.asset('assets/icons/ic_logo.svg', height: 80),
+                const SizedBox(height: 10),
+                Text(
+                  StringConstants.kOtpVerification,
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: context.colors.textPrimary),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    StringConstants.kEnterThe6DigitCode,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textSecondary),
+                  ),
+                ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 32), child: pinTextField),
+                Text(
+                  StringConstants.kDidNtReceiveTheCode,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: context.colors.textTertiary),
+                ),
+                BlocSelector<AuthBloc, AuthState, ({int seconds, bool canResend})>(
+                  selector: (state) => (seconds: state.resendSeconds, canResend: state.canResend),
+                  builder: (context, data) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4, bottom: 40),
+                      child: GestureDetector(
+                        onTap: data.canResend
+                            ? () {
+                                context.read<AuthBloc>().add(
+                                  OtpResendEvent(phoneNumber: context.read<AuthBloc>().state.phoneNumber ?? ''),
+                                );
+                              }
+                            : null,
+                        child: Text(
+                          data.canResend
+                              ? StringConstants.kResendCode
+                              : '${StringConstants.kResendIn} 00:${data.seconds.toString().padLeft(2, '0')}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: data.canResend ? AppColors.primary : context.colors.textTertiary,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                BlocSelector<AuthBloc, AuthState, bool>(
+                  selector: (state) => state.status == AuthAppStatus.loading,
+                  builder: (context, isLoading) {
+                    return FileFlowButton(
+                      text: StringConstants.kVerify,
+                      textColor: AppColors.white,
+                      icon: const Icon(Icons.security, color: AppColors.white),
+                      iconAlignment: IconAlignment.end,
+                      isLoading: isLoading,
+                      onPressed: () {
+                        if (pinTextField.controller.text.trim().length == 6) {
+                          context.read<AuthBloc>().add(OtpVerifyEvent(otp: pinTextField.controller.text.trim()));
+                        } else {
+                          printError('Invalid Otp');
+                        }
+                      },
+                    );
+                  },
+                ),
+                // const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

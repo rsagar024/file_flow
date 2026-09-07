@@ -11,6 +11,7 @@ class DeviceInfoService {
 
   Future<DeviceEntity> getDeviceInfo() async {
     final packageInfo = await PackageInfo.fromPlatform();
+    final now = DateTime.now().toUtc();
 
     if (Platform.isAndroid) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
@@ -22,6 +23,7 @@ class DeviceInfoService {
         appVersion: packageInfo.version,
         fcmToken: null,
         isActive: true,
+        lastLoginAt: now,
       );
     }
 
@@ -35,9 +37,16 @@ class DeviceInfoService {
         appVersion: packageInfo.version,
         fcmToken: null,
         isActive: true,
+        lastLoginAt: now,
       );
     }
 
-    return const DeviceEntity(deviceId: 'unknown', deviceName: 'unknown Device', platform: 'unknown', isActive: true);
+    return DeviceEntity(
+      deviceId: 'unknown',
+      deviceName: 'unknown Device',
+      platform: 'unknown',
+      isActive: true,
+      lastLoginAt: now,
+    );
   }
 }
