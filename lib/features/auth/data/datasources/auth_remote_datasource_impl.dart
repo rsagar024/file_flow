@@ -166,16 +166,28 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         'devices': {deviceId: deviceModel.toJson()},
       });
     } else {
-      await docRef.update({'devices.$deviceId': deviceModel.toJson()});
+      // deviceId can legitimately contain dots (e.g. Android's Build.ID), and
+      // DocumentReference.update() splits dotted string keys into nested field
+      // paths — so this must use FieldPath to keep deviceId as one literal segment.
+      await docRef.update(<Object, dynamic>{
+        FieldPath(['devices', deviceId]): deviceModel.toJson(),
+      });
     }
   }
 
   @override
   Stream<UserModel?> watchUser(String uid) {
-    return _firestore.collection('users').doc(uid).snapshots().map((doc) {
-      if (!doc.exists || doc.data() == null) return null;
-      return UserModel.fromJson(doc.data()!);
-    });
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .snapshots(includeMetadataChanges: true)
+        // Only trust server-acknowledged data — with offline persistence on,
+        // a real device can otherwise deliver a stale cached doc first.
+        .where((doc) => !doc.metadata.isFromCache)
+        .map((doc) {
+          if (!doc.exists || doc.data() == null) return null;
+          return UserModel.fromJson(doc.data()!);
+        });
   }
 
   @override
@@ -184,8 +196,8 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     String deviceId, {
     required bool isActive,
   }) async {
-    await _firestore.collection('users').doc(uid).update({
-      'devices.$deviceId.isActive': isActive,
+    await _firestore.collection('users').doc(uid).update(<Object, dynamic>{
+      FieldPath(['devices', deviceId, 'isActive']): isActive,
     });
   }
 
@@ -199,10 +211,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     final rawDevices = snapshot.data()?['devices'];
     if (rawDevices is! Map) return;
 
-    final updates = <String, dynamic>{};
+    final updates = <Object, dynamic>{};
     for (final key in rawDevices.keys) {
       if (key == excludeDeviceId) continue;
-      updates['devices.$key.isActive'] = false;
+      updates[FieldPath(['devices', key, 'isActive'])] = false;
     }
     if (updates.isNotEmpty) {
       await docRef.update(updates);

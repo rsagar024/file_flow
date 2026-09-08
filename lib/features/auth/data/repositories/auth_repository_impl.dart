@@ -264,10 +264,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
     if (existingUser != null) {
       final deviceInfo = await _deviceInfoService.getDeviceInfo();
-      await _authRemoteDatasource.updateDeviceInfo(
-        user.uid,
-        deviceInfo.toModel(),
-      );
+      try {
+        // Non-fatal: OTP verification already succeeded above, so a device-record
+        // write hiccup shouldn't be reported back as an OTP verification failure.
+        await _authRemoteDatasource.updateDeviceInfo(
+          user.uid,
+          deviceInfo.toModel(),
+        );
+      } catch (_) {}
 
       return Right(
         AuthResult(
