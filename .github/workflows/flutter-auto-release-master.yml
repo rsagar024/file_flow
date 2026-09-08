@@ -71,31 +71,34 @@ jobs:
           BODY="${{ github.event.pull_request.body }}"
           # Extracts everything after 'Release Note:'
           NOTES=$(echo "$BODY" | perl -0777 -ne 'print $1 if /(?i)Release Note:\s*(.*)/s')
-          
+
           if [ -z "$NOTES" ]; then NOTES="Production release stability improvements."; fi
-          
-          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
-          echo "$NOTES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+
+          {
+            echo "### Release Note:"
+            echo "$NOTES"
+            echo ""
+            echo "---"
+            echo "👤 Released by **${{ github.actor }}**"
+          } > release_notes.md
 
       # 🚀 Create Production GitHub Release
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: Wandalen/wretry.action@v3
         with:
-          tag_name: ${{ steps.tag.outputs.new_tag }}
-          name: "🚀 Production Release ${{ steps.tag.outputs.new_tag }}"
-          generate_release_notes: true # This creates the "What's Changed" and "New Contributors" logs
-          body: |
-            ### Release Note:
-            ${{ steps.pr_notes.outputs.release_notes }}
-            
-            ---
-            👤 Released by **${{ github.actor }}**
-          files: |
-            build/app/outputs/flutter-apk/file-hub-armeabi-v7a.apk
-            build/app/outputs/flutter-apk/file-hub-arm64-v8a.apk
-            build/app/outputs/flutter-apk/file-hub-x86_64.apk
-            build/app/outputs/bundle/release/file-hub-release.aab
+          action: softprops/action-gh-release@v3
+          attempt_limit: 3
+          attempt_delay: 15000
+          with: |
+            tag_name: ${{ steps.tag.outputs.new_tag }}
+            name: "🚀 Production Release ${{ steps.tag.outputs.new_tag }}"
+            generate_release_notes: true
+            body_path: release_notes.md
+            files: |
+              build/app/outputs/flutter-apk/file-hub-armeabi-v7a.apk
+              build/app/outputs/flutter-apk/file-hub-arm64-v8a.apk
+              build/app/outputs/flutter-apk/file-hub-x86_64.apk
+              build/app/outputs/bundle/release/file-hub-release.aab
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
