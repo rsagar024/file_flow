@@ -1,6 +1,4 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:fileflow/core/routes/app_route.dart';
 import 'package:flutter/material.dart';
@@ -32,12 +30,6 @@ class ThemeRevealController {
     final size = mediaQuery.size;
 
     final image = await boundary.toImage(pixelRatio: devicePixelRatio);
-    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData == null) {
-      applyNewTheme();
-      return;
-    }
-    final Uint8List screenshotBytes = byteData.buffer.asUint8List();
 
     applyNewTheme();
 
@@ -60,7 +52,7 @@ class ThemeRevealController {
             return ClipPath(
               clipper: _RevealClipper(center: origin, radius: curved.value * maxRadius),
               child: SizedBox.expand(
-                child: Image.memory(screenshotBytes, fit: BoxFit.cover),
+                child: RawImage(image: image, fit: BoxFit.cover),
               ),
             );
           },
@@ -74,6 +66,7 @@ class ThemeRevealController {
     } finally {
       entry.remove();
       controller.dispose();
+      image.dispose();
     }
   }
 }

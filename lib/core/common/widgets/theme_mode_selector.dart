@@ -14,7 +14,7 @@ class ThemeModeSelector extends FileFlowStatelessWidget {
   const ThemeModeSelector({super.key, required this.selectedMode, required this.onSelected});
 
   static const _options = <ThemeMode, String>{
-    ThemeMode.system: StringConstants.kSystemDefault,
+    ThemeMode.system: StringConstants.kSystem,
     ThemeMode.light: StringConstants.kLightMode,
     ThemeMode.dark: StringConstants.kDarkMode,
   };
@@ -28,13 +28,14 @@ class ThemeModeSelector extends FileFlowStatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: _options.entries.map((entry) {
           final isSelected = entry.key == selectedMode;
-          return _ThemeModeSegment(
-            label: entry.value,
-            isSelected: isSelected,
-            onTap: (origin) => onSelected(entry.key, origin),
+          return Expanded(
+            child: _ThemeModeSegment(
+              label: entry.value,
+              isSelected: isSelected,
+              onTap: (origin) => onSelected(entry.key, origin),
+            ),
           );
         }).toList(),
       ),
@@ -61,6 +62,7 @@ class _ThemeModeSegment extends StatelessWidget {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
+          width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             color: isSelected ? context.colors.active : AppColors.transparent,
@@ -68,6 +70,7 @@ class _ThemeModeSegment extends StatelessWidget {
           ),
           child: Text(
             label,
+            textAlign: TextAlign.center,
             style: CustomTextStyles.custom12Medium.copyWith(
               color: isSelected ? AppColors.white : context.colors.textSecondary,
             ),
