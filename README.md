@@ -12,8 +12,8 @@ FileFlow is a Flutter app for storing, organizing, and sharing files across devi
 - Phone number + OTP sign-in (Firebase Auth), with auto-verification and resend support
 - Account creation with unique email/username validation against Firestore
 - Per-account device/session tracking in Firestore, with remote logout of a single device or all other devices
-- Profile editing (display name, username, email, photo) and an avatar component with network/local/initials fallback
-- Light/dark/system theming with persisted preference and an animated transition on brightness change
+- Profile editing (display name, username, email, photo) and an avatar component with network/local/initials fallback that stays legible in both light and dark mode
+- Light/dark/system theming with persisted preference, an instant equal-width segmented mode switcher, and a fast animated circular-reveal transition on brightness change
 - Bottom-nav dashboard shell (Home / Sharing / Upload / Settings / Profile tabs)
 
 **UI scaffolding only — not wired to real data yet**
