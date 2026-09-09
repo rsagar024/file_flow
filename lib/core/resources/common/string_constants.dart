@@ -84,7 +84,7 @@ class StringConstants {
   static const String kNotification = 'Notification';
   static const String kDevices = 'Devices';
   static const String kAppearance = 'Appearance';
-  static const String kSystemDefault = 'System Default';
+  static const String kSystem = 'System';
   static const String kLightMode = 'Light Mode';
   static const String kDarkMode = 'Dark Mode';
   static const String kRecycleBin = 'Recycle Bin';

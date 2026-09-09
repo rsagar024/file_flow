@@ -29,15 +29,13 @@ class UserAvatar extends FileFlowStatelessWidget {
     return Container(
       height: size,
       width: size,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
-        gradient: hasImage
-            ? null
-            : const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.primary, AppColors.topLeftCirclePrimary],
-              ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.topLeftCirclePrimary],
+        ),
       ),
       alignment: Alignment.center,
       child: hasImage ? _buildImage() : _buildFallback(),
